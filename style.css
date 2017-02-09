@@ -7,3 +7,6 @@
  Author URI:   http://greatives.eu
  Template:     blade
 */
+.bk-small {
+  max-width: 100px;
+}

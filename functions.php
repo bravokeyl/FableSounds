@@ -159,13 +159,15 @@ function bk_check_serial_number($serial){
 
 add_action( 'template_redirect', 'bk_save_register_keys_details'  );
 function bk_save_register_keys_details(){
-  // wp_die(print_r("Hola!"));
+
   if ( 'POST' == strtoupper( $_SERVER[ 'REQUEST_METHOD' ] ) ) {
     if ( empty( $_POST[ 'action' ] ) || 'save_register_keys_details' !== $_POST[ 'action' ] ||
     empty( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'save_register_keys_details' ) ) {
       return;
     }else {
-      $bk_serial_key_val     = ! empty( $_POST['bk_serial_key'] )? esc_attr($_POST['bk_serial_key']) : '';
+      $bk_serial_key = strtoupper($_POST['bk_serial_key1'])."-".strtoupper($_POST['bk_serial_key2'])."-".strtoupper($_POST['bk_serial_key3'])."-".strtoupper($_POST['bk_serial_key4'])."-".strtoupper($_POST['bk_serial_key5']);
+      // wp_die(print_r($bk_serial_key));
+      $bk_serial_key_val     = ! empty( $bk_serial_key )? esc_attr($bk_serial_key) : '';
       $products_dropdown_val = ! empty( $_POST['products_dropdown'] )? esc_attr($_POST['products_dropdown']): '';
 
       if ( !empty( $bk_serial_key_val ) ) {
