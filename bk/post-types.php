@@ -155,7 +155,7 @@ function fs_render_serial_numbers_columns( $column ) {
     case 'user_id' :
 			$snuid = get_post_meta( $post->ID, 'bk_sn_user_email', true );
 			if ( $snuid ) {
-				echo intval($snuid);
+				echo sanitize_email($snuid);
 			} else {
 				echo '&ndash;';
 			}
