@@ -7,8 +7,8 @@ include(get_stylesheet_directory().'/bk/meta.php');
 function bk_assign_activation_code_after_registration($order_id){
   $order = new WC_Order( $order_id );
 
-  // $customer_obj = $order->get_user();
-  // $customer_email = sanitize_email($customer_obj->user_email);
+  $customer_obj = $order->get_user();
+  $customer_email = sanitize_email($customer_obj->user_email);
   // $customer_login = $customer_obj->user_login;
 
   $order_ids = array();
@@ -32,7 +32,7 @@ function bk_assign_activation_code_after_registration($order_id){
     for($i=0;$i<sizeof($activation_code_ids);$i++){
       update_post_meta($activation_code_ids[$i], 'bk_ac_status', "used");
       update_post_meta($activation_code_ids[$i], 'bk_ac_product_sku', $order_ids[$i]);
-      update_post_meta($activation_code_ids[$i], 'bk_ac_user_email', $order->get_user_id());
+      update_post_meta($activation_code_ids[$i], 'bk_ac_user_email', $customer_email);
       update_post_meta($activation_code_ids[$i], 'bk_ac_date', current_time('mysql'));
     }
   }
