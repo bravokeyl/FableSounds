@@ -1,66 +1,7 @@
-<h4>Registered Serials</h4>
-<p>Here you can see all the registered serials of products that you bought from third party!</p>
+<h4>Your registered products</h4>
+<p>Here you can see all the activation codes of products that you bought.</p>
 <?php
 $current_user = wp_get_current_user();
-$args = array(
-  'post_type'      => 'fs_serial_numbers',
-  'post_status'    => 'publish',
-  'posts_per_page' => '-1',
-  'meta_key'       => 'bk_sn_user_email',
-  'meta_query'     => array(
-    array(
-      'key'     => 'bk_sn_user_email',
-      'value'   => $current_user->user_email,
-      'compare' => '='
-    )
-  ),
-);
-$qe = new WP_Query($args);
-// print_r($q);
-if($qe->have_posts()){?>
-  <table class="row">
-    <thead>
-      <tr>
-        <th>
-          <?php _e("Product ID","bk");?>
-        </th>
-        <th>
-          <?php _e("Seller","bk");?>
-        </th>
-        <th>
-          <?php _e("Serial Number ","bk");?>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-  <?php while ($qe->have_posts()) {
-    $qe->the_post();
-    $acid = get_the_ID();
-    ?>
-      <tr>
-          <td>
-            <?php
-            $productsku = get_post_meta( $acid, 'bk_sn_product_sku', true );
-            echo bk_get_product_name_by_sku($productsku);
-            ?>
-          </td>
-          <td>
-            <?php echo esc_html(get_post_meta( $acid, 'bk_sn_seller_name', true ))?>
-          </td>
-          <td>
-            <?php echo $qe->post->post_title;?>
-          </td>
-        </tr>
-    <?php
-  }?>
-  </tbody>
-</table><?php
-  wp_reset_postdata();
-}
-?>
-<h4>Activation Codes</h4>
-<p>Here you can see all the activation codes that you have</p>
-<?php
 $activation_args = array(
   'post_type'      => 'fs_activation_codes',
   'post_status'    => 'publish',
@@ -81,7 +22,7 @@ if($activation_qe->have_posts()){?>
     <thead>
       <tr>
         <th>
-          <?php _e("Product ID","bk");?>
+          <?php _e("Product Name","bk");?>
         </th>
         <th>
           <?php _e("Activation Code","bk");?>
