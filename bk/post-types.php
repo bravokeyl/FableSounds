@@ -210,9 +210,9 @@ function fs_render_activation_codes_columns( $column ) {
       }
     break;
     case 'user_id' :
-      $cuid = intval( get_post_meta( $post->ID, 'bk_ac_user_email', true ) );
-			$user = get_user_by( 'ID', $cuid );
-      if ( !empty($cuid) ) {
+      $cuemail = get_post_meta( $post->ID, 'bk_ac_user_email', true );
+			$user = get_user_by( 'email', $cuemail );
+      if ( !empty($cuemail) ) {
         echo $user->user_email."(".$user->display_name.")";
       } else {
         echo '&ndash;';

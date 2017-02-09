@@ -117,3 +117,71 @@ function bk_register_keys_endpoint_title( $title ) {
 }
 
 add_filter( 'the_title', 'bk_register_keys_endpoint_title' );
+
+function bk_check_serial_number($serial){
+  $code = array();
+  $args = array(
+    'post_type' => 'fs_serial_numbers',
+    'name'      => $serial,
+    'posts_per_page' => '1',
+    'meta_query' => array(
+      array(
+        'key' => 'bk_sn_status',
+        'value' => "nreg",
+        'compare' => '='
+      )
+    ),
+    'post_status' => 'publish'
+  );
+
+  $query = new WP_Query($args);
+
+  if($query->have_posts()){
+    while($query->have_posts()){
+      $query->the_post();
+      array_push($code, get_the_ID());
+    }
+    wp_reset_postdata();
+  }
+
+  return $code;
+}
+
+
+add_action( 'template_redirect', 'bk_save_register_keys_details'  );
+function bk_save_register_keys_details(){
+  // wp_die(print_r("Hola!"));
+  if ( 'POST' == strtoupper( $_SERVER[ 'REQUEST_METHOD' ] ) ) {
+    if ( empty( $_POST[ 'action' ] ) || 'save_register_keys_details' !== $_POST[ 'action' ] ||
+    empty( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'save_register_keys_details' ) ) {
+      return;
+    }else {
+      $bk_serial_key_val     = ! empty( $_POST['bk_serial_key'] )? esc_attr($_POST['bk_serial_key']) : '';
+      $products_dropdown_val = ! empty( $_POST['products_dropdown'] )? esc_attr($_POST['products_dropdown']): '';
+
+      if ( !empty( $bk_serial_key_val ) ) {
+        $serial_found = bk_check_serial_number($bk_serial_key_val);
+        if(empty($serial_found)){
+          wc_add_notice( __( 'Invalid Serial Number, please check it.', 'bk' ),'error' );
+          wp_safe_redirect( wc_get_endpoint_url( 'register-keys' ) );
+    			exit;
+        } else {
+          $bk_current_user = wp_get_current_user();
+          update_post_meta(intval($serial_found[0]),'bk_sn_status','reg');
+          update_post_meta(intval($serial_found[0]),'bk_sn_product_sku',$products_dropdown_val);
+          update_post_meta(intval($serial_found[0]),'bk_sn_user_email',$bk_current_user->user_email);
+          update_post_meta(intval($serial_found[0]),'bk_sn_date',current_time('mysql'));
+          $activation_code_id = bk_get_unused_activation_codes(1);
+          update_post_meta($activation_code_id[0], 'bk_ac_status', "used");
+          update_post_meta($activation_code_id[0], 'bk_ac_product_sku', $products_dropdown_val);
+          update_post_meta($activation_code_id[0], 'bk_ac_user_email', $bk_current_user->user_email);
+          update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
+          wc_add_notice( __( 'Serial Number successfully registered.', 'bk' ) );
+          wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
+    			exit;
+        }
+      }
+    }
+  }
+}
+?>
