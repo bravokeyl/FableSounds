@@ -75,8 +75,8 @@ function bk_upgrade_product_menu_item($items) {
   $items = array(
 		'dashboard'       => __( 'Dashboard', 'blade-child' ),
 		'orders'          => __( 'Orders', 'blade-child' ),
-    'register-keys'       => __( 'Register Keys', 'blade-child' ),
-    'registered-keycodes'   => __( 'Registered Keys & Codes', 'blade-child' ),
+    'register-keys'       => __( 'Register a new product', 'blade-child' ),
+    'registered-keycodes'   => __( 'Your activation codes', 'blade-child' ),
 		'edit-address'    => __( 'Addresses', 'blade-child' ),
 		'payment-methods' => __( 'Payment Methods', 'blade-child' ),
 		'edit-account'    => __( 'Account Details', 'blade-child' ),
@@ -113,11 +113,11 @@ function bk_register_keys_endpoint_title( $title ) {
     $is_endpoint = isset( $wp_query->query_vars['register-keys'] );
     $is_registered = isset( $wp_query->query_vars['registered-keycodes'] );
     if ( $is_endpoint && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ) {
-        $title = __( 'Register Keys', 'bk' );
+        $title = __( 'Register a new product', 'bk' );
 
         remove_filter( 'the_title', 'bk_upgrade_endpoint_title' );
     }elseif( $is_registered && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ){
-       $title = __( 'Registered Keys & Codes', 'bk' );
+       $title = __( 'Your activation codes', 'bk' );
 
        remove_filter( 'the_title', 'bk_upgrade_endpoint_title' );
     }
