@@ -187,7 +187,8 @@ function fs_activation_codes_columns($existing_columns){
   $columns['cb']          = $existing_columns['cb'];
   $columns['title']       = __( 'Activation Code', 'fablesounds' );
 	$columns['serial_activation']       = __( 'Serial Code', 'fablesounds' );
-  $columns['user_id']     = __( 'User Data', 'fablesounds' );
+  $columns['user_email']     = __( 'User Email', 'fablesounds' );
+	$columns['user_name']     = __( 'User Name', 'fablesounds' );
   // $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
   $columns['product_id']      = __( 'Product SKU', 'fablesounds' );
   //$columns['products']    = __( 'Product IDs', 'fablesounds' );
@@ -198,7 +199,8 @@ function fs_activation_codes_columns($existing_columns){
 }
 function fs_render_activation_codes_columns( $column ) {
   global $post, $woocommerce;
-
+	$cuemail = get_post_meta( $post->ID, 'bk_ac_user_email', true );
+	$user = get_user_by( 'email', $cuemail );
   switch ( $column ) {
 
     case 'serial_activation' :
@@ -218,11 +220,16 @@ function fs_render_activation_codes_columns( $column ) {
         echo '&ndash;';
       }
     break;
-    case 'user_id' :
-      $cuemail = get_post_meta( $post->ID, 'bk_ac_user_email', true );
-			$user = get_user_by( 'email', $cuemail );
+    case 'user_email' :
       if ( !empty($cuemail) ) {
-        echo $user->user_email."(".$user->display_name.")";
+        echo $user->user_email;
+      } else {
+        echo '&ndash;';
+      }
+    break;
+		case 'user_name' :
+      if ( !empty($cuemail) ) {
+        echo $user->display_name;
       } else {
         echo '&ndash;';
       }
