@@ -75,8 +75,8 @@ function bk_upgrade_product_menu_item($items) {
   $items = array(
 		'dashboard'       => __( 'Dashboard', 'blade-child' ),
 		'orders'          => __( 'Orders', 'blade-child' ),
-    'register-keys'   => __( 'Registered Keys & Codes', 'blade-child' ),
-		//'downloads'       => __( 'Downloads', 'blade-child' ),
+    'register-keys'       => __( 'Register Keys', 'blade-child' ),
+    'registered-keycodes'   => __( 'Registered Keys & Codes', 'blade-child' ),
 		'edit-address'    => __( 'Addresses', 'blade-child' ),
 		'payment-methods' => __( 'Payment Methods', 'blade-child' ),
 		'edit-account'    => __( 'Account Details', 'blade-child' ),
@@ -87,12 +87,13 @@ function bk_upgrade_product_menu_item($items) {
 
 function bk_custom_endpoints() {
     add_rewrite_endpoint( 'register-keys', EP_ROOT | EP_PAGES );
+    add_rewrite_endpoint( 'registered-keycodes', EP_ROOT | EP_PAGES );
 }
 add_action( 'init', 'bk_custom_endpoints' );
 
 function bk_custom_query_vars( $vars ) {
     $vars[] = 'register-keys';
-
+    $vars[] = 'register-keycodes';
     return $vars;
 }
 add_filter( 'query_vars', 'bk_custom_query_vars', 0 );
@@ -101,16 +102,24 @@ add_action('woocommerce_account_register-keys_endpoint','bk_register_keys_endpoi
 function bk_register_keys_endpoint(){
   wc_get_template('myaccount/register-keys.php');
 }
+add_action('woocommerce_account_registered-keycodes_endpoint','bk_register_keycodes_endpoint');
+function bk_register_keycodes_endpoint(){
+  wc_get_template('myaccount/registered-keycodes.php');
+}
 
 function bk_register_keys_endpoint_title( $title ) {
     global $wp_query;
 
     $is_endpoint = isset( $wp_query->query_vars['register-keys'] );
-
+    $is_registered = isset( $wp_query->query_vars['registered-keycodes'] );
     if ( $is_endpoint && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ) {
-        $title = __( 'Registered Keys', 'woocommerce' );
+        $title = __( 'Register Keys', 'bk' );
 
         remove_filter( 'the_title', 'bk_upgrade_endpoint_title' );
+    }elseif( $is_registered && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ){
+       $title = __( 'Registered Keys & Codes', 'bk' );
+
+       remove_filter( 'the_title', 'bk_upgrade_endpoint_title' );
     }
 
     return $title;
@@ -177,7 +186,7 @@ function bk_save_register_keys_details(){
           update_post_meta($activation_code_id[0], 'bk_ac_user_email', $bk_current_user->user_email);
           update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
           wc_add_notice( __( 'Serial Number successfully registered.', 'bk' ) );
-          wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
+          wp_safe_redirect( wc_get_endpoint_url( 'registered-keycodes' ) );
     			exit;
         }
       }
