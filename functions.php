@@ -182,6 +182,7 @@ function bk_save_register_keys_details(){
           update_post_meta(intval($serial_found[0]),'bk_sn_date',current_time('mysql'));
           $activation_code_id = bk_get_unused_activation_codes(1);
           update_post_meta($activation_code_id[0], 'bk_ac_status', "used");
+          update_post_meta($activation_code_id[0], 'bk_ac_serial_activation', get_the_title( $serial_found[0]));
           update_post_meta($activation_code_id[0], 'bk_ac_product_sku', $products_dropdown_val);
           update_post_meta($activation_code_id[0], 'bk_ac_user_email', $bk_current_user->user_email);
           update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
@@ -193,4 +194,21 @@ function bk_save_register_keys_details(){
     }
   }
 }
-?>
+
+function bk_get_product_name_by_sku($productsku){
+  switch(strtoupper($productsku)) {
+    case "BGDR":
+      $product_name = "Broadway Gig";
+      break;
+    case "BLDR":
+      $product_name = "Broadway Lites";
+      break;
+    case "BKFDR":
+      $product_name = "Broadway Big Band – Kontakt Edition";
+      break;
+    default:
+      $product_name = "NA";
+  }
+
+  return $product_name;
+}

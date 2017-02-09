@@ -41,19 +41,7 @@ if($qe->have_posts()){?>
           <td>
             <?php
             $productsku = get_post_meta( $acid, 'bk_sn_product_sku', true );
-            switch(strtoupper($productsku)) {
-              case "BGDR":
-                echo "Broadway Gig";
-                break;
-              case "BLDR":
-                echo "Broadway Lites";
-                break;
-              case "BKFDR":
-                echo "Broadway Big Band – Kontakt Edition";
-                break;
-              default:
-                echo "NA";
-            }
+            echo bk_get_product_name_by_sku($productsku);
             ?>
           </td>
           <td>
@@ -99,6 +87,9 @@ if($activation_qe->have_posts()){?>
           <?php _e("Activation Code","bk");?>
         </th>
         <th>
+          <?php _e("Serial Number","bk");?>
+        </th>
+        <th>
           <?php _e("Assigned Date","bk");?>
         </th>
       </tr>
@@ -107,13 +98,17 @@ if($activation_qe->have_posts()){?>
   <?php while ($activation_qe->have_posts()) {
     $activation_qe->the_post();
     $activation_acid = get_the_ID();
+    $acproductsku = get_post_meta( $activation_acid, 'bk_ac_product_sku', true );
     ?>
         <tr>
           <td>
-            <?php echo $activation_acid;?>
+            <?php echo bk_get_product_name_by_sku($acproductsku);?>
           </td>
           <td>
             <?php echo $activation_qe->post->post_title;?>
+          </td>
+          <td>
+            <?php echo get_post_meta($activation_acid,'bk_ac_serial_activation',true);?>
           </td>
           <td>
             <?php echo get_post_meta($activation_acid,'bk_ac_date',true);?>

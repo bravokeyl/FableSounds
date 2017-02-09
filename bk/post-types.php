@@ -186,6 +186,7 @@ function fs_activation_codes_columns($existing_columns){
   $columns                = array();
   $columns['cb']          = $existing_columns['cb'];
   $columns['title']       = __( 'Activation Code', 'fablesounds' );
+	$columns['serial_activation']       = __( 'Serial Code', 'fablesounds' );
   $columns['user_id']     = __( 'User Data', 'fablesounds' );
   // $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
   $columns['product_id']      = __( 'Product SKU', 'fablesounds' );
@@ -200,7 +201,15 @@ function fs_render_activation_codes_columns( $column ) {
 
   switch ( $column ) {
 
-    case 'product_id' :
+    case 'serial_activation' :
+      $cpid = get_post_meta( $post->ID, 'bk_ac_serial_activation', true );
+      if ( $cpid ) {
+        print_r($cpid);
+      } else {
+        echo '&ndash;';
+      }
+    break;
+		case 'product_id' :
       $cpid = get_post_meta( $post->ID, 'bk_ac_product_sku', true );
 			// $order = wc_get_order($cpid);
       if ( $cpid ) {
