@@ -125,7 +125,7 @@ function fs_serial_numbers_columns($existing_columns){
   $columns['cb']          = $existing_columns['cb'];
   $columns['title'] = __( 'Serial Number', 'fablesounds' );
   $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
-  $columns['product_id']      = __( 'Product ID', 'fablesounds' );
+  $columns['product_id']      = __( 'Product SKU', 'fablesounds' );
   $columns['user_id'] = __( 'User ID', 'fablesounds' );
   //$columns['products']    = __( 'Product IDs', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
@@ -145,15 +145,15 @@ function fs_render_serial_numbers_columns( $column ) {
 			}
     break;
     case 'product_id' :
-			$snpid =  get_post_meta( $post->ID, 'bk_sn_product_id', true );
+			$snpid =  get_post_meta( $post->ID, 'bk_sn_product_sku', true );
 			if ( $snpid ) {
-				echo intval($snpid);
+				echo esc_attr($snpid);
 			} else {
 				echo '&ndash;';
 			}
     break;
     case 'user_id' :
-			$snuid = get_post_meta( $post->ID, 'bk_sn_user_id', true );
+			$snuid = get_post_meta( $post->ID, 'bk_sn_user_email', true );
 			if ( $snuid ) {
 				echo intval($snuid);
 			} else {
@@ -188,7 +188,7 @@ function fs_activation_codes_columns($existing_columns){
   $columns['title']       = __( 'Activation Code', 'fablesounds' );
   $columns['user_id']     = __( 'User Data', 'fablesounds' );
   // $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
-  $columns['product_id']      = __( 'Product ID', 'fablesounds' );
+  $columns['product_id']      = __( 'Product SKU', 'fablesounds' );
   //$columns['products']    = __( 'Product IDs', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
   $columns['serial_date'] = __( 'Assigned Date', 'fablesounds' );
@@ -201,8 +201,8 @@ function fs_render_activation_codes_columns( $column ) {
   switch ( $column ) {
 
     case 'product_id' :
-      $cpid = intval( get_post_meta( $post->ID, 'bk_ac_product_id', true ) );
-			$order = wc_get_order($cpid);
+      $cpid = get_post_meta( $post->ID, 'bk_ac_product_sku', true );
+			// $order = wc_get_order($cpid);
       if ( $cpid ) {
         print_r($cpid);
       } else {
@@ -210,7 +210,7 @@ function fs_render_activation_codes_columns( $column ) {
       }
     break;
     case 'user_id' :
-      $cuid = intval( get_post_meta( $post->ID, 'bk_ac_user_id', true ) );
+      $cuid = intval( get_post_meta( $post->ID, 'bk_ac_user_email', true ) );
 			$user = get_user_by( 'ID', $cuid );
       if ( !empty($cuid) ) {
         echo $user->user_email."(".$user->display_name.")";

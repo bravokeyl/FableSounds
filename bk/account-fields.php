@@ -22,8 +22,8 @@ function bk_extra_account_fields(){
     value="" />
 	</p>
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row form-row-last">
-		<label for="bk_product_id"><?php _e( 'Product ID', 'bk' ); ?> <span class="required">*</span></label>
-		<input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="bk_product_id" id="bk_product_id"
+		<label for="bk_product_sku"><?php _e( 'Product SKU', 'bk' ); ?> <span class="required">*</span></label>
+		<input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="bk_product_sku" id="bk_product_sku"
     value="" />
 	</p>
 	<div class="clear"></div>
@@ -31,7 +31,7 @@ function bk_extra_account_fields(){
 }
 function bk_extra_save_account_details($user_id){
   $rkey = esc_html($_POST[ 'bk_serial_key' ]);
-  $pid = esc_html($_POST[ 'bk_product_id' ]);
+  $pid = esc_html($_POST[ 'bk_product_sku' ]);
   if(!empty($rkey)){
     $args = array(
       'post_type'      => 'fs_activation_codes',
@@ -55,9 +55,9 @@ function bk_extra_save_account_details($user_id){
         // wp_die(print_r($acid));
         $d = current_time('mysql');
         update_post_meta($acid,'bk_ac_status',0);
-        update_post_meta($acid,'bk_ac_user_id',$user_id);
+        update_post_meta($acid,'bk_ac_user_email',$user_id);
         update_post_meta($acid,'bk_ac_date',$d);
-        update_post_meta($acid,'bk_ac_product_id',$pid);
+        update_post_meta($acid,'bk_ac_product_sku',$pid);
       }
       wp_reset_postdata();
     }

@@ -31,15 +31,15 @@ function bk_ac_meta_box($object, $box) {
 
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_ac_meta_nonce' ); ?>
    <p>
-  	<label for="bk-ac-user-id"><?php _e( "User ID:", 'bk' ); ?>
-    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_id', true ); ?>
-      <input type="text" name="bk-ac-user-id" class="" id="bk-ac-user-id" value="<?php echo esc_html($user_id);?>" />
+  	<label for="bk-ac-user-email"><?php _e( "User ID:", 'bk' ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_email', true ); ?>
+      <input type="text" name="bk-ac-user-email" class="" id="bk-ac-user-email" value="<?php echo esc_html($user_id);?>" />
     </label>
    </p>
    <p>
-  	<label for="bk-ac-product-id"><?php _e( "Product ID:", 'bk' ); ?>
-    <?php $product_id = get_post_meta( $object->ID, 'bk_ac_product_id', true ); ?>
-      <input type="text" name="bk-ac-product-id" class="" id="bk-ac-product-id" value="<?php echo esc_html($product_id);?>" />
+  	<label for="bk-ac-product-sku"><?php _e( "Product SKU:", 'bk' ); ?>
+    <?php $product_id = get_post_meta( $object->ID, 'bk_ac_product_sku', true ); ?>
+      <input type="text" name="bk-ac-product-sku" class="" id="bk-ac-product-sku" value="<?php echo esc_html($product_id);?>" />
     </label>
    </p>
    <p>
@@ -93,14 +93,14 @@ function bk_save_post_meta( $post_id, $post ) {
 	$meta_keys = array();
 
 	if( 'fs_activation_codes' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-ac-user-id'] ) ? intval($_POST['bk-ac-user-id']) : '' );
-	  $bpid = ( isset( $_POST['bk-ac-product-id'] ) ? intval($_POST['bk-ac-product-id']) : '' );
+		$buid = ( isset( $_POST['bk-ac-user-email'] ) ? intval($_POST['bk-ac-user-email']) : '' );
+	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
 	  $bstatus= ( isset( $_POST['bk-ac-status'] ) ? esc_attr($_POST['bk-ac-status']) : '' );
 	  $bdate = ( isset( $_POST['bk-ac-date'] ) ? $_POST['bk-ac-date'] : '' );
 
 	  $meta_keys = array(
-	    'bk_ac_user_id' => $buid,
-	    'bk_ac_product_id' => $bpid,
+	    'bk_ac_user_email' => $buid,
+	    'bk_ac_product_sku' => $bpid,
 	    'bk_ac_status' => $bstatus,
 	    'bk_ac_date' => $bdate
 	  );
@@ -108,16 +108,16 @@ function bk_save_post_meta( $post_id, $post ) {
 	}
 
 	if( 'fs_serial_numbers' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-sn-user-id'] ) ? intval($_POST['bk-sn-user-id']) : '' );
+		$buid = ( isset( $_POST['bk-sn-user-email'] ) ? intval($_POST['bk-sn-user-email']) : '' );
 	  $bseller = ( isset( $_POST['bk-sn-seller-name'] ) ? esc_attr($_POST['bk-sn-seller-name']) : '' );
-		$bpid = ( isset( $_POST['bk-sn-product-id'] ) ? intval($_POST['bk-sn-product-id']) : '' );
+		$bpid = ( isset( $_POST['bk-sn-product-sku'] ) ? esc_attr($_POST['bk-sn-product-sku']) : '' );
 		$bstatus = isset( $_POST['bk-sn-status'] ) ? esc_attr( $_POST['bk-sn-status']) : '';
 	  $bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
 
 	  $meta_keys = array(
-	    'bk_sn_user_id' => $buid,
+	    'bk_sn_user_email' => $buid,
 			'bk_sn_seller_name' => $bseller,
-	    'bk_sn_product_id' => $bpid,
+	    'bk_sn_product_sku' => $bpid,
 	    'bk_sn_status' => $bstatus,
 	    'bk_sn_date' => $bdate
 	  );
@@ -136,9 +136,9 @@ function bk_sn_meta_box($object, $box) {
 
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_sn_meta_nonce' ); ?>
    <p>
-  	<label for="bk-sn-user-id"><?php _e( "User ID:", 'bk' ); ?>
-    <?php $user_id = get_post_meta( $object->ID, 'bk_sn_user_id', true ); ?>
-      <input type="text" name="bk-sn-user-id" class="" id="bk-sn-user-id" value="<?php echo esc_attr($user_id);?>" />
+  	<label for="bk-sn-user-email"><?php _e( "User Email:", 'bk' ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_sn_user_email', true ); ?>
+      <input type="text" name="bk-sn-user-email" class="" id="bk-sn-user-email" value="<?php echo esc_attr($user_id);?>" />
     </label>
    </p>
 	 <p>
@@ -148,9 +148,9 @@ function bk_sn_meta_box($object, $box) {
     </label>
    </p>
    <p>
-  	<label for="bk-sn-product-id"><?php _e( "Product ID:", 'bk' ); ?>
-    <?php $product_id = get_post_meta( $object->ID, 'bk_sn_product_id', true ); ?>
-      <input type="text" name="bk-sn-product-id" class="" id="bk-sn-product-id" value="<?php echo esc_attr($product_id);?>" />
+  	<label for="bk-sn-product-sku"><?php _e( "Product SKU:", 'bk' ); ?>
+    <?php $product_id = get_post_meta( $object->ID, 'bk_sn_product_sku', true ); ?>
+      <input type="text" name="bk-sn-product-sku" class="" id="bk-sn-product-sku" value="<?php echo esc_attr($product_id);?>" />
     </label>
    </p>
    <p>

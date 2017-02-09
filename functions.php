@@ -16,8 +16,10 @@ function bk_assign_activation_code_after_registration($order_id){
   // wp_die(print_r($order_items));
   foreach ( $order_items as $item ) {
       $product_id = $item['product_id'];
+      $pr = wc_get_product( $product_id );
+	  	$psku = $pr->get_sku();
       // if($item['qty']) {
-        array_push($order_ids,$product_id);
+        array_push($order_ids,$psku);
       // }
       // $product_name = $item['name'];
       // $order_ids[$product_id] = $product_name;
@@ -29,9 +31,9 @@ function bk_assign_activation_code_after_registration($order_id){
     $activation_code_ids = bk_get_unused_activation_codes($order_num);
     for($i=0;$i<sizeof($activation_code_ids);$i++){
       update_post_meta($activation_code_ids[$i], 'bk_ac_status', "used");
-      update_post_meta($activation_code_ids[$i], 'bk_ac_product_id', $order_ids[$i]);
-      update_post_meta($activation_code_ids[$i], 'bk_ac_user_id', $order->get_user_id());
-      update_post_meta($activation_code_ids[$i], 'bk_ac_date', date('mysql'));
+      update_post_meta($activation_code_ids[$i], 'bk_ac_product_sku', $order_ids[$i]);
+      update_post_meta($activation_code_ids[$i], 'bk_ac_user_email', $order->get_user_id());
+      update_post_meta($activation_code_ids[$i], 'bk_ac_date', current_time('mysql'));
     }
   }
 
