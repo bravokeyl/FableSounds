@@ -1,5 +1,5 @@
-<h4>Registered Keys</h4>
-<p>Here you can see all the registered keys of products that you bought from third party!</p>
+<h4>Registered Serials & Activation codes</h4>
+<p>Here you can see all the registered serials & activation codes of products that you bought from third party!</p>
 <?php
 $current_user = wp_get_current_user();
 $args = array(

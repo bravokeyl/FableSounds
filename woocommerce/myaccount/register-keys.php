@@ -1,6 +1,6 @@
-<h4>Register New Keys</h4>
+<h4>Register New Serials</h4>
 <p>
-  Register your keys that you got from third party stores
+  Register your serials that you got from third party stores
   to get activation codes by filling the following field.
 </p>
 <form action="" method="post">
@@ -21,7 +21,7 @@
     echo "</select>";?>
   </p>
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row form-row-last">
-    <label for="bk_serial_key"><?php _e( 'Register Serial Key', 'bk' ); ?> <span class="required">*</span></label>
+    <label for="bk_serial_key"><?php _e( 'Register serial number', 'bk' ); ?> <span class="required">*</span></label>
     <input type="text" required class="woocommerce-Input woocommerce-Input--text input-text" name="bk_serial_key" id="bk_serial_key"
     value="" />
   </p>
