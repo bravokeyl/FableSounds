@@ -1,0 +1,101 @@
+<?php
+add_action( 'load-post.php', 'bk_halion_meta_boxes_setup' );
+add_action( 'load-post-new.php', 'bk_halion_meta_boxes_setup' );
+
+function bk_halion_meta_boxes_setup() {
+	add_action( 'add_meta_boxes', 'bk_add_halion_meta_boxes' );
+  add_action( 'save_post', 'bk_save_halion_meta', 10, 2 );
+}
+
+function bk_add_halion_meta_boxes() {
+	add_meta_box(
+    'bk-halion-meta',
+    esc_html__( 'Halion Codes', 'bk' ),
+    'bk_halion_meta_box',
+    array('fs_halion_codes'),
+    'normal',
+    'default'
+  );
+}
+
+function bk_halion_meta_box($object, $box) {
+	?>
+
+  <?php wp_nonce_field( basename( __FILE__ ), 'bk_ac_meta_nonce' ); ?>
+   <p>
+  	<label for="bk-ac-user-email"><?php _e( "User ID:", 'bk' ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_email', true ); ?>
+      <input type="text" name="bk-ac-user-email" class="" id="bk-ac-user-email" value="<?php echo esc_html($user_id);?>" />
+    </label>
+   </p>
+   <p>
+  	<label for="bk-ac-product-sku"><?php _e( "Product SKU:", 'bk' ); ?>
+    <?php $product_id = get_post_meta( $object->ID, 'bk_ac_product_sku', true ); ?>
+      <input type="text" name="bk-ac-product-sku" class="" id="bk-ac-product-sku" value="<?php echo esc_html($product_id);?>" />
+    </label>
+   </p>
+   <p>
+  	<label for="bk-ac-status"><?php _e( "Status:", 'bk' ); ?>
+    <?php $status = get_post_meta( $object->ID, 'bk_ac_status', true );?>
+			<select name="bk-ac-status" id="bk-ac-status">
+					<option value="nused" <?php selected( $status, 'nused' ); ?>>Unused</option>
+					<option value="used" <?php selected( $status, 'used' ); ?>>Used</option>
+			</select>
+    </label>
+   </p>
+   <p>
+  	<label for="bk-ac-date"><?php _e( "Date:", 'bk' ); ?>
+    <?php $date = get_post_meta( $object->ID, 'bk_ac_date', true ); ?>
+      <input type="text" name="bk-ac-date" class="" id="bk-ac-date" value="<?php echo esc_html($date);?>" />
+    </label>
+   </p>
+<?php
+}
+
+function bk_save_halion_meta( $post_id, $post ) {
+
+	$post_type = get_post_type_object( $post->post_type );
+
+	if( 'fs_halion_codes' == $post->post_type) {
+	  if ( !isset( $_POST['bk_ac_meta_nonce'] ) || !wp_verify_nonce( $_POST['bk_ac_meta_nonce'], basename( __FILE__ ) ) )
+	    return $post_id;
+	}
+
+  if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+    return $post_id;
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+    return $post_id;
+  }
+
+  if ( wp_is_post_autosave( $post_id ) ) {
+    return $post_id;
+  }
+
+  if ( wp_is_post_revision( $post_id ) ) {
+    return $post_id;
+  }
+
+	$meta_keys = array();
+
+	if( 'fs_halion_codes' == $post->post_type) {
+		$buid = ( isset( $_POST['bk-ac-user-email'] ) ? intval($_POST['bk-ac-user-email']) : '' );
+	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
+	  $bstatus= ( isset( $_POST['bk-ac-status'] ) ? esc_attr($_POST['bk-ac-status']) : '' );
+	  $bdate = ( isset( $_POST['bk-ac-date'] ) ? $_POST['bk-ac-date'] : '' );
+
+	  $meta_keys = array(
+	    'bk_ac_user_email' => $buid,
+	    'bk_ac_product_sku' => $bpid,
+	    'bk_ac_status' => $bstatus,
+	    'bk_ac_date' => $bdate
+	  );
+
+	}
+
+  foreach ($meta_keys as $meta_key => $new_meta_value) {
+    $meta_value = get_post_meta( $post_id, $meta_key, true );
+    update_post_meta( $post_id, $meta_key, $new_meta_value );
+  }
+
+}
