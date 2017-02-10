@@ -230,3 +230,53 @@ function bk_get_product_name_by_sku($productsku){
 }
 
 include(get_stylesheet_directory().'/bk/halion/form-handler.php');
+
+
+function bk_extra_register_fields() {
+    ?>
+    <p class="form-row form-row-first">
+    <label for="reg_billing_first_name"><?php _e( 'First name', 'fablesounds' ); ?> <span class="required">*</span></label>
+    <input type="text" required class="input-text" name="billing_first_name" id="reg_billing_first_name" value="<?php if ( ! empty( $_POST['billing_first_name'] ) ) esc_attr_e( $_POST['billing_first_name'] ); ?>" />
+    </p>
+
+    <p class="form-row form-row-last">
+    <label for="reg_billing_last_name"><?php _e( 'Last name', 'fablesounds' ); ?> <span class="required">*</span></label>
+    <input type="text" required class="input-text" name="billing_last_name" id="reg_billing_last_name" value="<?php if ( ! empty( $_POST['billing_last_name'] ) ) esc_attr_e( $_POST['billing_last_name'] ); ?>" />
+    </p>
+
+    <div class="clear"></div>
+
+    <p class="form-row form-row-first">
+    <label for="billing_country"><?php _e( 'Country', 'fablesounds' ); ?> <span class="required">*</span></label>
+    <input type="text" required class="input-text" name="billing_country" id="billing_country" value="<?php if ( ! empty( $_POST['billing_country'] ) ) esc_attr_e( $_POST['billing_country'] ); ?>" />
+    </p>
+
+    <p class="form-row form-row-last">
+    <label for="reg_billing_phone"><?php _e( 'Phone', 'fablesounds' ); ?></label>
+    <input type="text" class="input-text" name="billing_phone" id="reg_billing_phone" value="<?php if ( ! empty( $_POST['billing_phone'] ) ) esc_attr_e( $_POST['billing_phone'] ); ?>" />
+    </p>
+
+    <div class="clear"></div>
+    <?php
+}
+
+add_action( 'woocommerce_register_form_start', 'bk_extra_register_fields' );
+
+
+function bk_save_extra_register_fields( $customer_id ) {
+    if ( isset( $_POST['billing_phone'] ) ) {
+       update_user_meta( $customer_id, 'billing_phone', sanitize_text_field( $_POST['billing_phone'] ) );
+    }
+    if ( isset( $_POST['billing_country'] ) ) {
+       update_user_meta( $customer_id, 'billing_country', sanitize_text_field( $_POST['billing_country'] ) );
+    }
+    if ( isset( $_POST['billing_first_name'] ) ) {
+       update_user_meta( $customer_id, 'first_name', sanitize_text_field( $_POST['billing_first_name'] ) );
+       update_user_meta( $customer_id, 'billing_first_name', sanitize_text_field( $_POST['billing_first_name'] ) );
+    }
+    if ( isset( $_POST['billing_last_name'] ) ) {
+       update_user_meta( $customer_id, 'last_name', sanitize_text_field( $_POST['billing_last_name'] ) );
+       update_user_meta( $customer_id, 'billing_last_name', sanitize_text_field( $_POST['billing_last_name'] ) );
+    }
+}
+add_action( 'woocommerce_created_customer', 'bk_save_extra_register_fields' );
