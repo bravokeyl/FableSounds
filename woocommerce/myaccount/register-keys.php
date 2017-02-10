@@ -37,7 +37,11 @@
   <div class="clear"></div>
   <p>
     <?php wp_nonce_field( 'save_register_keys_details' ); ?>
-    <input type="submit" class="woocommerce-Button button" value="<?php esc_attr_e( 'Save changes', 'fablesounds' ); ?>" />
+    <input type="submit" class="woocommerce-Button button" value="<?php esc_attr_e( 'Register Product', 'fablesounds' ); ?>" />
     <input type="hidden" name="action" value="save_register_keys_details" />
   </p>
 </form>
+<div class="clear"></div>
+<div class="halion-form">
+  <?php wc_get_template('myaccount/halion-form.php');?>
+</div>

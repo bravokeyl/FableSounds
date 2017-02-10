@@ -7,6 +7,15 @@
  Author URI:   http://greatives.eu
  Template:     blade
 */
-.bk-small {
-  max-width: 100px;
+.halion-form {
+  padding-top: 30px;
+}
+
+@media only screen and (min-width: 480px) {
+  .bk-small {
+    max-width: 100px;
+  }
+  .bk-xsmall {
+    max-width: 75px;
+  }
 }
