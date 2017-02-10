@@ -77,8 +77,9 @@ function bk_upgrade_product_menu_item($items) {
   $items = array(
 		'dashboard'       => __( 'Dashboard', 'blade-child' ),
 		'orders'          => __( 'Orders', 'blade-child' ),
-    'register-keys'       => __( 'Register a new product', 'blade-child' ),
     'registered-keycodes'   => __( 'Your activation codes', 'blade-child' ),
+    'register-keys'       => __( 'Register a new product', 'blade-child' ),
+    'register-halion'       => __( 'Register HALion - powered BBB', 'blade-child' ),
 		'edit-address'    => __( 'Addresses', 'blade-child' ),
 		'payment-methods' => __( 'Payment Methods', 'blade-child' ),
 		'edit-account'    => __( 'Account Details', 'blade-child' ),
@@ -89,12 +90,14 @@ function bk_upgrade_product_menu_item($items) {
 
 function bk_custom_endpoints() {
     add_rewrite_endpoint( 'register-keys', EP_ROOT | EP_PAGES );
+    add_rewrite_endpoint( 'register-halion', EP_ROOT | EP_PAGES );
     add_rewrite_endpoint( 'registered-keycodes', EP_ROOT | EP_PAGES );
 }
 add_action( 'init', 'bk_custom_endpoints' );
 
 function bk_custom_query_vars( $vars ) {
     $vars[] = 'register-keys';
+    $vars[] = 'register-halion';
     $vars[] = 'register-keycodes';
     return $vars;
 }
@@ -108,18 +111,27 @@ add_action('woocommerce_account_registered-keycodes_endpoint','bk_register_keyco
 function bk_register_keycodes_endpoint(){
   wc_get_template('myaccount/registered-keycodes.php');
 }
+add_action('woocommerce_account_register-halion_endpoint','bk_register_halion_endpoint');
+function bk_register_halion_endpoint(){
+  wc_get_template('myaccount/register-halion.php');
+}
 
 function bk_register_keys_endpoint_title( $title ) {
     global $wp_query;
 
     $is_endpoint = isset( $wp_query->query_vars['register-keys'] );
     $is_registered = isset( $wp_query->query_vars['registered-keycodes'] );
+    $is_halion = isset( $wp_query->query_vars['register-halion'] );
     if ( $is_endpoint && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ) {
         $title = __( 'Register a new product', 'bk' );
 
         remove_filter( 'the_title', 'bk_register_keys_endpoint_title' );
     }elseif( $is_registered && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ){
        $title = __( 'Your activation codes', 'bk' );
+
+       remove_filter( 'the_title', 'bk_register_keys_endpoint_title' );
+    }elseif( $is_halion && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ){
+       $title = __( 'Register HALion - powered BBB', 'bk' );
 
        remove_filter( 'the_title', 'bk_register_keys_endpoint_title' );
     }

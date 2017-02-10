@@ -1,7 +1,6 @@
 <h4>Register New Serials</h4>
 <p>
-  Register your serials that you got from third party stores
-  to get activation codes by filling the following field.
+  Select your product from the drop-down menu and enter your serial number below.
 </p>
 <form action="" method="post">
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
@@ -42,6 +41,3 @@
   </p>
 </form>
 <div class="clear"></div>
-<div class="halion-form">
-  <?php wc_get_template('myaccount/halion-form.php');?>
-</div>

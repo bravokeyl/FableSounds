@@ -1,5 +1,4 @@
 <h4>Your registered products</h4>
-<p>Here you can see all the activation codes of products that you bought.</p>
 <?php
 $current_user = wp_get_current_user();
 $activation_args = array(
@@ -31,7 +30,7 @@ if($activation_qe->have_posts()){?>
           <?php _e("Serial Number","bk");?>
         </th>
         <th>
-          <?php _e("Assigned Date","bk");?>
+          <?php _e("Registration Date","bk");?>
         </th>
       </tr>
     </thead>
