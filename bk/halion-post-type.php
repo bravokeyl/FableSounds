@@ -65,6 +65,9 @@ function fs_halion_codes_columns($existing_columns){
   $columns                = array();
   $columns['cb']          = $existing_columns['cb'];
   $columns['title'] = __( 'Serial Number', 'fablesounds' );
+  $columns['brass'] = __( 'Brass Code', 'fablesounds' );
+  $columns['reeds'] = __( 'Reeds Code', 'fablesounds' );
+  $columns['rythm'] = __( 'Rythm Code', 'fablesounds' );
   // $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
   // $columns['product_id']      = __( 'Product SKU', 'fablesounds' );
   $columns['user_email'] = __( 'User Email', 'fablesounds' );
@@ -77,41 +80,47 @@ function fs_halion_codes_columns($existing_columns){
 }
 function fs_render_halion_codes_columns( $column ) {
   global $post, $woocommerce;
+  $halion_codes =  get_post_meta( $post->ID, 'bk_halion_codes', true );
+  $halion_user_email = get_post_meta( $post->ID, 'bk_halion_user_email', true );
+  $halion_user= get_user_by( 'email', $halion_user_email );
   switch ( $column ) {
-    case 'seller_name' :
-			$snseller =  get_post_meta( $post->ID, 'bk_sn_seller_name', true );
-			if ( $snseller ) {
-				echo esc_attr($snseller);
+    case 'brass' :
+			if ( $halion_codes ) {
+				echo esc_attr($halion_codes[0]);
 			} else {
 				echo '&ndash;';
 			}
     break;
-    case 'product_id' :
-			$snpid =  get_post_meta( $post->ID, 'bk_sn_product_sku', true );
-			if ( $snpid ) {
-				echo esc_attr($snpid);
+    case 'reeds' :
+			if ( $halion_codes ) {
+				echo esc_attr($halion_codes[1]);
+			} else {
+				echo '&ndash;';
+			}
+    break;
+    case 'rythm' :
+			if ( $halion_codes ) {
+				echo esc_attr($halion_codes[2]);
 			} else {
 				echo '&ndash;';
 			}
     break;
     case 'user_email' :
-			$snuid = get_post_meta( $post->ID, 'bk_sn_user_email', true );
-			if ( $snuid ) {
-				echo sanitize_email($snuid);
+			if ( $halion_user_email ) {
+				echo sanitize_email($halion_user_email);
 			} else {
 				echo '&ndash;';
 			}
     break;
     case 'user_name' :
-			$snuid = get_post_meta( $post->ID, 'bk_sn_user_email', true );
-			if ( $snuid ) {
-				echo sanitize_email($snuid);
+			if ( $halion_user ) {
+				echo esc_attr($halion_user->display_name);
 			} else {
 				echo '&ndash;';
 			}
     break;
     case 'status' :
-		  $status = get_post_meta( $post->ID, 'bk_sn_status', true );
+		  $status = get_post_meta( $post->ID, 'bk_halion_status', true );
 			if ( $status == 'reg' ) {
 				echo "Registered";
 			}else {
@@ -119,7 +128,7 @@ function fs_render_halion_codes_columns( $column ) {
 			}
     break;
     case 'serial_date' :
-			$sndate = get_post_meta( $post->ID, 'bk_sn_date', true );
+			$sndate = get_post_meta( $post->ID, 'bk_halion_date', true );
 			if ( $sndate ) {
 				echo esc_attr($sndate);
 			} else {

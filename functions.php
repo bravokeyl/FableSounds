@@ -239,9 +239,9 @@ function bk_register_halion_keys(){
           $halion_serial[2] .= esc_attr(strtoupper($_POST[$rythm_key]));
         }
       }
-      wp_die(print_r($halion_serial));
+      // wp_die(print_r($halion_serial));
       if ( !empty( $halion_serial ) ) {
-        $serial_found = bk_check_serial_number($bk_serial_key_val);
+        // $serial_found = bk_check_serial_number($bk_serial_key_val);
         if(empty($serial_found)){
           wc_add_notice( __( 'Invalid Serial Number, please check it.', 'bk' ),'error' );
           wp_safe_redirect( wc_get_endpoint_url( 'register-keys' ) );
