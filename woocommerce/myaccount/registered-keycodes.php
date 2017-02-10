@@ -61,10 +61,7 @@ if($activation_qe->have_posts()){?>
 </table><?php
   wp_reset_postdata();
 }
-?>
-<h4>Your HALION products</h4>
-<p>Here you can see all the activation codes of products that you bought.</p>
-<?php
+
 $current_user = wp_get_current_user();
 $halion_args = array(
   'post_type'      => 'fs_halion_codes',
@@ -82,6 +79,8 @@ $halion_args = array(
 $halion_qe = new WP_Query($halion_args);
 // print_r($q);
 if($halion_qe->have_posts()){?>
+  <h4>Your HALION products</h4>
+  <p>Here you can see all the activation codes of products that you bought.</p>
   <table class="row">
     <thead>
       <tr>

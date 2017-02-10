@@ -32,7 +32,7 @@ function bk_check_halion_keys($halion_serial){
   );
 
   $query = new WP_Query($args);
-
+  // wp_die(print_r($query->request));
   if($query->have_posts()){
     while($query->have_posts()){
       $query->the_post();
