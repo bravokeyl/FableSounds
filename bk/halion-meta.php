@@ -23,9 +23,9 @@ function bk_halion_meta_box($object, $box) {
 
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_ac_meta_nonce' ); ?>
    <p>
-  	<label for="bk-ac-user-email"><?php _e( "User ID:", 'bk' ); ?>
+  	<label for="bk-halion-user-email"><?php _e( "User ID:", 'bk' ); ?>
     <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_email', true ); ?>
-      <input type="text" name="bk-ac-user-email" class="" id="bk-ac-user-email" value="<?php echo esc_html($user_id);?>" />
+      <input type="text" name="bk-halion-user-email" class="" id="bk-halion-user-email" value="<?php echo esc_html($user_id);?>" />
     </label>
    </p>
    <p>
@@ -35,18 +35,18 @@ function bk_halion_meta_box($object, $box) {
     </label>
    </p>
    <p>
-  	<label for="bk-ac-status"><?php _e( "Status:", 'bk' ); ?>
-    <?php $status = get_post_meta( $object->ID, 'bk_ac_status', true );?>
-			<select name="bk-ac-status" id="bk-ac-status">
-					<option value="nused" <?php selected( $status, 'nused' ); ?>>Unused</option>
-					<option value="used" <?php selected( $status, 'used' ); ?>>Used</option>
+  	<label for="bk-halion-status"><?php _e( "Status:", 'bk' ); ?>
+    <?php $status = get_post_meta( $object->ID, 'bk_halion_status', true );?>
+			<select name="bk-halion-status" id="bk-halion-status">
+					<option value="nreg" <?php selected( $status, 'nreg' ); ?>>Not Registered</option>
+					<option value="reg" <?php selected( $status, 'reg' ); ?>>Registered</option>
 			</select>
     </label>
    </p>
    <p>
-  	<label for="bk-ac-date"><?php _e( "Date:", 'bk' ); ?>
-    <?php $date = get_post_meta( $object->ID, 'bk_ac_date', true ); ?>
-      <input type="text" name="bk-ac-date" class="" id="bk-ac-date" value="<?php echo esc_html($date);?>" />
+  	<label for="bk-halion-date"><?php _e( "Date:", 'bk' ); ?>
+    <?php $date = get_post_meta( $object->ID, 'bk_halion_date', true ); ?>
+      <input type="text" name="bk-halion-date" class="" id="bk-halion-date" value="<?php echo esc_html($date);?>" />
     </label>
    </p>
 <?php
@@ -79,16 +79,16 @@ function bk_save_halion_meta( $post_id, $post ) {
 	$meta_keys = array();
 
 	if( 'fs_halion_codes' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-ac-user-email'] ) ? intval($_POST['bk-ac-user-email']) : '' );
+		$buid = ( isset( $_POST['bk-halion-user-email'] ) ? intval($_POST['bk-halion-user-email']) : '' );
 	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
-	  $bstatus= ( isset( $_POST['bk-ac-status'] ) ? esc_attr($_POST['bk-ac-status']) : '' );
-	  $bdate = ( isset( $_POST['bk-ac-date'] ) ? $_POST['bk-ac-date'] : '' );
+	  $bstatus= ( isset( $_POST['bk-halion-status'] ) ? esc_attr($_POST['bk-halion-status']) : '' );
+	  $bdate = ( isset( $_POST['bk-halion-date'] ) ? $_POST['bk-halion-date'] : '' );
 
 	  $meta_keys = array(
-	    'bk_ac_user_email' => $buid,
+	    'bk_halion_user_email' => $buid,
 	    'bk_ac_product_sku' => $bpid,
-	    'bk_ac_status' => $bstatus,
-	    'bk_ac_date' => $bdate
+	    'bk_halion_status' => $bstatus,
+	    'bk_halion_date' => $bdate
 	  );
 
 	}
