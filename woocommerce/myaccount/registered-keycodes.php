@@ -81,7 +81,7 @@ $halion_qe = new WP_Query($halion_args);
 if($halion_qe->have_posts()){?>
   <h4>Your HALION products</h4>
   <p>Here you can see all the activation codes of products that you bought.</p>
-  <table class="row">
+  <table class="row halion-table">
     <thead>
       <tr>
         <th>
