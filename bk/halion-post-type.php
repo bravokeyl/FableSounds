@@ -80,27 +80,29 @@ function fs_halion_codes_columns($existing_columns){
 }
 function fs_render_halion_codes_columns( $column ) {
   global $post, $woocommerce;
-  $halion_codes =  get_post_meta( $post->ID, 'bk_halion_codes', true );
+  $halion_brass_code =  get_post_meta( $post->ID, 'bk_halion_brass_code', true );
+  $halion_reeds_code =  get_post_meta( $post->ID, 'bk_halion_reeds_code', true );
+  $halion_rythm_code =  get_post_meta( $post->ID, 'bk_halion_rythm_code', true );
   $halion_user_email = get_post_meta( $post->ID, 'bk_halion_user_email', true );
   $halion_user= get_user_by( 'email', $halion_user_email );
   switch ( $column ) {
     case 'brass' :
-			if ( $halion_codes ) {
-				echo esc_attr($halion_codes[0]);
+			if ( $halion_brass_code ) {
+				echo esc_attr($halion_brass_code);
 			} else {
 				echo '&ndash;';
 			}
     break;
     case 'reeds' :
-			if ( $halion_codes ) {
-				echo esc_attr($halion_codes[1]);
+			if ( $halion_reeds_code ) {
+				echo esc_attr($halion_reeds_code);
 			} else {
 				echo '&ndash;';
 			}
     break;
     case 'rythm' :
-			if ( $halion_codes ) {
-				echo esc_attr($halion_codes[2]);
+			if ( $halion_rythm_code ) {
+				echo esc_attr($halion_rythm_code);
 			} else {
 				echo '&ndash;';
 			}

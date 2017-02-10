@@ -74,10 +74,10 @@ function bk_register_halion_keys(){
         } else {
           $bk_current_user = wp_get_current_user();
           update_post_meta(intval($serial_found[0]),'bk_halion_status','reg');
-          update_post_meta(intval($serial_found[0]),'bk_halion_codes', $halion_serial);
-          update_post_meta(intval($serial_found[0]),'bk_halion_brass_code', $halion_serial);
-          update_post_meta(intval($serial_found[0]),'bk_halion_reeds_code', $halion_serial);
-          update_post_meta(intval($serial_found[0]),'bk_halion_rythm_code', $halion_serial);
+          // update_post_meta(intval($serial_found[0]),'bk_halion_codes', $halion_serial);
+          // update_post_meta(intval($serial_found[0]),'bk_halion_brass_code', $halion_serial[0]);
+          // update_post_meta(intval($serial_found[0]),'bk_halion_reeds_code', $halion_serial[0]);
+          // update_post_meta(intval($serial_found[0]),'bk_halion_rythm_code', $halion_serial[0]);
           // update_post_meta(intval($serial_found[0]),'bk_sn_product_sku',$products_dropdown_val);
           update_post_meta(intval($serial_found[0]),'bk_halion_user_email',$bk_current_user->user_email);
           update_post_meta(intval($serial_found[0]),'bk_halion_date',current_time('mysql'));

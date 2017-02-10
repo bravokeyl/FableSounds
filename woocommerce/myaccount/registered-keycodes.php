@@ -61,3 +61,66 @@ if($activation_qe->have_posts()){?>
 </table><?php
   wp_reset_postdata();
 }
+?>
+<h4>Your HALION products</h4>
+<p>Here you can see all the activation codes of products that you bought.</p>
+<?php
+$current_user = wp_get_current_user();
+$halion_args = array(
+  'post_type'      => 'fs_halion_codes',
+  'post_status'    => 'publish',
+  'posts_per_page' => '-1',
+  'meta_key'       => 'bk_halion_user_email',
+  'meta_query'     => array(
+    array(
+      'key'     => 'bk_halion_user_email',
+      'value'   => $current_user->user_email,
+      'compare' => '='
+    )
+  ),
+);
+$halion_qe = new WP_Query($halion_args);
+// print_r($q);
+if($halion_qe->have_posts()){?>
+  <table class="row">
+    <thead>
+      <tr>
+        <th>
+          <?php _e("Brass","bk");?>
+        </th>
+        <th>
+          <?php _e("Reeds","bk");?>
+        </th>
+        <th>
+          <?php _e("Rythm","bk");?>
+        </th>
+        <th>
+          <?php _e("Assigned Date","bk");?>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+  <?php while ($halion_qe->have_posts()) {
+    $halion_qe->the_post();
+    $hal_acid = get_the_ID();
+    ?>
+        <tr>
+          <td>
+            <?php echo get_post_meta($hal_acid,'bk_halion_brass_code',true);?>
+          </td>
+          <td>
+            <?php echo get_post_meta($hal_acid,'bk_halion_reeds_code',true);?>
+          </td>
+          <td>
+            <?php echo get_post_meta($hal_acid,'bk_halion_rythm_code',true);?>
+          </td>
+          <td>
+            <?php echo get_post_meta($hal_acid,'bk_halion_date',true);?>
+          </td>
+        </tr>
+    <?php
+  }?>
+  </tbody>
+</table><?php
+  wp_reset_postdata();
+}
