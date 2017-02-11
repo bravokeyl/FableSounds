@@ -280,3 +280,11 @@ function bk_save_extra_register_fields( $customer_id ) {
     }
 }
 add_action( 'woocommerce_created_customer', 'bk_save_extra_register_fields' );
+
+
+function bk_add_serial_to_line_item( $order_data, $order ) {
+    $order_data['serial'] = "98290-56771-04051-40477-00756";
+
+    return $order_data;
+}
+add_filter( 'woocommerce_api_order_response', 'bk_add_serial_to_line_item', 10, 2 );
