@@ -6,8 +6,8 @@ include(get_stylesheet_directory().'/bk/halion-post-type.php');
 include(get_stylesheet_directory().'/bk/meta.php');
 include(get_stylesheet_directory().'/bk/halion-meta.php');
 
-function bk_assign_activation_code_after_registration($order_id){
-  $order = new WC_Order( $order_id );
+function bk_assign_activation_code_after_registration($order){
+  //$order = new WC_Order( $order_id );
 
   $customer_obj = $order->get_user();
   $customer_email = sanitize_email($customer_obj->user_email);
@@ -40,7 +40,7 @@ function bk_assign_activation_code_after_registration($order_id){
   }
 
 }
-add_action('woocommerce_order_status_completed','bk_assign_activation_code_after_registration');
+//add_action('woocommerce_order_status_completed','bk_assign_activation_code_after_registration');
 
 
 function bk_get_unused_activation_codes($number){
@@ -283,7 +283,39 @@ add_action( 'woocommerce_created_customer', 'bk_save_extra_register_fields' );
 
 
 function bk_add_serial_to_line_item( $order_data, $order ) {
-    $order_data['serial'] = "98290-56771-04051-40477-00756";
+    $order_data['serial_data'] = array();
+
+    foreach ( $order->get_items() as $item_id => $item ) {
+			$product     = $order->get_product_from_item( $item );
+			$product_id  = null;
+			$product_sku = null;
+
+			if ( is_object( $product ) ) {
+				$product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
+				$product_sku = $product->get_sku();
+			}
+      //bk_assign_activation_code_after_registration($order);
+
+      $quantity = intval($order_data['total_line_items_quantity']);
+      $customer = $order_data['customer'];
+      $customer_email = $customer->email;
+      $activation_code_ids = bk_get_unused_activation_codes($quantity);
+
+      for($i=0;$i<sizeof($activation_code_ids);$i++){
+        update_post_meta($activation_code_ids[$i], 'bk_ac_status', "used");
+        update_post_meta($activation_code_ids[$i], 'bk_ac_product_sku', $product_sku);
+        update_post_meta($activation_code_ids[$i], 'bk_ac_user_email', $customer_email);
+        update_post_meta($activation_code_ids[$i], 'bk_ac_date', current_time('mysql'));
+      }
+
+      $serial = "98290-56771-04051-40477-".wp_rand(1000,9999);
+      $serial_data = array(
+        "product_id" => $product_id,
+        "product_sku" => $product_sku,
+        "serial" => $serial
+      );
+			$order_data['serial_data'][] = $serial_data;
+		}
 
     return $order_data;
 }
