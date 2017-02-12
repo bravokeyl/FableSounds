@@ -291,6 +291,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     $serials = bk_get_unused_activation_codes($quantity);
     $serial_index = 0;
 
+    
     foreach ( $order->get_items() as $item_id => $item ) {
 			$product     = $order->get_product_from_item( $item );
 			$product_id  = null;
