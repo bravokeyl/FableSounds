@@ -361,9 +361,16 @@ function my_custom_function(){
     // if(!($key == 'billing_first_name' || $key == 'billing_last_name')){
     //   $field['required'] = false;
     // }
+    if(($key == 'billing_company')){
+      $field['class'] = array(
+        'form-row-first'
+      );
+    }
     if(!($key == 'billing_email')){
+      //print_r($field);
       woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
     }
+
   endforeach;
 }
 add_action('woocommerce_register_form','my_custom_function');
@@ -373,6 +380,6 @@ function bk_enqueue_scripts(){
   $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
   $assets_path = str_replace( array( 'http:', 'https:' ), '', WC()->plugin_url() ) . '/assets/';
   $frontend_script_path = $assets_path . 'js/frontend/';
-
+  // make sure to enqueue this only on login reg page
   wp_enqueue_script( 'wc-country-select', $frontend_script_path . 'country-select' . $suffix . '.js' );
 }
