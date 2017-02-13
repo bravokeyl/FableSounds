@@ -130,6 +130,7 @@ function fs_serial_numbers_columns($existing_columns){
   //$columns['products']    = __( 'Product IDs', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
   $columns['serial_date'] = __( 'Date', 'fablesounds' );
+	$columns['distributed'] = __( 'Distributed', 'fablesounds' );
 
   return $columns;
 }
@@ -170,6 +171,14 @@ function fs_render_serial_numbers_columns( $column ) {
     break;
     case 'serial_date' :
 			$sndate = get_post_meta( $post->ID, 'bk_sn_date', true );
+			if ( $sndate ) {
+				echo esc_attr($sndate);
+			} else {
+				echo '&ndash;';
+			}
+    break;
+		case 'distributed' :
+			$sndate = get_post_meta( $post->ID, 'bk_sn_distributed', true );
 			if ( $sndate ) {
 				echo esc_attr($sndate);
 			} else {

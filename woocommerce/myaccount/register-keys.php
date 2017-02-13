@@ -1,24 +1,8 @@
 <h4>Register New Serials</h4>
 <p>
-  Select your product from the drop-down menu and enter your serial number below.
+  Enter your serial number below to register your product.
 </p>
 <form action="" method="post">
-  <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
-    <label for="bk_product_sku"><?php _e( 'Product', 'bk' ); ?> <span class="required">*</span></label>
-    <?php
-    //Save Database query by hardcoding
-    $products_dropdown = array(
-      'BGDR'  =>  'Broadway Gig',
-      'BLDR'  =>  'Broadway Lites',
-      'BKFDR' =>  'Broadway Big Band – Kontakt Edition'
-    );
-
-    echo "<select name='products_dropdown'>";
-    foreach( $products_dropdown as $key => $product ){
-        echo "<option value = '" . esc_attr( $key ) . "'>" . esc_html( $product ) . "</option>";
-    }
-    echo "</select>";?>
-  </p>
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
     <label for="bk_serial_key"><?php _e( 'Register serial number', 'bk' ); ?> <span class="required">*</span></label>
     <input type="text" required class="woocommerce-Input woocommerce-Input--text input-text bk-small" name="bk_serial_key1" id="bk_serial_key1"
