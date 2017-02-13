@@ -31,7 +31,6 @@
     pattern="[A-Za-z0-9]{4}"title="Four digit alphanumeric" name="bk_serial_key4" id="bk_serial_key4" value="" />  &nbsp;&ndash;&nbsp;
     <input type="text" required class="woocommerce-Input woocommerce-Input--text input-text bk-small"
     pattern="[A-Za-z0-9]{4}"title="Four digit alphanumeric" name="bk_serial_key5" id="bk_serial_key5" value="" />
-
   </p>
   <div class="clear"></div>
   <p>

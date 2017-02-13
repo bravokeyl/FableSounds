@@ -202,6 +202,9 @@ function bk_save_register_keys_details(){
           update_post_meta($activation_code_id[0], 'bk_ac_product_sku', $products_dropdown_val);
           update_post_meta($activation_code_id[0], 'bk_ac_user_login', $bk_current_user->user_login);
           update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
+
+          // wc_create_order();
+          $order = wc_create_order();
           wc_add_notice( __( 'Serial Number successfully registered.', 'bk' ) );
           wp_safe_redirect( wc_get_endpoint_url( 'registered-keycodes' ) );
     			exit;
