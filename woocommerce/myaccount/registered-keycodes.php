@@ -5,11 +5,11 @@ $activation_args = array(
   'post_type'      => 'fs_activation_codes',
   'post_status'    => 'publish',
   'posts_per_page' => '-1',
-  'meta_key'       => 'bk_ac_user_email',
+  'meta_key'       => 'bk_ac_user_login',
   'meta_query'     => array(
     array(
-      'key'     => 'bk_ac_user_email',
-      'value'   => $current_user->user_email,
+      'key'     => 'bk_ac_user_login',
+      'value'   => $current_user->user_login,
       'compare' => '='
     )
   ),
@@ -68,10 +68,10 @@ $halion_args = array(
   'post_type'      => 'fs_halion_codes',
   'post_status'    => 'publish',
   'posts_per_page' => '-1',
-  'meta_key'       => 'bk_halion_user_email',
+  'meta_key'       => 'bk_halion_user_login',
   'meta_query'     => array(
     array(
-      'key'     => 'bk_halion_user_email',
+      'key'     => 'bk_halion_user_login',
       'value'   => $current_user->user_email,
       'compare' => '='
     )

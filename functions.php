@@ -10,7 +10,7 @@ function bk_assign_activation_code_after_registration($order_id){
   $order = new WC_Order( $order_id );
 
   $customer_obj = $order->get_user();
-  $customer_email = sanitize_email($customer_obj->user_email);
+  $customer_email = sanitize_email($customer_obj->user_name);
   // $customer_login = $customer_obj->user_login;
 
   $order_ids = array();
@@ -194,13 +194,13 @@ function bk_save_register_keys_details(){
           $bk_current_user = wp_get_current_user();
           update_post_meta(intval($serial_found[0]),'bk_sn_status','reg');
           update_post_meta(intval($serial_found[0]),'bk_sn_product_sku',$products_dropdown_val);
-          update_post_meta(intval($serial_found[0]),'bk_sn_user_email',$bk_current_user->user_email);
+          update_post_meta(intval($serial_found[0]),'bk_sn_user_login',$bk_current_user->user_login);
           update_post_meta(intval($serial_found[0]),'bk_sn_date',current_time('mysql'));
           $activation_code_id = bk_get_unused_activation_codes(1);
           update_post_meta($activation_code_id[0], 'bk_ac_status', "used");
           update_post_meta($activation_code_id[0], 'bk_ac_serial_activation', get_the_title( $serial_found[0]));
           update_post_meta($activation_code_id[0], 'bk_ac_product_sku', $products_dropdown_val);
-          update_post_meta($activation_code_id[0], 'bk_ac_user_email', $bk_current_user->user_email);
+          update_post_meta($activation_code_id[0], 'bk_ac_user_login', $bk_current_user->user_login);
           update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
           wc_add_notice( __( 'Serial Number successfully registered.', 'bk' ) );
           wp_safe_redirect( wc_get_endpoint_url( 'registered-keycodes' ) );
