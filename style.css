@@ -13,6 +13,40 @@
 .halion-table {
   word-break: break-all;
 }
+.ajax_add_to_cart.added {
+  display: none;
+}
+.added_to_cart.wc-forward {
+  background-color: #f1b144;
+  color: #ffffff;
+  display: inline-block;
+  padding: 20px;
+  z-index: 2;
+    vertical-align: top;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    outline: 0;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    -webkit-appearance: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: color .5s ease, background-color .5s ease, border-color .5s ease;
+    -moz-transition: color .5s ease, background-color .5s ease, border-color .5s ease;
+    -o-transition: color .5s ease, background-color .5s ease, border-color .5s ease;
+    -ms-transition: color .5s ease, background-color .5s ease, border-color .5s ease;
+    transition: color .5s ease, background-color .5s ease, border-color .5s ease;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
 @media only screen and (min-width: 480px) {
   .bk-small {
     max-width: 100px;
