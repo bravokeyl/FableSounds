@@ -9,8 +9,8 @@ function bk_add_to_cart( $atts ) {
   $url = '';
   $pid = intval($atts['id']);
   $class = "grve-btn grve-btn-medium grve-round grve-bg-primary-1";
-  $href= '';
-  $eligible= true;
+  $href = '';
+  $eligible = false;
   $label = $atts['label'];
 
   if( "new" === $atts['type'] ){
