@@ -141,16 +141,22 @@ function bk_register_keys_endpoint_title( $title ) {
 
 add_filter( 'the_title', 'bk_register_keys_endpoint_title' );
 
-function bk_check_serial_number($serial){
+function bk_check_serial_number($serial,$sku){
   $code = array();
   $args = array(
     'post_type' => 'fs_serial_numbers',
     'name'      => $serial,
     'posts_per_page' => '1',
     'meta_query' => array(
+      'relation' => 'AND',
       array(
         'key' => 'bk_sn_status',
         'value' => "nreg",
+        'compare' => '='
+      ),
+      array(
+        'key' => 'bk_sn_product_sku',
+        'value' => $sku,
         'compare' => '='
       )
     ),
@@ -158,7 +164,7 @@ function bk_check_serial_number($serial){
   );
 
   $query = new WP_Query($args);
-
+  // wp_die(print_r($query->request));
   if($query->have_posts()){
     while($query->have_posts()){
       $query->the_post();
@@ -185,7 +191,8 @@ function bk_save_register_keys_details(){
       $products_dropdown_val = ! empty( $_POST['products_dropdown'] )? esc_attr($_POST['products_dropdown']): '';
 
       if ( !empty( $bk_serial_key_val ) ) {
-        $serial_found = bk_check_serial_number($bk_serial_key_val);
+        $serial_found = bk_check_serial_number($bk_serial_key_val,$products_dropdown_val);
+        // wp_die(print_r($serial_found));
         if(empty($serial_found)){
           wc_add_notice( __( 'Invalid Serial Number, please check it.', 'bk' ),'error' );
           wp_safe_redirect( wc_get_endpoint_url( 'register-keys' ) );
@@ -193,7 +200,7 @@ function bk_save_register_keys_details(){
         } else {
           $bk_current_user = wp_get_current_user();
           update_post_meta(intval($serial_found[0]),'bk_sn_status','reg');
-          update_post_meta(intval($serial_found[0]),'bk_sn_product_sku',$products_dropdown_val);
+          //update_post_meta(intval($serial_found[0]),'bk_sn_product_sku',$products_dropdown_val);
           update_post_meta(intval($serial_found[0]),'bk_sn_user_login',$bk_current_user->user_login);
           update_post_meta(intval($serial_found[0]),'bk_sn_date',current_time('mysql'));
           $activation_code_id = bk_get_unused_activation_codes(1);
