@@ -260,7 +260,7 @@ function bk_extra_register_fields() {
     <?php
 }
 
-add_action( 'woocommerce_register_form_start', 'bk_extra_register_fields' );
+//add_action( 'woocommerce_register_form_start', 'bk_extra_register_fields' );
 
 
 function bk_save_extra_register_fields( $customer_id ) {
@@ -277,6 +277,24 @@ function bk_save_extra_register_fields( $customer_id ) {
     if ( isset( $_POST['billing_last_name'] ) ) {
        update_user_meta( $customer_id, 'last_name', sanitize_text_field( $_POST['billing_last_name'] ) );
        update_user_meta( $customer_id, 'billing_last_name', sanitize_text_field( $_POST['billing_last_name'] ) );
+    }
+    if ( isset( $_POST['billing_company'] ) ) {
+       update_user_meta( $customer_id, 'billing_company', sanitize_text_field( $_POST['billing_company'] ) );
+    }
+    if ( isset( $_POST['billing_address_1'] ) ) {
+       update_user_meta( $customer_id, 'billing_address_1', sanitize_text_field( $_POST['billing_address_1'] ) );
+    }
+    if ( isset( $_POST['billing_address_2'] ) ) {
+       update_user_meta( $customer_id, 'billing_address_2', sanitize_text_field( $_POST['billing_address_2'] ) );
+    }
+    if ( isset( $_POST['billing_city'] ) ) {
+       update_user_meta( $customer_id, 'billing_city', sanitize_text_field( $_POST['billing_city'] ) );
+    }
+    if ( isset( $_POST['billing_state'] ) ) {
+       update_user_meta( $customer_id, 'billing_state', sanitize_text_field( $_POST['billing_state'] ) );
+    }
+    if ( isset( $_POST['billing_postcode'] ) ) {
+       update_user_meta( $customer_id, 'billing_postcode', sanitize_text_field( $_POST['billing_postcode'] ) );
     }
 }
 add_action( 'woocommerce_created_customer', 'bk_save_extra_register_fields' );
@@ -332,4 +350,29 @@ add_filter( 'woocommerce_checkout_fields' , 'bk_woo_no_order_notes' );
 function bk_woo_no_order_notes( $fields ) {
    unset($fields['order']['order_comments']);
    return $fields;
+}
+
+
+function my_custom_function(){
+  global $woocommerce;
+  $checkout = $woocommerce->checkout();
+
+  foreach ($checkout->checkout_fields['billing'] as $key => $field) :
+    // if(!($key == 'billing_first_name' || $key == 'billing_last_name')){
+    //   $field['required'] = false;
+    // }
+    if(!($key == 'billing_email')){
+      woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+    }
+  endforeach;
+}
+add_action('woocommerce_register_form','my_custom_function');
+
+add_action('wp_enqueue_scripts','bk_enqueue_scripts');
+function bk_enqueue_scripts(){
+  $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+  $assets_path = str_replace( array( 'http:', 'https:' ), '', WC()->plugin_url() ) . '/assets/';
+  $frontend_script_path = $assets_path . 'js/frontend/';
+
+  wp_enqueue_script( 'wc-country-select', $frontend_script_path . 'country-select' . $suffix . '.js' );
 }
