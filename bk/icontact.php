@@ -50,6 +50,7 @@ function add_user_to_icontact($email, $firstName, $lastName, $userId) {
 				'fablesoundsuserid' => $userId
 			)
 		));
+    // wp_die(print_r($response));
 }
 
 function mark_as_new_lites_user($fableUserId, $dump_response) {
@@ -155,12 +156,13 @@ function add_to_list($userId, $listName, $dump_response){
 }
 
 function add_user_to_list($userId, $listId, $dump_response) {
-	error_log('adding user '.$userId.' to mailing list: '.$listName);
+	error_log('adding user '.$userId.' to mailing list: '.$listId);
 
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
 
 	$contactId = get_contact_id($userId);
+  //wp_die($contactId);
 	if ($contactId > 0)
 	{
 		error_log('contactId = '.$contactId);
@@ -176,7 +178,7 @@ function add_user_to_list($userId, $listId, $dump_response) {
 						'status' => 'normal'
 					)
 				));
-
+      // wp_die(print_r($response));
 			if ($dump_response == true)
 			{
 				dump($response);
@@ -184,6 +186,7 @@ function add_user_to_list($userId, $listId, $dump_response) {
 
 		}
 	}
+
 }
 
 function delete_user($userId, $dump_response) {

@@ -266,6 +266,12 @@ function bk_get_product_name_by_sku($productsku){
 include(get_stylesheet_directory().'/bk/halion/form-handler.php');
 
 function bk_save_extra_register_fields( $customer_id ) {
+    $firstName = sanitize_text_field( $_POST['billing_first_name'] );
+    $lastName = sanitize_text_field( $_POST['billing_first_name'] );
+    $email = sanitize_text_field( $_POST['email'] );
+    $user = get_user_by('email',$email);
+    $userId = $user->login;
+
     if ( isset( $_POST['billing_phone'] ) ) {
        update_user_meta( $customer_id, 'billing_phone', sanitize_text_field( $_POST['billing_phone'] ) );
     }
@@ -298,6 +304,9 @@ function bk_save_extra_register_fields( $customer_id ) {
     if ( isset( $_POST['billing_postcode'] ) ) {
        update_user_meta( $customer_id, 'billing_postcode', sanitize_text_field( $_POST['billing_postcode'] ) );
     }
+
+    add_user_to_icontact($email, $firstName, $lastName, $userId);
+
 }
 add_action( 'woocommerce_created_customer', 'bk_save_extra_register_fields' );
 
