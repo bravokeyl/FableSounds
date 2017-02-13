@@ -352,15 +352,39 @@ function bk_woo_no_order_notes( $fields ) {
    return $fields;
 }
 
+function bk_validate_extra_register_fields( $username, $email, $validation_errors ) {
+  if ( isset( $_POST['billing_first_name'] ) && empty( $_POST['billing_first_name'] ) ) {
+     $validation_errors->add( 'billing_first_name_error', __( '<strong>Error</strong>: First name is required!', 'woocommerce' ) );
+  }
+  if ( isset( $_POST['billing_last_name'] ) && empty( $_POST['billing_last_name'] ) ) {
+     $validation_errors->add( 'billing_last_name_error', __( '<strong>Error</strong>: Last name is required!.', 'woocommerce' ) );
+  }
+  if ( isset( $_POST['billing_address_1'] ) && empty( $_POST['billing_address_1'] ) ) {
+     $validation_errors->add( 'billing_address_1_error', __( '<strong>Error</strong>: Address is required!.', 'woocommerce' ) );
+  }
+  if ( isset( $_POST['billing_country'] ) && empty( $_POST['billing_country'] ) ) {
+     $validation_errors->add( 'billing_country_error', __( '<strong>Error</strong>: City is required!.', 'woocommerce' ) );
+  }
+  if ( isset( $_POST['billing_city'] ) && empty( $_POST['billing_city'] ) ) {
+     $validation_errors->add( 'billing_city_error', __( '<strong>Error</strong>: City is required!.', 'woocommerce' ) );
+  }
 
-function my_custom_function(){
+  if ( isset( $_POST['billing_postcode'] ) && empty( $_POST['billing_postcode'] ) ) {
+     $validation_errors->add( 'billing_postcode_error', __( 'PostCode / Zip is required!.', 'woocommerce' ) );
+  }
+  return $validation_errors;
+}
+
+add_action( 'woocommerce_register_post', 'bk_validate_extra_register_fields', 10, 3 );
+
+function bk_custom_reg_form(){
   global $woocommerce;
   $checkout = $woocommerce->checkout();
 
   foreach ($checkout->checkout_fields['billing'] as $key => $field) :
-    // if(!($key == 'billing_first_name' || $key == 'billing_last_name')){
-    //   $field['required'] = false;
-    // }
+    if($key == 'billing_phone'){
+      $field['required'] = false;
+    }
     if(($key == 'billing_company')){
       $field['class'] = array(
         'form-row-first'
@@ -373,7 +397,7 @@ function my_custom_function(){
 
   endforeach;
 }
-add_action('woocommerce_register_form','my_custom_function');
+add_action('woocommerce_register_form','bk_custom_reg_form');
 
 add_action('wp_enqueue_scripts','bk_enqueue_scripts');
 function bk_enqueue_scripts(){
