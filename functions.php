@@ -76,7 +76,7 @@ add_filter( 'woocommerce_account_menu_items', 'bk_upgrade_product_menu_item' );
 function bk_upgrade_product_menu_item($items) {
   $items = array(
 		'dashboard'       => __( 'Dashboard', 'blade-child' ),
-		'orders'          => __( 'Orders', 'blade-child' ),
+		// 'orders'          => __( 'Orders', 'blade-child' ),
     'registered-keycodes'   => __( 'Your activation codes', 'blade-child' ),
     'register-keys'       => __( 'Register a new product', 'blade-child' ),
     'register-halion'       => __( 'Register HALion - powered BBB', 'blade-child' ),
@@ -176,6 +176,21 @@ function bk_check_serial_number($serial,$sku){
   return $code;
 }
 
+function bk_create_order($sku){
+  $args = array(
+    'status' => 'completed'
+  );
+  // $address_billing = "";
+  $order = wc_create_order($args);
+  $pid = wc_get_product_id_by_sku($sku);
+  if ( is_wp_error( $order ) ) {
+      return false;
+  } else {
+    $order->add_product( get_product( $pid ), 1 );
+    return true;
+  }
+  // $order->set_address( $address_billing, 'billing' );
+}
 
 add_action( 'template_redirect', 'bk_save_register_keys_details'  );
 function bk_save_register_keys_details(){
@@ -209,9 +224,7 @@ function bk_save_register_keys_details(){
           update_post_meta($activation_code_id[0], 'bk_ac_product_sku', $products_dropdown_val);
           update_post_meta($activation_code_id[0], 'bk_ac_user_login', $bk_current_user->user_login);
           update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
-
-          // wc_create_order();
-          $order = wc_create_order();
+          bk_create_order($products_dropdown_val);
           wc_add_notice( __( 'Serial Number successfully registered.', 'bk' ) );
           wp_safe_redirect( wc_get_endpoint_url( 'registered-keycodes' ) );
     			exit;

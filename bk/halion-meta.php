@@ -24,7 +24,7 @@ function bk_halion_meta_box($object, $box) {
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_ac_meta_nonce' ); ?>
    <p>
   	<label for="bk-halion-user-email"><?php _e( "User ID:", 'bk' ); ?>
-    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_email', true ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_login', true ); ?>
       <input type="text" name="bk-halion-user-email" class="" id="bk-halion-user-email" value="<?php echo esc_html($user_id);?>" />
     </label>
    </p>
