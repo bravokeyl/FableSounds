@@ -262,3 +262,31 @@ function fs_render_activation_codes_columns( $column ) {
 
   }
 }
+
+
+add_filter('manage_users_columns', 'bk_add_user_id_column');
+function bk_add_user_id_column($columns) {
+    $columns['user_eligible'] = 'User Upgrades';
+    return $columns;
+}
+
+add_action('manage_users_custom_column',  'bk_show_user_id_column_content', 10, 3);
+function bk_show_user_id_column_content($value, $column_name, $user_id) {
+    $user = get_user_meta($user_id,'fs_capabilities',true);
+
+		// switch ($column_name) {
+    //     case 'phone' :
+    //         return get_the_author_meta( 'phone', $user_id );
+    //         break;
+    //     case 'xyz' :
+    //         return '';
+    //         break;
+    //     default:
+    // }
+    // return $val;
+
+		if ( 'user_eligible' == $column_name ) {
+			return wc_get_customer_order_count($user_id);
+		}
+    return $value;
+}
