@@ -17,13 +17,22 @@
 // Each of the functions here ends up calling callResource(), which sets up all the
 // HTTP headers for the request authentication.
 
+// $GLOBALS['config'] = array(
+// 	'apiUrl'   => 'https://app.sandbox.icontact.com/icp',
+// 	'username' => 'fablesounds-beta',
+// 	'password' => 't1K1beta',
+// 	'appId'    => 'ZqgH9LsDWJBX2erYb7gVzBmCaNsT0roQ',
+// 	'accountId' => 415506,
+// 	'clientFolderId' => 126934,
+// );
+
 $GLOBALS['config'] = array(
-	'apiUrl'   => 'https://app.sandbox.icontact.com/icp',
-	'username' => 'fablesounds-beta',
-	'password' => 't1K1beta',
-	'appId'    => 'ZqgH9LsDWJBX2erYb7gVzBmCaNsT0roQ',
-	'accountId' => 415506,
-	'clientFolderId' => 126934,
+ 'apiUrl'   => 'https://app.sandbox.icontact.com/icp',
+ 'username' => 'fablesounds-wc',
+ 'password' => 't1K1beta!',
+ 'appId'    => 's19UXbn8Sfc4AmTCOzcikj3NKcTiOhn7',
+ 'accountId' => 415511,
+ 'clientFolderId' => 126939,
 );
 
 $GLOBALS['lists'] = array(
