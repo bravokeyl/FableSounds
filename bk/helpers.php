@@ -44,15 +44,19 @@ function bk_add_to_cart( $atts ) {
 }
 add_shortcode( 'fable_cart', 'bk_add_to_cart' );
 
-/* Handle upgrades and updates */
+/* Handle upgrades */
 function bk_current_user_eligible_to_upgrade($product_id) {
 
-  $product_ids= array ('2258','2253','2242');
   global $woocommerce;
   $current_user= wp_get_current_user();
   $customer_email = $current_user->email;
   $user_id = $current_user->ID;
-
+  $product = new WC_Product($product_id);
+  $sku = $product->get_sku();
+  if("BKFDR" == $sku) {
+    return true;
+  }
+  // wp_die(print_r($product->get_sku()));
   // foreach($product_ids as $item){
     if ( wc_customer_bought_product( $customer_email, $user_id, $product_id) ){
       return true;
