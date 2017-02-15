@@ -421,3 +421,9 @@ function bk_enqueue_scripts(){
 add_filter( 'wp_mail_from', function() {
     return 'wordpress@fablesounds.com';
 });
+
+
+add_filter('woocommerce_return_to_shop_redirect','bk_return_empty_cart_shop_url');
+function bk_return_empty_cart_shop_url() {
+  return esc_url(home_url('/broadway-big-band'));
+}
