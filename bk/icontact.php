@@ -17,49 +17,44 @@
 // Each of the functions here ends up calling callResource(), which sets up all the
 // HTTP headers for the request authentication.
 
-// $GLOBALS['config'] = array(
-// 	'apiUrl'   => 'https://app.sandbox.icontact.com/icp',
-// 	'username' => 'fablesounds-beta',
-// 	'password' => 't1K1beta',
-// 	'appId'    => 'ZqgH9LsDWJBX2erYb7gVzBmCaNsT0roQ',
-// 	'accountId' => 415506,
-// 	'clientFolderId' => 126934,
-// );
+
 
 $GLOBALS['config'] = array(
  'apiUrl'   => 'https://app.sandbox.icontact.com/icp',
  'username' => 'fablesounds-wc',
- 'password' => 't1K1beta!',
+ 'password' => 't1K1beta',
  'appId'    => 's19UXbn8Sfc4AmTCOzcikj3NKcTiOhn7',
  'accountId' => 415511,
  'clientFolderId' => 126939,
 );
 
-$GLOBALS['lists'] = array(
-	'BBB Kontakt' => 268189,
-	'Broadway Lites' => 268190,
-	'Broadway Gig' => 268191
+$GLOBALS['icontact_lists'] = array(
+	'BKFDR' => 268236,
+	'BLDR' => 268237,
+	'BGDR' => 268238
 );
 
 
 
-function add_user_to_icontact($email, $firstName, $lastName, $userId) {
+function add_user_to_icontact($email, $firstName, $lastName, $userName) {
 	error_log('adding user to icontact...');
-	error_log('email = '.$email.', user_id = '.$userId.', firstName = '.$firstName.', lastName = '.$lastName);
+	error_log('email = '.$email.', user_id = '.$userName.', firstName = '.$firstName.', lastName = '.$lastName);
 
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
-
+  // wp_die($userName);
 	$response = callResource("/a/{$acc}/c/{$clf}/contacts",
 		'POST', array(
 			array(
 				'firstName' => $firstName,
 				'lastName'  => $lastName,
 				'email'     => $email,
-				'fablesoundsuserid' => $userId
+				'fablesoundsuserid' => '',
+        'fableusername' => $userName
 			)
 		));
-    // wp_die(print_r($response));
+
+  return $response;
 }
 
 function mark_as_new_lites_user($fableUserId, $dump_response) {
@@ -133,20 +128,12 @@ function add_to_list($contactId, $listId)
 }
 */
 
-# deprecated function. use the add_user_to_list function instead.
-function add_to_list($userId, $listName, $dump_response){
-	error_log('adding user '.$userId.' to mailing list: '.$listName);
+function add_user_to_list($contactId, $listId, $dump_response) {
+	error_log('adding user '.$userName.' to mailing list: '.$listId);
 
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
-
-	$contactId = get_contact_id($userId);
-	if ($contactId > 0)
-	{
-		error_log('contactId = '.$contactId);
-		$listId = get_list_id($listName);
-		if ($listId > 0)
-		{
+		if ($listId > 0){
 			error_log('listId = '.$listId);
 			$response = callResource("/a/{$acc}/c/{$clf}/subscriptions",
 				'POST', array(
@@ -156,46 +143,7 @@ function add_to_list($userId, $listName, $dump_response){
 						'status' => 'normal'
 					)
 				));
-			if ($dump_response == true)
-			{
-				dump($response);
-			}
 		}
-	}
-}
-
-function add_user_to_list($userId, $listId, $dump_response) {
-	error_log('adding user '.$userId.' to mailing list: '.$listId);
-
-	$acc = $GLOBALS['config']['accountId'];
-	$clf = $GLOBALS['config']['clientFolderId'];
-
-	$contactId = get_contact_id($userId);
-  //wp_die($contactId);
-	if ($contactId > 0)
-	{
-		error_log('contactId = '.$contactId);
-		//$listId = $listName;//$GLOBAL['lists'][$listName];
-		if ($listId > 0)
-		{
-			error_log('listId = '.$listId);
-			$response = callResource("/a/{$acc}/c/{$clf}/subscriptions",
-				'POST', array(
-					array(
-						'contactId' => $contactId,
-						'listId'  => $listId,
-						'status' => 'normal'
-					)
-				));
-      // wp_die(print_r($response));
-			if ($dump_response == true)
-			{
-				dump($response);
-			}
-
-		}
-	}
-
 }
 
 function delete_user($userId, $dump_response) {
@@ -375,7 +323,7 @@ function get_contact_id($userId) {
 	$clf = $GLOBALS['config']['clientFolderId'];
 
 	$contactId = 0;
-	$response = callResource("/a/{$acc}/c/{$clf}/contacts?fablesoundsuserid={$userId}", 'GET');
+	$response = callResource("/a/{$acc}/c/{$clf}/contacts?fableusername={$userId}", 'GET');
 	if ($response['code'] == STATUS_CODE_SUCCESS)
 	{
 		$contactId = $response['data']['contacts'][0]['contactId'];

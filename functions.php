@@ -228,6 +228,9 @@ function bk_save_register_keys_details(){
             update_post_meta($activation_code_id[0], 'bk_ac_user_login', $bk_current_user->user_login);
             update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
             bk_create_order($products_dropdown_val);
+            $icontact_id = get_user_meta($bk_current_user->ID,'bk_icontact_id',true);
+            global $icontact_lists;
+            add_user_to_list($icontact_id,$icontact_lists[$products_dropdown_val]);
             wc_add_notice( __( 'Serial Number successfully registered.', 'bk' ) );
           } else {
             $to = get_option('admin_email');
@@ -270,8 +273,8 @@ function bk_save_extra_register_fields( $customer_id ) {
     $lastName = sanitize_text_field( $_POST['billing_first_name'] );
     $email = sanitize_text_field( $_POST['email'] );
     $user = get_user_by('email',$email);
-    $userId = $user->login;
-
+    $user_name = $user->user_login;
+    // wp_die(print_r($user));
     if ( isset( $_POST['billing_phone'] ) ) {
        update_user_meta( $customer_id, 'billing_phone', sanitize_text_field( $_POST['billing_phone'] ) );
     }
@@ -305,8 +308,9 @@ function bk_save_extra_register_fields( $customer_id ) {
        update_user_meta( $customer_id, 'billing_postcode', sanitize_text_field( $_POST['billing_postcode'] ) );
     }
 
-    add_user_to_icontact($email, $firstName, $lastName, $userId);
-
+    $icontact_res = add_user_to_icontact($email, $firstName, $lastName, $user_name);
+    $icontact_id = get_contact_id($user_name);
+    update_user_meta($user->ID,'bk_icontact_id',$icontact_id);
 }
 add_action( 'woocommerce_created_customer', 'bk_save_extra_register_fields' );
 

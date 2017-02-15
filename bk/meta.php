@@ -130,14 +130,13 @@ function bk_save_post_meta( $post_id, $post ) {
 
 }
 
-
 function bk_sn_meta_box($object, $box) {
 	?>
 
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_sn_meta_nonce' ); ?>
    <p>
   	<label for="bk-sn-user-email"><?php _e( "User Email:", 'bk' ); ?>
-    <?php $user_id = get_post_meta( $object->ID, 'bk_sn_user_email', true ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_sn_user_login', true ); ?>
       <input type="text" name="bk-sn-user-email" class="" id="bk-sn-user-email" value="<?php echo esc_attr($user_id);?>" />
     </label>
    </p>
