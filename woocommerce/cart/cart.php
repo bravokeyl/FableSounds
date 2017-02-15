@@ -52,7 +52,9 @@ do_action( 'woocommerce_before_cart' ); ?>
 									if ( ! $_product->is_visible() ) {
 										echo str_replace( array( 'http:', 'https:' ), '', $thumbnail );
 									} else {
-										printf( '<a href="%s">%s</a>', esc_url( $_product->get_permalink( $cart_item ) ), $thumbnail );
+										$product_page = sanitize_title($_product->get_title());
+										$product_url = esc_url(home_url($product_page));
+										printf( '<a href="%s">%s</a>', $product_url, $thumbnail );
 									}
 								?>
 							</td>
@@ -62,7 +64,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 									if ( ! $_product->is_visible() ) {
 										echo apply_filters( 'woocommerce_cart_item_name', $_product->get_title(), $cart_item, $cart_item_key ) . '&nbsp;';
 									} else {
-										echo apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s </a>', esc_url( $_product->get_permalink( $cart_item ) ), $_product->get_title() ), $cart_item, $cart_item_key );
+										echo apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s </a>', $product_url, $_product->get_title() ), $cart_item, $cart_item_key );
 									}
 
 									// Meta data
@@ -154,5 +156,5 @@ do_action( 'woocommerce_before_cart' ); ?>
 </form>
 
 <?php do_action( 'woocommerce_after_cart' );
-	
+
 //Omit closing PHP tag to avoid accidental whitespace output errors.
