@@ -217,9 +217,10 @@ function bk_save_register_keys_details(){
     			exit;
         } else {
           $bk_current_user = wp_get_current_user();
+          $username = $bk_current_user->user_login;
           update_post_meta(intval($serial_found[0]),'bk_sn_status','reg');
           //update_post_meta(intval($serial_found[0]),'bk_sn_product_sku',$products_dropdown_val);
-          update_post_meta(intval($serial_found[0]),'bk_sn_user_login',$bk_current_user->user_login);
+          update_post_meta(intval($serial_found[0]),'bk_sn_user_login',$username);
           update_post_meta(intval($serial_found[0]),'bk_sn_date',current_time('mysql'));
           $activation_code_id = bk_get_unused_activation_codes(1);
           if(!empty($activation_code_id)) {
@@ -229,6 +230,7 @@ function bk_save_register_keys_details(){
             update_post_meta($activation_code_id[0], 'bk_ac_user_login', $bk_current_user->user_login);
             update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
             bk_create_order($products_dropdown_val);
+            $voucher_id = bk_assign_voucher_to_user($username,$activation_code_id[0],$products_dropdown_val);
             $icontact_id = get_user_meta($bk_current_user->ID,'bk_icontact_id',true);
             global $icontact_lists;
             add_user_to_list($icontact_id,$icontact_lists[$products_dropdown_val]);
@@ -236,11 +238,12 @@ function bk_save_register_keys_details(){
           } else {
             $to = get_option('admin_email');
             $subject = 'No activation codes';
-            $body = 'No activation codes but the user '.$bk_current_user->user_login.' entered correct serial number';
+            $body = 'No activation codes but the user '.$username.' entered correct serial number';
             $headers = array('Content-Type: text/html; charset=UTF-8');
             wp_mail( $to, $subject, $body, $headers );
             wc_add_notice( __( 'Serial Number successfully registered and activation codes will be emailed to you.', 'bk' ) );
           }
+
           wp_safe_redirect( wc_get_endpoint_url( 'registered-keycodes' ) );
           exit;
         }
