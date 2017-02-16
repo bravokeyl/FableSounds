@@ -435,3 +435,29 @@ add_filter('woocommerce_return_to_shop_redirect','bk_return_empty_cart_shop_url'
 function bk_return_empty_cart_shop_url() {
   return esc_url(home_url('/broadway-big-band'));
 }
+
+add_action('woocommerce_payment_complete', 'bk_assign_vouchers');
+
+function bk_assign_vouchers($order_id){
+  $order = new WC_Order( $order_id );
+  $username = "Guest";
+  $user = $order->get_user();
+  $items = $order->get_items();
+  $username = $user->user_login;
+  $quantity = intval($order->get_item_count());
+  $serials = bk_get_unused_activation_codes($quantity);
+  $serial_index = 0;
+  foreach ( $items as $item_id => $item ) {
+    $product     = $order->get_product_from_item( $item );
+    $product_id  = null;
+    $product_sku = null;
+
+    if ( is_object( $product ) ) {
+      $product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
+      $product_sku = $product->get_sku();
+    }
+    bk_assign_voucher_to_user($username,$serials[$serial_index],$product_sku);
+    $serial_index++;
+  }
+  return $order_id;
+}
