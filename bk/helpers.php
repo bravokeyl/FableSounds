@@ -5,7 +5,7 @@ function bk_get_sku($pid) {
 function bk_is_product_upgrade($sku) {
   $products = array(
     "BKFGU",
-    "BKFDU",
+    "BKFLU",
     "BKFHU"
   );
 
@@ -136,7 +136,9 @@ function bk_current_user_eligible_to_upgrade($product_id,$sku) {
     // if ( wc_customer_bought_product( $customer_email, $user_id, $product_id) ){
     //   return true;
     // }
-    return true;
+    if($vouchers > 0){
+      return true;
+    }
   }
 
   return false;
