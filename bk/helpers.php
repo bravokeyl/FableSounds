@@ -1,4 +1,13 @@
 <?php
+function bk_get_sku($pid){
+  return false;
+}
+
+function bk_products_upgrade(){
+  $products = array();
+  return $products;
+}
+
 function bk_add_to_cart( $atts ) {
   $atts = shortcode_atts( array(
         'label' => 'Add to Cart',
@@ -51,17 +60,24 @@ function bk_current_user_eligible_to_upgrade($product_id) {
   $current_user= wp_get_current_user();
   $customer_email = $current_user->email;
   $user_id = $current_user->ID;
-  $product = new WC_Product($product_id);
-  $sku = $product->get_sku();
-  if("BKFDR" == $sku) {
-    return true;
-  }
-  // wp_die(print_r($product->get_sku()));
-  // foreach($product_ids as $item){
-    if ( wc_customer_bought_product( $customer_email, $user_id, $product_id) ){
+  if($user_id){ //0 means not logged in or guest user
+    $product = new WC_Product($product_id);
+    $sku = $product->get_sku();
+    if("BKFDR" == $sku) {
       return true;
     }
-  // }
+    $product_upgrades = bk_products_upgrade();
+    if(in_array($sku,$product_upgrades)) {
+      if ( wc_customer_bought_product( $customer_email, $user_id, $product_id) ){
+        return true;
+      }
+      return false;
+    }
+    // wp_die(print_r($product->get_sku()));
+    // foreach($product_ids as $item){
+
+    // }
+  }
   return false;
 }
 

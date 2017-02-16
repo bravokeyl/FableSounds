@@ -2,6 +2,7 @@
 
 include(get_stylesheet_directory().'/bk/post-types.php');
 include(get_stylesheet_directory().'/bk/halion-post-type.php');
+include(get_stylesheet_directory().'/bk/vouchers/vouchers.php');
 //include(get_stylesheet_directory().'/bk/account-fields.php');
 include(get_stylesheet_directory().'/bk/meta.php');
 include(get_stylesheet_directory().'/bk/halion-meta.php');
