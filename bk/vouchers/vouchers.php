@@ -102,10 +102,10 @@ function fs_render_vouchers_columns( $column ) {
 			}
     break;
     case 'status' :
-			if ( $vouchers_voucher_status == 'reg' ) {
-				echo "Registered";
+			if ( $vouchers_voucher_status == 'used' ) {
+				echo "Used";
 			}else {
-				echo "Not Registered";
+				echo "Not Used";
 			}
     break;
     case 'voucher_date' :

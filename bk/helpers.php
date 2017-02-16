@@ -93,3 +93,16 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
   }
 
 }
+
+
+add_filter('really_simple_csv_importer_save_meta', function($meta, $post, $is_update) {
+    foreach ($meta as $key => $value) {
+      if('bk_voucher_imp_date' == $key) {
+        if (strpos($value, ',') !== false) {
+            $_value = preg_split("/,+/", $value);
+            $meta[$key] = $_value;
+        }
+      }  
+    }
+    return $meta;
+}, 10, 3);
