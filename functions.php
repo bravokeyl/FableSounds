@@ -84,7 +84,7 @@ function bk_upgrade_product_menu_item($items) {
     'register-keys'       => __( 'Register a new product', 'blade-child' ),
     'register-halion'       => __( 'Register HALion - powered BBB', 'blade-child' ),
 		'edit-address'    => __( 'Addresses', 'blade-child' ),
-		'payment-methods' => __( 'Payment Methods', 'blade-child' ),
+		//'payment-methods' => __( 'Payment Methods', 'blade-child' ),
 		'edit-account'    => __( 'Account Details', 'blade-child' ),
 		'customer-logout' => __( 'Logout', 'blade-child' ),
 	);
