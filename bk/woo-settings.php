@@ -32,7 +32,7 @@ class WC_Settings_Tab_FableSounds{
         array(
               'name' => __( 'Dashboard title', 'fablesounds' ),
               'type' => 'text',
-              'css'  => 'min-width:300px;',
+              'css'  => 'width:80%;',
               'id'   => 'wc_settings_bk_dashboard_title'
           ),
         array(
@@ -44,7 +44,7 @@ class WC_Settings_Tab_FableSounds{
         array(
               'name' => __( 'Registered Products Title', 'fablesounds' ),
               'type' => 'text',
-              'css'  => 'min-width:300px;',
+              'css'  => 'width:80%;',
               // 'desc' => __( 'This is some helper text', 'fablesounds' ),
               'id'   => 'wc_settings_registered_products_title'
           ),
@@ -52,43 +52,43 @@ class WC_Settings_Tab_FableSounds{
               'name' => __( 'Registered Products Description', 'fablesounds' ),
               'type' => 'textarea',
               // 'desc' => __( 'sjsjjsjsj shsjs d hd', 'fablesounds' ),
-              'css'  => 'width:450px; height: 75px;',
+              'css'  => 'width:80%; height: 150px;',
               'id'   => 'wc_settings_registered_products_description'
           ),
         array(
                 'name' => __( 'Register a new product Title', 'fablesounds' ),
                 'type' => 'text',
-                'css'         => 'min-width:300px;',
+                'css'  => 'width:80%;',
                 'id'   => 'wc_settings_register_new_product_title'
             ),
         array(
                 'name' => __( 'Register a new product Description', 'fablesounds' ),
                 'type' => 'textarea',
-                'css'         => 'width:450px; height: 75px;',
+                'css'  => 'width:80%; height: 150px;',
                 'id'   => 'wc_settings_register_new_product_description'
             ),
         array(
                 'name' => __( 'Register HALion - powered BBB Title', 'fablesounds' ),
                 'type' => 'text',
-                'css'         => 'min-width:300px;',
+                'css'  => 'width:80%;',
                 'id'   => 'wc_settings_register_halion_title'
             ),
         array(
                 'name' => __( 'Register HALion - powered BBB Description', 'fablesounds' ),
                 'type' => 'textarea',
-                'css'         => 'width:450px; height: 75px;',
+                'css'  => 'width:80%; height: 150px;',
                 'id'   => 'wc_settings_register_halion_description'
             ),
         array(
                 'name' => __( 'Available updates/upgrades Title', 'fablesounds' ),
                 'type' => 'text',
-                'css'         => 'min-width:300px;',
+                'css'  => 'width:80%;',
                 'id'   => 'wc_settings_available_updates_upgrades_title'
             ),
        array(
                 'name' => __( 'Available updates/upgrades Description', 'fablesounds' ),
                 'type' => 'textarea',
-                'css'         => 'width:450px; height: 75px;',
+                'css'  => 'width:80%; height: 150px;',
                 'id'   => 'wc_settings_available_updates_upgrades_description'
             ),
       array(
