@@ -29,12 +29,12 @@ class WC_Settings_Tab_FableSounds{
             'desc'     => '',
             'id'       => 'wc_settings_tab_fablesounds_section_title'
         ),
-        array(
-              'name' => __( 'Dashboard title', 'fablesounds' ),
-              'type' => 'text',
-              'css'  => 'width:80%;',
-              'id'   => 'wc_settings_bk_dashboard_title'
-          ),
+        // array(
+        //       'name' => __( 'Dashboard title', 'fablesounds' ),
+        //       'type' => 'text',
+        //       'css'  => 'width:80%;',
+        //       'id'   => 'wc_settings_bk_dashboard_title'
+        //   ),
         array(
               'name' => __( 'Dasboard description', 'fablesounds' ),
               'type' => 'textarea',
