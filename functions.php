@@ -8,6 +8,7 @@ include(get_stylesheet_directory().'/bk/meta.php');
 include(get_stylesheet_directory().'/bk/halion-meta.php');
 include(get_stylesheet_directory().'/bk/icontact.php');
 include(get_stylesheet_directory().'/bk/helpers.php');
+include(get_stylesheet_directory().'/bk/woo-settings.php');
 
 function bk_assign_activation_code_after_registration($order_id){
   $order = new WC_Order( $order_id );
@@ -80,9 +81,10 @@ function bk_upgrade_product_menu_item($items) {
   $items = array(
 		'dashboard'       => __( 'Dashboard', 'blade-child' ),
 		// 'orders'          => __( 'Orders', 'blade-child' ),
-    'registered-keycodes'   => __( 'Your activation codes', 'blade-child' ),
+    'registered-keycodes'   => __( 'Registered Products', 'blade-child' ),
     'register-keys'       => __( 'Register a new product', 'blade-child' ),
     'register-halion'       => __( 'Register HALion - powered BBB', 'blade-child' ),
+    'available-updates-upgrades'       => __( 'Available Updates/Upgrades', 'blade-child' ),
 		'edit-address'    => __( 'Addresses', 'blade-child' ),
 		//'payment-methods' => __( 'Payment Methods', 'blade-child' ),
 		'edit-account'    => __( 'Account Details', 'blade-child' ),
@@ -95,6 +97,7 @@ function bk_custom_endpoints() {
     add_rewrite_endpoint( 'register-keys', EP_ROOT | EP_PAGES );
     add_rewrite_endpoint( 'register-halion', EP_ROOT | EP_PAGES );
     add_rewrite_endpoint( 'registered-keycodes', EP_ROOT | EP_PAGES );
+    add_rewrite_endpoint( 'available-updates-upgrades', EP_ROOT | EP_PAGES );
 }
 add_action( 'init', 'bk_custom_endpoints' );
 
@@ -102,6 +105,7 @@ function bk_custom_query_vars( $vars ) {
     $vars[] = 'register-keys';
     $vars[] = 'register-halion';
     $vars[] = 'register-keycodes';
+    $vars[] = 'available-updates-upgrades';
     return $vars;
 }
 add_filter( 'query_vars', 'bk_custom_query_vars', 0 );
@@ -117,6 +121,10 @@ function bk_register_keycodes_endpoint(){
 add_action('woocommerce_account_register-halion_endpoint','bk_register_halion_endpoint');
 function bk_register_halion_endpoint(){
   wc_get_template('myaccount/register-halion.php');
+}
+add_action('woocommerce_account_available-updates-upgrades_endpoint','bk_available_updates_upgrades_endpoint');
+function bk_available_updates_upgrades_endpoint(){
+  wc_get_template('myaccount/available-updates-upgrades.php');
 }
 
 function bk_register_keys_endpoint_title( $title ) {
