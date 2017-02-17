@@ -96,7 +96,7 @@ function bk_upgrade_product_menu_item($items) {
     'register-keys'       => $register_new,
     'register-halion'       => $registered_halion,
     'available-updates-upgrades' => $available_upgrades_updates,
-		'edit-address'    => __( 'Addresses', 'blade-child' ),
+		'edit-address'    => __( 'Address', 'blade-child' ),
 		//'payment-methods' => __( 'Payment Methods', 'blade-child' ),
 		'edit-account'    => __( 'Account Details', 'blade-child' ),
 		'customer-logout' => __( 'Logout', 'blade-child' ),

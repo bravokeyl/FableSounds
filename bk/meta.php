@@ -198,3 +198,9 @@ function bk_save_product_meta($post_id) {
 		}
 	}
 }
+
+add_action('woocommerce_product_options_general_product_data','bk_product_is_new');
+function bk_product_is_new() {
+	woocommerce_wp_text_input( array( 'id' => '_continuata_sku', 'label' => __( 'Continuata SKU', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'This is the SKU that we send to Continuata.', 'fablesounds' ) ) );
+	woocommerce_wp_text_input( array( 'id' => '_continuata_sku', 'label' => __( 'Continuata SKU', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'This is the SKU that we send to Continuata.', 'fablesounds' ) ) );
+}
