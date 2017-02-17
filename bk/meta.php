@@ -169,3 +169,32 @@ function bk_sn_meta_box($object, $box) {
    </p>
 <?php
 }
+
+
+add_action('woocommerce_product_options_sku','bk_product_meta');
+function bk_product_meta() {
+	woocommerce_wp_text_input( array( 'id' => '_continuata_sku', 'label' => '<abbr title="'. __( 'Continuata Stock Keeping Unit', 'fablesounds' ) .'">' . __( 'Continuata SKU', 'fablesounds' ) . '</abbr>', 'desc_tip' => 'true', 'description' => __( 'This is the SKU that we send to Continuata.', 'fablesounds' ) ) );
+}
+
+add_action('woocommerce_process_product_meta','bk_save_product_meta');
+function bk_save_product_meta($post_id) {
+	// Unique Continuata SKU
+	$sku     = get_post_meta( $post_id, '_continuata_sku', true );
+	$new_sku = (string) wc_clean( $_POST['_continuata_sku'] );
+
+	if ( '' == $new_sku ) {
+		update_post_meta( $post_id, '_continuata_sku', '' );
+	} elseif ( $new_sku !== $sku ) {
+		if ( ! empty( $new_sku ) ) {
+			$unique_sku = wc_product_has_unique_sku( $post_id, $new_sku );
+
+			if ( ! $unique_sku ) {
+				WC_Admin_Meta_Boxes::add_error( __( 'Continuata SKU must be unique.', 'fablesounds' ) );
+			} else {
+				update_post_meta( $post_id, '_continuata_sku', $new_sku );
+			}
+		} else {
+			update_post_meta( $post_id, '_continuata_sku', '' );
+		}
+	}
+}
