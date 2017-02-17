@@ -1,7 +1,6 @@
-<h4>Register old HALION Product Serial</h4>
+<h4><?php echo get_option('wc_settings_register_halion_title');?></h4>
 <p>
-  To be eligible for the Broadway Big Band - Kontakt Edition Cross-grade pricing, please register your existing
-  HALion-powered copy of Broadway Big Band by entering your 3 activation codes below.
+  <?php echo get_option('wc_settings_register_halion_description');?>
 </p>
 <form action="" method="post">
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">

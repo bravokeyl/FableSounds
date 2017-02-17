@@ -78,13 +78,24 @@ function bk_get_unused_activation_codes($number){
 
 add_filter( 'woocommerce_account_menu_items', 'bk_upgrade_product_menu_item' );
 function bk_upgrade_product_menu_item($items) {
+  $registered_products = get_option('wc_settings_registered_products_title', 'Registered Products');
+  $register_new = get_option('wc_settings_register_new_product_title','Register a new product');
+  $registered_halion = get_option('wc_settings_register_halion_title','Register HALion - powered BBB');
+  $available_upgrades_updates = get_option('wc_settings_available_updates_upgrades_title','Available Updates/Upgrades');
+
+  $registered_products = empty($registered_products) ? 'Registered Products': $registered_products;
+  $register_new = empty($register_new) ? 'Register a new product': $register_new;
+  $registered_halion = empty($registered_halion) ?'Register HALion - powered BBB': $registered_halion;
+  $available_upgrades_updates = empty($available_upgrades_updates) ?'Available Updates/Upgrades': $available_upgrades_updates;
+
+
   $items = array(
 		'dashboard'       => __( 'Dashboard', 'blade-child' ),
 		// 'orders'          => __( 'Orders', 'blade-child' ),
-    'registered-keycodes'   => __( 'Registered Products', 'blade-child' ),
-    'register-keys'       => __( 'Register a new product', 'blade-child' ),
-    'register-halion'       => __( 'Register HALion - powered BBB', 'blade-child' ),
-    'available-updates-upgrades'       => __( 'Available Updates/Upgrades', 'blade-child' ),
+    'registered-keycodes'   => $registered_products,
+    'register-keys'       => $register_new,
+    'register-halion'       => $registered_halion,
+    'available-updates-upgrades' => $available_upgrades_updates,
 		'edit-address'    => __( 'Addresses', 'blade-child' ),
 		//'payment-methods' => __( 'Payment Methods', 'blade-child' ),
 		'edit-account'    => __( 'Account Details', 'blade-child' ),

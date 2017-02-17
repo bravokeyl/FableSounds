@@ -1,6 +1,6 @@
-<h4>Register New Serials</h4>
+<h4><?php echo get_option('wc_settings_register_new_product_title');?></h4>
 <p>
-  Enter your serial number below to register your product.
+  <?php echo get_option('wc_settings_register_new_product_description');?>
 </p>
 <form action="" method="post">
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
