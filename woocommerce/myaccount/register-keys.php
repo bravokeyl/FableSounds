@@ -1,7 +1,7 @@
 <h4><?php echo get_option('wc_settings_register_new_product_title');?></h4>
-<p>
+<div>
   <?php echo get_option('wc_settings_register_new_product_description');?>
-</p>
+</div>
 <form action="" method="post">
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
     <label for="bk_serial_key"><?php _e( 'Register serial number', 'bk' ); ?> <span class="required">*</span></label>

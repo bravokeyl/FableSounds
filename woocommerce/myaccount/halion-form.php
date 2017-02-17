@@ -1,7 +1,7 @@
 <h4><?php echo get_option('wc_settings_register_halion_title');?></h4>
-<p>
+<div>
   <?php echo get_option('wc_settings_register_halion_description');?>
-</p>
+</div>
 <form action="" method="post">
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
     <label for="bk_old_halion_brass_key"><?php _e( 'Enter Activation code 1 : Brass', 'bk' ); ?> <span class="required">*</span></label>

@@ -1,7 +1,7 @@
 <h4><?php echo get_option('wc_settings_registered_products_title');?></h4>
-<p>
+<div>
   <?php echo get_option('wc_settings_registered_products_description');?>
-</p>
+</div>
 <?php
 $current_user = wp_get_current_user();
 $activation_args = array(

@@ -22,27 +22,39 @@ class WC_Settings_Tab_FableSounds{
 
     public static function get_settings() {
 
-        $settings = array(
-            array(
-                'name'     => __( 'My Account Page tabs', 'fablesounds' ),
-                'type'     => 'title',
-                'desc'     => '',
-                'id'       => 'wc_settings_tab_fablesounds_section_title'
-            ),
-          array(
-                'name' => __( 'Registered Products Title', 'fablesounds' ),
-                'type' => 'text',
-                'css'         => 'min-width:300px;',
-                // 'desc' => __( 'This is some helper text', 'fablesounds' ),
-                'id'   => 'wc_settings_registered_products_title'
-            ),
-          array(
-                'name' => __( 'Registered Products Description', 'fablesounds' ),
-                'type' => 'textarea',
-                // 'desc' => __( 'sjsjjsjsj shsjs d hd', 'fablesounds' ),
-                'css'         => 'width:450px; height: 75px;',
-                'id'   => 'wc_settings_registered_products_description'
-            ),
+      $settings = array(
+        array(
+            'name'     => __( 'My Account Page tabs', 'fablesounds' ),
+            'type'     => 'title',
+            'desc'     => '',
+            'id'       => 'wc_settings_tab_fablesounds_section_title'
+        ),
+        array(
+              'name' => __( 'Dashboard title', 'fablesounds' ),
+              'type' => 'text',
+              'css'  => 'min-width:300px;',
+              'id'   => 'wc_settings_bk_dashboard_title'
+          ),
+        array(
+              'name' => __( 'Dasboard description', 'fablesounds' ),
+              'type' => 'textarea',
+              'css'  => 'width:80%; height: 150px;',
+              'id'   => 'wc_settings_bk_dashboard_description'
+          ),
+        array(
+              'name' => __( 'Registered Products Title', 'fablesounds' ),
+              'type' => 'text',
+              'css'  => 'min-width:300px;',
+              // 'desc' => __( 'This is some helper text', 'fablesounds' ),
+              'id'   => 'wc_settings_registered_products_title'
+          ),
+        array(
+              'name' => __( 'Registered Products Description', 'fablesounds' ),
+              'type' => 'textarea',
+              // 'desc' => __( 'sjsjjsjsj shsjs d hd', 'fablesounds' ),
+              'css'  => 'width:450px; height: 75px;',
+              'id'   => 'wc_settings_registered_products_description'
+          ),
         array(
                 'name' => __( 'Register a new product Title', 'fablesounds' ),
                 'type' => 'text',
