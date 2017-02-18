@@ -17,7 +17,9 @@ function bk_add_to_cart( $atts ) {
   $atts = shortcode_atts( array(
         'label' => 'Add to Cart',
         'id' => '',
-        'type' => 'upgrade'
+        'sku' => '',
+        'type' => 'upgrade',
+        'not_eligible' => 'Not eligible to upgrade'
   ), $atts, 'fable_cart' );
 
   $url = '';
@@ -45,11 +47,15 @@ function bk_add_to_cart( $atts ) {
     $url .= 'data-product_id="'.$pid.'" class="'.$class.'">><span class="grve-item">';
     $url .= '<i class="grve-menu-icon fa fa-shopping-cart"></i></span>'.$label.'</a>';
 
+    if(!empty($atts['sku'])) {
+      $eligible = bk_current_user_eligible_to_upgrade($atts['id'],$atts['sku']);
+    }
+    
     if( "new" == $atts['type'] ){
     }else {
       if($eligible){
       } else {
-        $url = '<button type="button" class="disabled grve-bg-hover-none" disabled>Not eligible to upgrade</button>';
+        $url = '<button type="button" class="disabled grve-bg-hover-none" disabled>'.$atts['not_eligible'].'</button>';
       }
     }
   }
