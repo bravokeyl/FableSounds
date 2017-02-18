@@ -80,7 +80,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
       $slug = 'activation-code-id-'.$ac_id.'-'.$pid;
     	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-".$pid;
       if( null == get_page_by_title( $title ) ) {
-        $bk_wclogger->add('debug','Creating Voucher'.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
+        $bk_wclogger->add('debug','Creating Voucher '.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
         $voucher_id = wp_insert_post(
     			array(
     				'comment_status'	=>	'closed',
