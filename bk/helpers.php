@@ -61,11 +61,11 @@ add_shortcode( 'fable_cart', 'bk_add_to_cart' );
 function bk_create_voucher(){
 
 }
-function bk_assign_voucher_to_user($username,$ac_id,$sku){
+function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $voucher_id = -1;
   $author_id = 1;
 	$slug = 'activation-code-id-'.$ac_id;
-	$title = strtoupper($username)."-".$ac_id."-".$sku;
+	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku;
   if( null == get_page_by_title( $title ) ) {
     $voucher_id = wp_insert_post(
 			array(
@@ -78,9 +78,11 @@ function bk_assign_voucher_to_user($username,$ac_id,$sku){
 				'post_type'		=>	'fs_vouchers'
 			)
 		);
+
     if($voucher_id){
+      $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
       update_post_meta($voucher_id,'bk_voucher_status','used');
-      update_post_meta($voucher_id,'bk_voucher_product_sku', $sku);
+      update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr );
       update_post_meta($voucher_id,'bk_voucher_user_login', $username);
       update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
     }

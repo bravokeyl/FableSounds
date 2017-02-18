@@ -466,17 +466,23 @@ function bk_assign_vouchers($order_id){
   $quantity = intval($order->get_item_count());
   $serials = bk_get_unused_activation_codes($quantity);
   $serial_index = 0;
-  foreach ( $items as $item_id => $item ) {
-    $product     = $order->get_product_from_item( $item );
-    $product_id  = null;
-    $product_sku = null;
+  if(count($serials) == $quantity ) {
+    foreach ( $items as $item_id => $item ) {
+      $product     = $order->get_product_from_item( $item );
+      $product_id  = null;
+      $product_sku = null;
 
-    if ( is_object( $product ) ) {
-      $product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
-      $product_sku = $product->get_sku();
+      if ( is_object( $product ) ) {
+        $product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
+        $product_sku = $product->get_sku();
+      }
+      bk_assign_voucher_to_user($username,$serials[$serial_index],$product_id,$product_sku);
+      $serial_index++;
     }
-    bk_assign_voucher_to_user($username,$serials[$serial_index],$product_sku);
-    $serial_index++;
+
+  } else {
+    //Email to Admin "Shortage of Activation codes"
   }
+
   return $order_id;
 }
