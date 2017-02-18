@@ -82,7 +82,7 @@ function fs_render_vouchers_columns( $column ) {
   switch ( $column ) {
     case 'product_sku' :
 			if ( $vouchers_product_sku ) {
-				print_r($vouchers_product_sku);
+				print_r(get_the_title($vouchers_product_sku[0]));
 			} else {
 				echo '&ndash;';
 			}
