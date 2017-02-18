@@ -3,8 +3,8 @@ function bk_mail_insufficient_activation_codes(){
   $to = 'bravokeyl@gmail.com';
   $subject = 'Insufficient Activation codes';
   $body = 'Activation codes are ran out';
-  $headers = array('Content-Type: text/html; charset=UTF-8');
-
+  $headers[] = 'Content-Type: text/html; charset=UTF-8';
+  $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
   wp_mail( $to, $subject, $body, $headers );
 }
 function bk_get_sku($pid) {
