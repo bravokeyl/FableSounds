@@ -81,7 +81,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
 
     if($voucher_id){
       $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
-      update_post_meta($voucher_id,'bk_voucher_status','used');
+      update_post_meta($voucher_id,'bk_voucher_status','nused');
       update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr );
       update_post_meta($voucher_id,'bk_voucher_user_login', $username);
       update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
