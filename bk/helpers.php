@@ -1,8 +1,9 @@
 <?php
 function bk_mail_insufficient_activation_codes(){
-  $to = 'bravokeyl@gmail.com';
+  $admin_email = sanitize_email(get_option('admin_email'));
+  $to = array( $admin_email, 'bravokeyl@gmail.com' );
   $subject = 'Insufficient Activation codes';
-  $body = 'Activation codes are ran out';
+  $body = 'Activation codes are ran out, please add more codes.';
   $headers[] = 'Content-Type: text/html; charset=UTF-8';
   $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
   wp_mail( $to, $subject, $body, $headers );

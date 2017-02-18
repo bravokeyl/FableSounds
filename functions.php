@@ -393,6 +393,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     } else {
       $bk_apiLogger->add('debug','Webhook Fired: Order updates with status '.$order_data['status']);
     }
+
     return false;
 }
 add_filter( 'woocommerce_api_order_response', 'bk_add_serial_to_line_item', 10, 2 );
@@ -493,10 +494,19 @@ function bk_assign_vouchers($order_id){
       bk_assign_voucher_to_user($username,$serials[$serial_index],$product_id,$product_sku);
       $serial_index++;
     }
-
   } else {
     //Email to Admin "Shortage of Activation codes"
+    bk_mail_insufficient_activation_codes();
   }
 
   return $order_id;
+}
+
+add_action('woocommerce_payment_complete', 'bk_check_codes_quantity',15);
+function bk_check_codes_quantity(){
+  $all = '-1';
+  $serials = bk_get_unused_activation_codes($all);
+  if(20 > count($serials)) {
+    bk_mail_insufficient_activation_codes();
+  }
 }
