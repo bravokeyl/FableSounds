@@ -181,6 +181,8 @@ function bk_save_product_meta($post_id) {
 	// Unique Continuata SKU
 	$sku     = get_post_meta( $post_id, '_continuata_sku', true );
 	$new_sku = (string) wc_clean( $_POST['_continuata_sku'] );
+	$eligble_products = (string) wc_clean( $_POST['bk_eligible_products'] );
+	$is_upgrade_update  = 'no';
 
 	if ( '' == $new_sku ) {
 		update_post_meta( $post_id, '_continuata_sku', '' );
@@ -197,10 +199,38 @@ function bk_save_product_meta($post_id) {
 			update_post_meta( $post_id, '_continuata_sku', '' );
 		}
 	}
+
+	if ( ! empty( $_POST['bk_product_upgrade_update'] ) ) {
+		$is_upgrade_update = 'yes';
+	}
+
+	$eligble_products_arr = isset( $_POST['bk_eligible_products'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['bk_eligible_products'] ) ) ) : array();
+
+	update_post_meta( $post_id, 'bk_eligible_products', $eligble_products_arr );
+	update_post_meta( $post_id, 'bk_product_upgrade_update', $is_upgrade_update );
 }
 
 add_action('woocommerce_product_options_general_product_data','bk_product_is_new');
 function bk_product_is_new() {
+	global $post;
 	woocommerce_wp_checkbox( array( 'id' => 'bk_product_upgrade_update', 'label' => __( 'Is upgrade/update?', 'fablesounds' ),'description' => __( 'Is this product a upgrade/update and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
-	woocommerce_wp_text_input( array( 'id' => 'bk_eligible_products', 'label' => __( 'Eligible Products', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'Comma separated list of eligble product SKU\'s once this product is bought.', 'fablesounds' ) ) );
-}
+	// woocommerce_wp_text_input( array( 'id' => 'bk_eligible_products', 'label' => __( 'Eligible Products', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'Comma separated list of eligble product SKU\'s once this product is bought.', 'fablesounds' ) ) );
+
+	?>
+	<p class="form-field">
+		<label for="bk_eligible_products"><?php _e( 'Eligible Products', 'fablesounds' ); ?></label>
+		<input type="hidden" class="wc-product-search" style="width: 50%;" id="bk_eligible_products" name="bk_eligible_products" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'fablesounds' ); ?>" data-action="woocommerce_json_search_products" data-multiple="true" data-exclude="<?php echo intval( $post->ID ); ?>" data-selected="<?php
+			$product_ids = array_filter( array_map( 'absint', (array) get_post_meta( $post->ID, 'bk_eligible_products', true ) ) );
+			$json_ids    = array();
+
+			foreach ( $product_ids as $product_id ) {
+				$product = wc_get_product( $product_id );
+				if ( is_object( $product ) ) {
+					$json_ids[ $product_id ] = wp_kses_post( html_entity_decode( $product->get_formatted_name(), ENT_QUOTES, get_bloginfo( 'charset' ) ) );
+				}
+			}
+
+			echo esc_attr( json_encode( $json_ids ) );
+		?>" value="<?php echo implode( ',', array_keys( $json_ids ) ); ?>" /> <?php echo wc_help_tip( __( 'Comma separated list of eligble product SKU\'s once this product is bought.', 'fablesounds' ) ); ?>
+	</p>
+<?php }
