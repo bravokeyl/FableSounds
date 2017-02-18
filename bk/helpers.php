@@ -1,4 +1,12 @@
 <?php
+function bk_mail_insufficient_activation_codes(){
+  $to = 'bravokeyl@gmail.com';
+  $subject = 'Insufficient Activation codes';
+  $body = 'Activation codes are ran out';
+  $headers = array('Content-Type: text/html; charset=UTF-8');
+
+  wp_mail( $to, $subject, $body, $headers );
+}
 function bk_get_sku($pid) {
   return false;
 }
@@ -67,6 +75,7 @@ add_shortcode( 'fable_cart', 'bk_add_to_cart' );
 function bk_create_voucher(){
 
 }
+
 function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $voucher_id = -1;
   $author_id = 1;
@@ -190,22 +199,3 @@ add_filter('really_simple_csv_importer_save_meta', function($meta, $post, $is_up
     }
     return $meta;
 }, 10, 3);
-
-// $label = __( 'Enable Logging', 'fablesounds' );
-// $description = __( 'Enable the logging of errors.', 'fablesounds' );
-//
-// if ( defined( 'WC_LOG_DIR' ) ) {
-// 	$log_url = add_query_arg( 'tab', 'logs', add_query_arg( 'page', 'wc-status', admin_url( 'admin.php' ) ) );
-// 	$log_key = 'your-plugin-slug-here-' . sanitize_file_name( wp_hash( 'your-plugin-slug-here' ) ) . '-log';
-// 	$log_url = add_query_arg( 'log_file', $log_key, $log_url );
-//
-// 	$label .= ' | ' . sprintf( __( '%1$sView Log%2$s', 'fablesounds' ), '<a href="' . esc_url( $log_url ) . '">', '</a>' );
-// }
-//
-// $form_fields['wc_yourpluginslug_debug'] = array(
-// 	'title'       => __( 'Debug Log', 'fablesounds' ),
-// 	'label'       => $label,
-// 	'description' => $description,
-// 	'type'        => 'checkbox',
-// 	'default'     => 'no'
-// );

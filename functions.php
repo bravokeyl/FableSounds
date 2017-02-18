@@ -343,43 +343,57 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     $quantity = intval($order_data['total_line_items_quantity']);
 
     $cemail = sanitize_email($order_data['billing_address']['email']);
-
-    $serials = bk_get_unused_activation_codes($quantity);
-    $serial_index = 0;
+    $bk_apiLogger = new WC_Logger();
 
 
-    foreach ( $order->get_items() as $item_id => $item ) {
-			$product     = $order->get_product_from_item( $item );
-			$product_id  = null;
-			$product_sku = null;
+    if( 'processing' == $order_data['status'] ){
+      $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
+      $serials = bk_get_unused_activation_codes($quantity);
 
-			if ( is_object( $product ) ) {
-				$product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
-				$product_sku = $product->get_sku();
-			}
+      if($quantity == count($serials)){
+        $serial_index = 0;
+        foreach ( $order->get_items() as $item_id => $item ) {
+    			$product     = $order->get_product_from_item( $item );
+    			$product_id  = null;
+    			$product_sku = null;
 
-      $serial_id = $serials[$serial_index];
+    			if ( is_object( $product ) ) {
+    				$product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
+    				$product_sku = $product->get_sku();
+    			}
 
-      update_post_meta( $serial_id, 'bk_ac_status', "used" );
-      update_post_meta( $serial_id, 'bk_ac_product_sku', $product_sku );
-      update_post_meta( $serial_id, 'bk_ac_user_email', $cemail );
-      update_post_meta( $serial_id, 'bk_ac_date', current_time('mysql') );
+          $serial_id = $serials[$serial_index];
+          $bk_apiLogger->add('debug','Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail.' - Serial ID:'. $serial_id);
 
-      update_post_meta( $serial_id, 'order_data', $order_data );
+          update_post_meta( $serial_id, 'bk_ac_status', "used" );
+          update_post_meta( $serial_id, 'bk_ac_product_sku', $product_sku );
+          update_post_meta( $serial_id, 'bk_ac_user_email', $cemail );
+          update_post_meta( $serial_id, 'bk_ac_date', current_time('mysql') );
 
-      $serial = get_the_title($serial_id);
-      $serial_data = array(
-        "product_id" => $product_id,
-        "product_sku" => $product_sku,
-        "serial" => $serial
-      );
+          update_post_meta( $serial_id, 'order_data', $order_data );
 
-			$order_data['serial_data'][] = $serial_data;
+          $serial = get_the_title($serial_id);
+          $serial_data = array(
+            "product_id" => $product_id,
+            "product_sku" => $product_sku,
+            "serial" => $serial
+          );
 
-      $serial_index++;
-		}
+    			$order_data['serial_data'][] = $serial_data;
 
-    return $order_data;
+          $serial_index++;
+    		}
+        return $order_data;
+      } else {
+        $bk_apiLogger->add('error','Continuata Webhook Fired: Order id '.$order_data['order_number']);
+        $bk_apiLogger->add('error','Continuata Webhook Fired: Shortage of Activation codes');
+        $bk_apiLogger->add('error','Continuata Webhook Fired: Activation codes Required: '.$quantity.' : Available '.count($serials));
+        bk_mail_insufficient_activation_codes();
+      }
+    } else {
+      $bk_apiLogger->add('debug','Webhook Fired: Order updates with status '.$order_data['status']);
+    }
+    return false;
 }
 add_filter( 'woocommerce_api_order_response', 'bk_add_serial_to_line_item', 10, 2 );
 
