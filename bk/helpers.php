@@ -100,7 +100,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
           update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
         }
       } else {
-        $bk_wclogger->add('debug','Cannot create vocuher '.$title.' and user '.$username.' : Product '.$product_sku);
+        $bk_wclogger->add('warning','Cannot create vocuher '.$title.' and user '.$username.' : Product '.$product_sku);
         $voucher_id = -2;
       }
     }
