@@ -70,12 +70,17 @@ function bk_create_voucher(){
 function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $voucher_id = -1;
   $author_id = 1;
-  if( null == get_page_by_title( $title ) ) {
-    $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
-    if(is_array($sku_arr)){
-      foreach($sku_arr as $key => $pid){
-        $slug = 'activation-code-id-'.$ac_id.'-'.$pid;
-      	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-".$pid;
+
+  $bk_wclogger = new WC_Logger();
+
+
+  $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
+  if(is_array($sku_arr)){
+    foreach($sku_arr as $key => $pid){
+      $slug = 'activation-code-id-'.$ac_id.'-'.$pid;
+    	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-".$pid;
+      if( null == get_page_by_title( $title ) ) {
+        $bk_wclogger->add('debug','Creating Voucher'.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
         $voucher_id = wp_insert_post(
     			array(
     				'comment_status'	=>	'closed',
@@ -94,10 +99,11 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
           update_post_meta($voucher_id,'bk_voucher_user_login', $username);
           update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
         }
+      } else {
+        $bk_wclogger->add('debug','Cannot create vocuher '.$title.' and user '.$username.' : Product '.$product_sku);
+        $voucher_id = -2;
       }
     }
-  } else {
-    $voucher_id = -2;
   }
 
   return $voucher_id;
@@ -184,3 +190,22 @@ add_filter('really_simple_csv_importer_save_meta', function($meta, $post, $is_up
     }
     return $meta;
 }, 10, 3);
+
+// $label = __( 'Enable Logging', 'fablesounds' );
+// $description = __( 'Enable the logging of errors.', 'fablesounds' );
+//
+// if ( defined( 'WC_LOG_DIR' ) ) {
+// 	$log_url = add_query_arg( 'tab', 'logs', add_query_arg( 'page', 'wc-status', admin_url( 'admin.php' ) ) );
+// 	$log_key = 'your-plugin-slug-here-' . sanitize_file_name( wp_hash( 'your-plugin-slug-here' ) ) . '-log';
+// 	$log_url = add_query_arg( 'log_file', $log_key, $log_url );
+//
+// 	$label .= ' | ' . sprintf( __( '%1$sView Log%2$s', 'fablesounds' ), '<a href="' . esc_url( $log_url ) . '">', '</a>' );
+// }
+//
+// $form_fields['wc_yourpluginslug_debug'] = array(
+// 	'title'       => __( 'Debug Log', 'fablesounds' ),
+// 	'label'       => $label,
+// 	'description' => $description,
+// 	'type'        => 'checkbox',
+// 	'default'     => 'no'
+// );
