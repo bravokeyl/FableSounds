@@ -47,12 +47,12 @@ function bk_add_to_cart( $atts ) {
     $url .= 'data-product_id="'.$pid.'" class="'.$class.'">><span class="grve-item">';
     $url .= '<i class="grve-menu-icon fa fa-shopping-cart"></i></span>'.$label.'</a>';
 
-    if(!empty($atts['sku'])) {
-      $eligible = bk_current_user_eligible_to_upgrade($atts['id'],$atts['sku']);
-    }
-    
     if( "new" == $atts['type'] ){
+
     }else {
+      if(!empty($atts['sku'])) {
+        $eligible = bk_current_user_eligible_to_upgrade($atts['id'],$atts['sku']);
+      }
       if($eligible){
       } else {
         $url = '<button type="button" class="disabled grve-bg-hover-none" disabled>'.$atts['not_eligible'].'</button>';
@@ -70,27 +70,31 @@ function bk_create_voucher(){
 function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $voucher_id = -1;
   $author_id = 1;
-	$slug = 'activation-code-id-'.$ac_id;
-	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku;
   if( null == get_page_by_title( $title ) ) {
-    $voucher_id = wp_insert_post(
-			array(
-				'comment_status'	=>	'closed',
-				'ping_status'		=>	'closed',
-				'post_author'		=>	$author_id,
-				'post_name'		=>	$slug,
-				'post_title'		=>	$title,
-				'post_status'		=>	'publish',
-				'post_type'		=>	'fs_vouchers'
-			)
-		);
+    $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
+    if(is_array($sku_arr)){
+      foreach($sku_arr as $key => $pid){
+        $slug = 'activation-code-id-'.$ac_id.'-'.$pid;
+      	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-".$pid;
+        $voucher_id = wp_insert_post(
+    			array(
+    				'comment_status'	=>	'closed',
+    				'ping_status'		=>	'closed',
+    				'post_author'		=>	$author_id,
+    				'post_name'		=>	$slug,
+    				'post_title'		=>	$title,
+    				'post_status'		=>	'publish',
+    				'post_type'		=>	'fs_vouchers'
+    			)
+    		);
 
-    if($voucher_id){
-      $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
-      update_post_meta($voucher_id,'bk_voucher_status','nused');
-      update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr );
-      update_post_meta($voucher_id,'bk_voucher_user_login', $username);
-      update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
+        if($voucher_id){
+          update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr[$key] );
+          update_post_meta($voucher_id,'bk_voucher_status','nused');
+          update_post_meta($voucher_id,'bk_voucher_user_login', $username);
+          update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
+        }
+      }
     }
   } else {
     $voucher_id = -2;
