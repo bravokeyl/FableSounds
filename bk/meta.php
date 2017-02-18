@@ -214,8 +214,6 @@ add_action('woocommerce_product_options_general_product_data','bk_product_is_new
 function bk_product_is_new() {
 	global $post;
 	woocommerce_wp_checkbox( array( 'id' => 'bk_product_upgrade_update', 'label' => __( 'Is upgrade/update?', 'fablesounds' ),'description' => __( 'Is this product a upgrade/update and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
-	// woocommerce_wp_text_input( array( 'id' => 'bk_eligible_products', 'label' => __( 'Eligible Products', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'Comma separated list of eligble product SKU\'s once this product is bought.', 'fablesounds' ) ) );
-
 	?>
 	<p class="form-field">
 		<label for="bk_eligible_products"><?php _e( 'Eligible Products', 'fablesounds' ); ?></label>

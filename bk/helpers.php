@@ -2,14 +2,11 @@
 function bk_get_sku($pid) {
   return false;
 }
-function bk_is_product_upgrade($sku) {
-  $products = array(
-    "BKFGU",
-    "BKFLU",
-    "BKFHU"
-  );
+function bk_product_upgrade_update($product_id) {
 
-  if( in_array($sku, $products) ){
+  $is_product_upgrade = get_post_meta($product_id,'bk_product_upgrade_update',true);
+
+  if( "yes" == $is_product_upgrade ){
     return true;
   }
 
@@ -149,9 +146,9 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
 
   $product = new WC_Product($product_id);
   $sku = $product->get_sku();
-  $is_upgrade = bk_is_product_upgrade($sku);
+  $is_product_upgrade = bk_product_upgrade_update($product_id);
 
-  if($is_upgrade){
+  if($is_product_upgrade){
     $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
     if($eligible) {
 
