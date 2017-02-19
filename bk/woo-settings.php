@@ -92,8 +92,26 @@ class WC_Settings_Tab_FableSounds{
                 'id'   => 'wc_settings_available_updates_upgrades_description'
             ),
       array(
+              'name' => __( 'Ineligible to upgrades message', 'fablesounds' ),
+              'type' => 'textarea',
+              'css'  => 'width:80%; height: 150px;',
+              'id'   => 'wc_settings_upgrades_message'
+          ),
+      array(
+              'name' => __( 'Ineligible to updates message', 'fablesounds' ),
+              'type' => 'textarea',
+              'css'  => 'width:80%; height: 150px;',
+              'id'   => 'wc_settings_updates_message'
+          ),
+      array(
+              'name' => __( 'Ineligible to backup products message', 'fablesounds' ),
+              'type' => 'textarea',
+              'css'  => 'width:80%; height: 150px;',
+              'id'   => 'wc_settings_available_updates_upgrades_title'
+          ),
+      array(
                  'type' => 'sectionend',
-                 'id' => 'wc_settings_tab_fablesounds_section_end'
+                 'id' => 'wc_settings_backups_message'
             )
         );
 

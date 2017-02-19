@@ -467,7 +467,7 @@ add_filter( 'wp_mail_from', function() {
 
 add_filter('woocommerce_return_to_shop_redirect','bk_return_empty_cart_shop_url');
 function bk_return_empty_cart_shop_url() {
-  return esc_url(home_url('/broadway-big-band'));
+  return esc_url(home_url('/'));
 }
 
 add_action('woocommerce_payment_complete', 'bk_assign_vouchers');

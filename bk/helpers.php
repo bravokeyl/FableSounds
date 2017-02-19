@@ -11,14 +11,28 @@ function bk_mail_insufficient_activation_codes(){
 function bk_get_sku($pid) {
   return false;
 }
-function bk_product_upgrade_update($product_id) {
 
-  $is_product_upgrade = get_post_meta($product_id,'bk_product_upgrade_update',true);
-
+function bk_product_upgrade($product_id) {
+  $is_product_upgrade = get_post_meta($product_id,'bk_product_upgrade',true);
   if( "yes" == $is_product_upgrade ){
     return true;
   }
+  return false;
+}
 
+function bk_product_update($product_id) {
+  $is_product_update = get_post_meta($product_id,'bk_product_update',true);
+  if( "yes" == $is_product_update ){
+    return true;
+  }
+  return false;
+}
+
+function bk_product_backup($product_id) {
+  $is_product_backup = get_post_meta($product_id,'bk_product_backup',true);
+  if( "yes" == $is_product_backup ){
+    return true;
+  }
   return false;
 }
 
@@ -148,6 +162,7 @@ function bk_get_user_product_vouchers($username,$sku){
 
   return $vouchers_found;
 }
+
 /* Handle upgrades */
 function bk_current_user_eligible_to_upgrade($product_id,$sku) {
 
@@ -174,14 +189,25 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
 
   $product = new WC_Product($product_id);
   $sku = $product->get_sku();
-  $is_product_upgrade = bk_product_upgrade_update($product_id);
-
+  $is_product_upgrade = bk_product_upgrade($product_id);
+  $is_product_update = bk_product_update($product_id);
+  $is_product_backup = bk_product_backup($product_id);
+  $product_url = get_post_meta($product_id,'bk_product_url',true);
   if($is_product_upgrade){
     $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
     if($eligible) {
 
     } else {
       wc_add_notice( "You are not eligible to upgrade. Please register a product or buy a new one.", 'error' );
+      wp_safe_redirect(esc_url($product_url));
+      exit;
+    }
+  } elseif($is_product_update){
+    $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
+    if($eligible) {
+
+    } else {
+      wc_add_notice( "You are not eligible to update. Please register a product or buy a new one.", 'error' );
       wp_safe_redirect( wc_get_endpoint_url( 'my-account' ) );
       exit;
     }

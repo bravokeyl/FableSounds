@@ -52,8 +52,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 									if ( ! $_product->is_visible() ) {
 										echo str_replace( array( 'http:', 'https:' ), '', $thumbnail );
 									} else {
-										$product_page = sanitize_title($_product->get_title());
-										$product_url = esc_url(home_url($product_page));
+										$product_page = get_post_meta($product_id,'bk_product_url', true);
+										$product_url = esc_url($product_page);
 										printf( '<a href="%s">%s</a>', $product_url, $thumbnail );
 									}
 								?>

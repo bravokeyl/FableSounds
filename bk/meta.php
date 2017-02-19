@@ -206,8 +206,11 @@ function bk_save_product_meta($post_id) {
 	if ( ! empty( $_POST['bk_product_update'] ) ) {
 		$is_update = 'yes';
 	}
-	if ( ! empty( $_POST['bk_product_download'] ) ) {
+	if ( ! empty( $_POST['bk_product_backup'] ) ) {
 		$is_download = 'yes';
+	}
+	if ( ! empty( $_POST['bk_product_url'] ) ) {
+		$product_url = $_POST['bk_product_url'];
 	}
 
 	$eligble_products_arr = isset( $_POST['bk_eligible_products'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['bk_eligible_products'] ) ) ) : array();
@@ -215,15 +218,18 @@ function bk_save_product_meta($post_id) {
 	update_post_meta( $post_id, 'bk_eligible_products', $eligble_products_arr );
 	update_post_meta( $post_id, 'bk_product_upgrade', $is_upgrade );
 	update_post_meta( $post_id, 'bk_product_update', $is_update );
-	update_post_meta( $post_id, 'bk_product_download', $is_download );
+	update_post_meta( $post_id, 'bk_product_backup', $is_download );
+	update_post_meta( $post_id, 'bk_product_url', $product_url );
+	
 }
 
 add_action('woocommerce_product_options_general_product_data','bk_product_is_new');
 function bk_product_is_new() {
 	global $post;
+	woocommerce_wp_text_input( array( 'id' => 'bk_product_url', 'label' => __( 'Product URL', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'This is the URL used in the cart pages.', 'fablesounds' ) ) );
 	woocommerce_wp_checkbox( array( 'id' => 'bk_product_upgrade', 'label' => __( 'Is upgrade?', 'fablesounds' ),'description' => __( 'Is this product a upgrade and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
 	woocommerce_wp_checkbox( array( 'id' => 'bk_product_update', 'label' => __( 'Is update?', 'fablesounds' ),'description' => __( 'Is this product a update and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
-	woocommerce_wp_checkbox( array( 'id' => 'bk_product_download', 'label' => __( 'Is download?', 'fablesounds' ),'description' => __( 'Is this product a download and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
+	woocommerce_wp_checkbox( array( 'id' => 'bk_product_backup', 'label' => __( 'Is backup?', 'fablesounds' ),'description' => __( 'Is this product a backup and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
 	?>
 	<p class="form-field">
 		<label for="bk_eligible_products"><?php _e( 'Eligible Products', 'fablesounds' ); ?></label>
