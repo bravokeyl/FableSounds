@@ -110,8 +110,8 @@ class WC_Settings_Tab_FableSounds{
               'id'   => 'wc_settings_backups_message'
           ),
       array(
-                 'type' => 'sectionend',
-                 'id' => 'wc_settings_section_end'
+              'type' => 'sectionend',
+              'id' => 'wc_settings_tab_fablesounds_section_end'
             )
         );
 
