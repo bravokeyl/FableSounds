@@ -39,10 +39,9 @@ function bk_product_backup($product_id) {
 function bk_add_to_cart( $atts ) {
   $atts = shortcode_atts( array(
         'label' => 'Add to Cart',
-        'id' => '',
+        'id' => '0',
         'sku' => '',
         'type' => 'upgrade',
-        'not_eligible' => 'Not eligible to upgrade'
   ), $atts, 'fable_cart' );
 
   $url = '';
@@ -78,7 +77,19 @@ function bk_add_to_cart( $atts ) {
       }
       if($eligible){
       } else {
-        $url = '<button type="button" class="disabled grve-bg-hover-none" disabled>'.$atts['not_eligible'].'</button>';
+
+        $eligible_message = "Not Eligible";
+        if("upgrade" == $atts['type']){
+          $eligible_message = get_option('wc_settings_upgrades_message');
+        }
+        if("update" == $atts['type']){
+          $eligible_message = get_option('wc_settings_updates_message');
+        }
+        if("backup" == $atts['type']){
+          $eligible_message = get_option('wc_settings_backups_message');
+        }
+
+        $url = '<div type="button" class="disabled grve-bg-hover-none" disabled>'.$eligible_message.'</div>';
       }
     }
   }

@@ -107,11 +107,11 @@ class WC_Settings_Tab_FableSounds{
               'name' => __( 'Ineligible to backup products message', 'fablesounds' ),
               'type' => 'textarea',
               'css'  => 'width:80%; height: 150px;',
-              'id'   => 'wc_settings_available_updates_upgrades_title'
+              'id'   => 'wc_settings_backups_message'
           ),
       array(
                  'type' => 'sectionend',
-                 'id' => 'wc_settings_backups_message'
+                 'id' => 'wc_settings_section_end'
             )
         );
 
