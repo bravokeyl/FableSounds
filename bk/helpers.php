@@ -241,7 +241,7 @@ function bk_current_user_eligible_to_upgrade($product_id,$sku) {
   $user_id = $current_user->ID;
   $user_login = $current_user->user_login;
   if($user_id) { //0 means not logged in or guest user
-    $vouchers = bk_get_user_product_vouchers($user_login,$sku);
+    $vouchers = bk_get_user_product_vouchers($user_login,$product_id);
     // if ( wc_customer_bought_product( $customer_email, $user_id, $product_id) ){
     //   return true;
     // }
