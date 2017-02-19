@@ -82,16 +82,7 @@ function bk_add_to_cart( $atts ) {
       } else {
 
         $eligible_message = "Not Eligible";
-        if("upgrade" == $atts['type']){
-          $eligible_message = get_option('wc_settings_upgrades_message');
-        }
-        if("update" == $atts['type']){
-          $eligible_message = get_option('wc_settings_updates_message');
-        }
-        if("backup" == $atts['type']){
-          $eligible_message = get_option('wc_settings_backups_message');
-        }
-
+        $eligible_message = get_post_meta($pid,'bk_product_message',true);
         $url = '<div type="button" class="disabled grve-bg-hover-none" disabled>'.$eligible_message.'</div>';
       }
     }
