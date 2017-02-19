@@ -344,8 +344,10 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
     $cemail = sanitize_email($order_data['billing_address']['email']);
     $bk_apiLogger = new WC_Logger();
-
-
+    $bk_order_id = $order_data['id'];
+    $bk_customer_id = get_post_meta( $bk_order_id, '_customer_user', true );
+    $customer_obj = get_user_by('id',$bk_customer_id);
+    $customer_username = $customer_obj->user_login;
     if( 'processing' == $order_data['status'] ){
       $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
       $serials = bk_get_unused_activation_codes($quantity);
@@ -368,6 +370,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           update_post_meta( $serial_id, 'bk_ac_status', "used" );
           update_post_meta( $serial_id, 'bk_ac_product_sku', $product_sku );
           update_post_meta( $serial_id, 'bk_ac_user_email', $cemail );
+          update_post_meta( $serial_id, 'bk_ac_user_login', $customer_username );
           update_post_meta( $serial_id, 'bk_ac_date', current_time('mysql') );
 
           update_post_meta( $serial_id, 'order_data', $order_data );

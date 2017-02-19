@@ -132,7 +132,6 @@ function bk_save_post_meta( $post_id, $post ) {
 
 function bk_sn_meta_box($object, $box) {
 	?>
-
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_sn_meta_nonce' ); ?>
    <p>
   	<label for="bk-sn-user-email"><?php _e( "User Email:", 'bk' ); ?>
