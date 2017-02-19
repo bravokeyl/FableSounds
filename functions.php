@@ -349,7 +349,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     if( 'processing' == $order_data['status'] ){
       $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
       $serials = bk_get_unused_activation_codes($quantity);
-
+      $bk_apiLogger->add('debug','Continuata Webhook Fired: Serials found : '.count($serials).' Quantity required: '.$quantity);
       if($quantity == count($serials)){
         $serial_index = 0;
         foreach ( $order->get_items() as $item_id => $item ) {
@@ -509,8 +509,9 @@ add_action('woocommerce_payment_complete', 'bk_check_codes_quantity',15);
 function bk_check_codes_quantity(){
   $all = '-1';
   $serials = bk_get_unused_activation_codes($all);
-  if(20 > count($serials)) {
-    bk_mail_insufficient_activation_codes();
+  $count = count($serials);
+  if(20 > $count) {
+    bk_mail_insufficient_activation_codes($count);
   }
 }
 
