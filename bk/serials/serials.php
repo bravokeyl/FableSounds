@@ -65,14 +65,14 @@ function fs_serial_numbers_columns($existing_columns){
   $columns                = array();
   $columns['cb']          = $existing_columns['cb'];
   $columns['title'] = __( 'Serial Number', 'fablesounds' );
-  $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
   $columns['product_id']      = __( 'Product SKU', 'fablesounds' );
+  $columns['dealer_price'] = __( 'Dealer Price', 'fablesounds' );
+  $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
   $columns['user_id'] = __( 'User Login', 'fablesounds' );
-  //$columns['products']    = __( 'Product IDs', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
-  $columns['serial_date'] = __( 'Date', 'fablesounds' );
-	$columns['distributed'] = __( 'Distributed', 'fablesounds' );
 
+  $columns['download_code'] = __( 'Download Code', 'fablesounds' );
+  $columns['serial_date'] = __( 'Date', 'fablesounds' );
   return $columns;
 }
 function fs_render_serial_numbers_columns( $column ) {
@@ -110,6 +110,22 @@ function fs_render_serial_numbers_columns( $column ) {
 				echo "Not Registered";
 			}
     break;
+    case 'download_code' :
+			$sndate = get_post_meta( $post->ID, 'bk_sn_dealer_price', true );
+			if ( $sndate ) {
+				echo esc_attr($sndate);
+			} else {
+				echo '&ndash;';
+			}
+    break;
+    case 'dealer_price' :
+			$sndate = get_post_meta( $post->ID, 'bk_sn_dealer_price', true );
+			if ( $sndate ) {
+				echo esc_attr($sndate);
+			} else {
+				echo '&ndash;';
+			}
+    break;
     case 'serial_date' :
 			$sndate = get_post_meta( $post->ID, 'bk_sn_date', true );
 			if ( $sndate ) {
@@ -118,13 +134,6 @@ function fs_render_serial_numbers_columns( $column ) {
 				echo '&ndash;';
 			}
     break;
-		case 'distributed' :
-			$sndate = get_post_meta( $post->ID, 'bk_sn_distributed', true );
-			if ( $sndate ) {
-				echo esc_attr($sndate);
-			} else {
-				echo '&ndash;';
-			}
-    break;
+
   }
 }
