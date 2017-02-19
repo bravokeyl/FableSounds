@@ -61,11 +61,11 @@ function bk_create_serial_number($sku,$order_id,$ac_id,$username){
   }
 }
 
-function bk_assign_serial_number($serial,$sku){
+function bk_assign_serial_number($quantity){
   $code = array();
   $args = array(
     'post_type' => 'fs_serial_numbers',
-    'posts_per_page' => '1',
+    'posts_per_page' => $quantity,
     'meta_query' => array(
       'relation' => 'AND',
       array(

@@ -388,8 +388,22 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     			$order_data['serial_data'][] = $serial_data;
 
           // bk_create_serial_number($product_sku,$order_data['order_number'],$serial_id,$customer_username);
-          $nr_serial = bk_assign_serial_number();
-
+          $nr_serial = bk_assign_serial_number($quantity);
+          if($quantity == count($nr_serial)){
+            update_post_meta( $nr_serial[$serial_index], 'bk_ac_status', "used" );
+            update_post_meta( $nr_serial[$serial_index], 'bk_ac_product_sku', $product_sku );
+            update_post_meta( $nr_serial[$serial_index], 'bk_ac_user_email', $cemail );
+            update_post_meta( $nr_serial[$serial_index], 'bk_ac_user_login', $customer_username );
+            update_post_meta( $nr_serial[$serial_index], 'bk_ac_date', current_time('mysql') );
+          } else {
+            $admin_email = sanitize_email(get_option('admin_email'));
+            $to = array( $admin_email, 'bravokeyl@gmail.com' );
+            $subject = 'Not enough serial numbers';
+            $body = 'Not enough serial numbers.';
+            $headers[] = 'Content-Type: text/html; charset=UTF-8';
+            $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
+            wp_mail( $to, $subject, $body, $headers );
+          }
           $serial_index++;
     		} // foreach
         return $order_data;
