@@ -11,6 +11,28 @@ function bk_mail_insufficient_activation_codes($count='0'){
   $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
   wp_mail( $to, $subject, $body, $headers );
 }
+function bk_activation_codes_available(){
+  $args = array(
+    'post_type' => 'fs_activation_codes',
+    'posts_per_page' => '-1',
+    'meta_query' => array(
+      array(
+        'key' => 'bk_ac_status',
+        'value' => "nused",
+        'compare' => '='
+      )
+    ),
+    'post_status' => 'publish'
+  );
+
+  $query = new WP_Query($args);
+  $count = $query->found_posts;
+  if(0 == intval($count)) {
+    bk_mail_insufficient_activation_codes(0);
+    return false;
+  }
+  return true;
+}
 function bk_get_sku($pid) {
   return false;
 }
@@ -53,6 +75,7 @@ function bk_add_to_cart( $atts ) {
         'id' => '0',
         'sku' => '',
         'type' => 'upgrade',
+        'nlabel' => 'Login to find out if you are eligible'
   ), $atts, 'fable_cart' );
 
   $url = '';
@@ -66,7 +89,7 @@ function bk_add_to_cart( $atts ) {
     $href = 'href="/cart/?add-to-cart='.$pid.'"';
   } else {
     $href = 'href="/my-account/"';
-    $label = "Login to upgrade";
+    $label = $atts['nlabel'];
   }
 
   if( ! is_user_logged_in() ){
@@ -199,22 +222,23 @@ function bk_current_user_eligible_to_upgrade($product_id,$sku) {
 
 add_action('woocommerce_add_to_cart','bk_check_add_to_cart',10,6);
 function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data ) {
+  $codes_available = bk_activation_codes_available();
+  if($codes_available){
+    $product = new WC_Product($product_id);
+    $sku = $product->get_sku();
+    $is_product_upgrade = bk_product_upgrade($product_id);
+    $product_url = get_post_meta($product_id,'bk_product_url',true);
+    if($is_product_upgrade){
+      $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
+      if($eligible) {
 
-  $product = new WC_Product($product_id);
-  $sku = $product->get_sku();
-  $is_product_upgrade = bk_product_upgrade($product_id);
-  $product_url = get_post_meta($product_id,'bk_product_url',true);
-  if($is_product_upgrade){
-    $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
-    if($eligible) {
-
-    } else {
-      wc_add_notice( "You are not eligible to upgrade. Please register a product or buy a new one.", 'error' );
-      wp_safe_redirect(esc_url($product_url));
-      exit;
+      } else {
+        wc_add_notice( "You are not eligible to upgrade. Please register a product or buy a new one.", 'error' );
+        wp_safe_redirect(esc_url($product_url));
+        exit;
+      }
     }
   }
-  
 }
 
 
