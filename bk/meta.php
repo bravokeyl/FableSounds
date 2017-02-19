@@ -113,13 +113,18 @@ function bk_save_post_meta( $post_id, $post ) {
 		$bpid = ( isset( $_POST['bk-sn-product-sku'] ) ? esc_attr($_POST['bk-sn-product-sku']) : '' );
 		$bstatus = isset( $_POST['bk-sn-status'] ) ? esc_attr( $_POST['bk-sn-status']) : '';
 	  $bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
+		$bdcode = isset( $_POST['bk-download-code'] ) ? esc_attr( $_POST['bk-download-code']) : '';
+	  $bdealer_price = ( isset( $_POST['bk-dealer-price'] ) ? $_POST['bk-dealer-price'] : '' );
+		$bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
 
 	  $meta_keys = array(
 	    'bk_sn_user_email' => $buid,
 			'bk_sn_seller_name' => $bseller,
 	    'bk_sn_product_sku' => $bpid,
 	    'bk_sn_status' => $bstatus,
-	    'bk_sn_date' => $bdate
+	    'bk_download_code' => $bdcode,
+			'bk_dealer_price' => $bdealer_price,
+			'bk_sn_date' => $bdate
 	  );
 	}
 
@@ -155,6 +160,12 @@ function bk_sn_meta_box($object, $box) {
   	<label for="bk-download-code"><?php _e( "Download Code:", 'bk' ); ?>
     <?php $product_id = get_post_meta( $object->ID, 'bk_download_code', true ); ?>
       <input type="text" name="bk-download-code" class="" id="bk-download-code" value="<?php echo esc_attr($product_id);?>" />
+    </label>
+   </p>
+	 <p>
+  	<label for="bk-dealer-price"><?php _e( "Dealer Price:", 'bk' ); ?>
+    <?php $product_id = get_post_meta( $object->ID, 'bk_dealer_price', true ); ?>
+      <input type="text" name="bk-dealer-price" class="" id="bk-dealer-price" value="<?php echo esc_attr($product_id);?>" />
     </label>
    </p>
    <p>

@@ -95,7 +95,7 @@ function fs_render_serial_numbers_columns( $column ) {
 			}
     break;
     case 'user_id' :
-			$snuid = get_post_meta( $post->ID, 'bk_sn_user_name', true );
+			$snuid = get_post_meta( $post->ID, 'bk_sn_user_login', true );
 			if ( $snuid ) {
 				echo $snuid;
 			} else {
@@ -111,7 +111,7 @@ function fs_render_serial_numbers_columns( $column ) {
 			}
     break;
     case 'download_code' :
-			$sndate = get_post_meta( $post->ID, 'bk_sn_dealer_price', true );
+			$sndate = get_post_meta( $post->ID, 'bk_download_code', true );
 			if ( $sndate ) {
 				echo esc_attr($sndate);
 			} else {
@@ -119,7 +119,7 @@ function fs_render_serial_numbers_columns( $column ) {
 			}
     break;
     case 'dealer_price' :
-			$sndate = get_post_meta( $post->ID, 'bk_sn_dealer_price', true );
+			$sndate = get_post_meta( $post->ID, 'bk_dealer_price', true );
 			if ( $sndate ) {
 				echo esc_attr($sndate);
 			} else {
