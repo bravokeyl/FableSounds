@@ -14,26 +14,13 @@ function bk_mail_insufficient_activation_codes($count='0'){
 function bk_get_sku($pid) {
   return false;
 }
+function bk_create_serial_number(){
+
+}
 
 function bk_product_upgrade($product_id) {
   $is_product_upgrade = get_post_meta($product_id,'bk_product_upgrade',true);
   if( "yes" == $is_product_upgrade ){
-    return true;
-  }
-  return false;
-}
-
-function bk_product_update($product_id) {
-  $is_product_update = get_post_meta($product_id,'bk_product_update',true);
-  if( "yes" == $is_product_update ){
-    return true;
-  }
-  return false;
-}
-
-function bk_product_backup($product_id) {
-  $is_product_backup = get_post_meta($product_id,'bk_product_backup',true);
-  if( "yes" == $is_product_backup ){
     return true;
   }
   return false;
@@ -195,8 +182,6 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
   $product = new WC_Product($product_id);
   $sku = $product->get_sku();
   $is_product_upgrade = bk_product_upgrade($product_id);
-  $is_product_update = bk_product_update($product_id);
-  $is_product_backup = bk_product_backup($product_id);
   $product_url = get_post_meta($product_id,'bk_product_url',true);
   if($is_product_upgrade){
     $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
@@ -220,14 +205,15 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
 
 }
 
-add_filter('really_simple_csv_importer_save_meta', function($meta, $post, $is_update) {
-    foreach ($meta as $key => $value) {
-      if('bk_voucher_imp_date' == $key) {
-        if (strpos($value, ',') !== false) {
-            $_value = preg_split("/,+/", $value);
-            $meta[$key] = $_value;
-        }
-      }
-    }
-    return $meta;
-}, 10, 3);
+
+// add_filter('really_simple_csv_importer_save_meta', function($meta, $post, $is_update) {
+//     foreach ($meta as $key => $value) {
+//       if('bk_voucher_imp_date' == $key) {
+//         if (strpos($value, ',') !== false) {
+//             $_value = preg_split("/,+/", $value);
+//             $meta[$key] = $_value;
+//         }
+//       }
+//     }
+//     return $meta;
+// }, 10, 3);
