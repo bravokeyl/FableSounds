@@ -108,7 +108,7 @@ function bk_save_post_meta( $post_id, $post ) {
 	}
 
 	if( 'fs_serial_numbers' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-sn-user-email'] ) ? intval($_POST['bk-sn-user-email']) : '' );
+		$buid = ( isset( $_POST['bk-sn-user-login'] ) ? $_POST['bk-sn-user-login'] : '' );
 	  $bseller = ( isset( $_POST['bk-sn-seller-name'] ) ? esc_attr($_POST['bk-sn-seller-name']) : '' );
 		$bpid = ( isset( $_POST['bk-sn-product-sku'] ) ? esc_attr($_POST['bk-sn-product-sku']) : '' );
 		$bstatus = isset( $_POST['bk-sn-status'] ) ? esc_attr( $_POST['bk-sn-status']) : '';
@@ -118,7 +118,7 @@ function bk_save_post_meta( $post_id, $post ) {
 		$bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
 
 	  $meta_keys = array(
-	    'bk_sn_user_email' => $buid,
+	    'bk_sn_user_login' => $buid,
 			'bk_sn_seller_name' => $bseller,
 	    'bk_sn_product_sku' => $bpid,
 	    'bk_sn_status' => $bstatus,
