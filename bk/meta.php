@@ -187,13 +187,7 @@ function bk_save_product_meta($post_id) {
 		update_post_meta( $post_id, '_continuata_sku', '' );
 	} elseif ( $new_sku !== $sku ) {
 		if ( ! empty( $new_sku ) ) {
-			// $unique_sku = wc_product_has_unique_sku( $post_id, $new_sku );
-			//
-			// if ( ! $unique_sku ) {
-			// 	WC_Admin_Meta_Boxes::add_error( __( 'Continuata SKU must be unique.', 'fablesounds' ) );
-			// } else {
 				update_post_meta( $post_id, '_continuata_sku', $new_sku );
-			// }
 		} else {
 			update_post_meta( $post_id, '_continuata_sku', '' );
 		}
@@ -202,11 +196,8 @@ function bk_save_product_meta($post_id) {
 	if ( ! empty( $_POST['bk_product_upgrade'] ) ) {
 		$is_upgrade = 'yes';
 	}
-	if ( ! empty( $_POST['bk_product_update'] ) ) {
-		$is_update = 'yes';
-	}
-	if ( ! empty( $_POST['bk_product_backup'] ) ) {
-		$is_download = 'yes';
+	if ( ! empty( $_POST['bk_product_message'] ) ) {
+		$product_message = $_POST['bk_product_message'];
 	}
 	if ( ! empty( $_POST['bk_product_url'] ) ) {
 		$product_url = $_POST['bk_product_url'];
@@ -216,19 +207,16 @@ function bk_save_product_meta($post_id) {
 
 	update_post_meta( $post_id, 'bk_eligible_products', $eligble_products_arr );
 	update_post_meta( $post_id, 'bk_product_upgrade', $is_upgrade );
-	update_post_meta( $post_id, 'bk_product_update', $is_update );
-	update_post_meta( $post_id, 'bk_product_backup', $is_download );
 	update_post_meta( $post_id, 'bk_product_url', $product_url );
-
+	update_post_meta( $post_id, 'bk_product_message', $product_message );
 }
 
 add_action('woocommerce_product_options_general_product_data','bk_product_is_new');
 function bk_product_is_new() {
 	global $post;
 	woocommerce_wp_text_input( array( 'id' => 'bk_product_url', 'label' => __( 'Product URL', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'This is the URL used in the cart pages.', 'fablesounds' ) ) );
-	woocommerce_wp_checkbox( array( 'id' => 'bk_product_upgrade', 'label' => __( 'Is upgrade?', 'fablesounds' ),'description' => __( 'Is this product a upgrade and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
-	woocommerce_wp_checkbox( array( 'id' => 'bk_product_update', 'label' => __( 'Is update?', 'fablesounds' ),'description' => __( 'Is this product a update and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
-	woocommerce_wp_checkbox( array( 'id' => 'bk_product_backup', 'label' => __( 'Is backup?', 'fablesounds' ),'description' => __( 'Is this product a backup and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
+	woocommerce_wp_checkbox( array( 'id' => 'bk_product_upgrade', 'label' => __( 'Voucher Required?', 'fablesounds' ),'description' => __( 'Is this product a upgrade and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
+	woocommerce_wp_textarea_input( array( 'id' => 'bk_product_message', 'label' => __( 'Product Message', 'fablesounds' ), 'class' => 'widefat' ) );
 	?>
 	<p class="form-field">
 		<label for="bk_eligible_products"><?php _e( 'Eligible Products', 'fablesounds' ); ?></label>
