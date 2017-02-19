@@ -134,9 +134,9 @@ function bk_sn_meta_box($object, $box) {
 	?>
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_sn_meta_nonce' ); ?>
    <p>
-  	<label for="bk-sn-user-email"><?php _e( "User Email:", 'bk' ); ?>
+  	<label for="bk-sn-user-login"><?php _e( "User Name:", 'bk' ); ?>
     <?php $user_id = get_post_meta( $object->ID, 'bk_sn_user_login', true ); ?>
-      <input type="text" name="bk-sn-user-email" class="" id="bk-sn-user-email" value="<?php echo esc_attr($user_id);?>" />
+      <input type="text" name="bk-sn-user-login" class="" id="bk-sn-user-login" value="<?php echo esc_attr($user_id);?>" />
     </label>
    </p>
 	 <p>
@@ -149,6 +149,12 @@ function bk_sn_meta_box($object, $box) {
   	<label for="bk-sn-product-sku"><?php _e( "Product SKU:", 'bk' ); ?>
     <?php $product_id = get_post_meta( $object->ID, 'bk_sn_product_sku', true ); ?>
       <input type="text" name="bk-sn-product-sku" class="" id="bk-sn-product-sku" value="<?php echo esc_attr($product_id);?>" />
+    </label>
+   </p>
+	 <p>
+  	<label for="bk-download-code"><?php _e( "Download Code:", 'bk' ); ?>
+    <?php $product_id = get_post_meta( $object->ID, 'bk_download_code', true ); ?>
+      <input type="text" name="bk-download-code" class="" id="bk-download-code" value="<?php echo esc_attr($product_id);?>" />
     </label>
    </p>
    <p>
