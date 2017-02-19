@@ -167,8 +167,6 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $author_id = 1;
 
   $bk_wclogger = new WC_Logger();
-
-
   $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
   if(is_array($sku_arr)){
     foreach($sku_arr as $key => $pid){

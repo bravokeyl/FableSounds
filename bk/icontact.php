@@ -31,7 +31,7 @@ $GLOBALS['config'] = array(
 $GLOBALS['icontact_lists'] = array(
 	'BKFDR' => 268236,
 	'BLDR' => 268237,
-	'BGDR' => 268238
+	'BGDR' => 268238,
 );
 
 
@@ -128,7 +128,7 @@ function add_to_list($contactId, $listId)
 }
 */
 
-function add_user_to_list($contactId, $listId, $dump_response) {
+function add_user_to_list($contactId, $listId) {
 	error_log('adding user '.$userName.' to mailing list: '.$listId);
 
 	$acc = $GLOBALS['config']['accountId'];
@@ -143,6 +143,8 @@ function add_user_to_list($contactId, $listId, $dump_response) {
 						'status' => 'normal'
 					)
 				));
+
+      // wp_die(print_r($response));
 		}
 }
 
