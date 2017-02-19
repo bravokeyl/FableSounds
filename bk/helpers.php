@@ -277,9 +277,9 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
     $to = array( $admin_email, 'bravokeyl@gmail.com' );
     $subject = 'No Activation codes';
     $user = wp_get_current_user();
-    
+
     if($user){
-      $user_name = $user->user_lgoin;
+      $user_name = $user->user_login;
     }else {
       $user_name = "Guest";
     }
