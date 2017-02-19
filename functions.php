@@ -372,23 +372,26 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
           update_post_meta( $serial_id, 'order_data', $order_data );
 
+          $continuata_sku = get_post_meta($product_id,'_continuata_sku',true);
+
           $serial = get_the_title($serial_id);
           $serial_data = array(
             "product_id" => $product_id,
-            "product_sku" => $product_sku,
+            "product_sku" => $continuata_sku,
             "serial" => $serial
           );
 
     			$order_data['serial_data'][] = $serial_data;
 
           $serial_index++;
-    		}
+    		} // foreach
         return $order_data;
       } else {
         $bk_apiLogger->add('error','Continuata Webhook Fired: Order id '.$order_data['order_number']);
         $bk_apiLogger->add('error','Continuata Webhook Fired: Shortage of Activation codes');
         $bk_apiLogger->add('error','Continuata Webhook Fired: Activation codes Required: '.$quantity.' : Available '.count($serials));
         bk_mail_insufficient_activation_codes();
+        return false;
       }
     } else {
       $bk_apiLogger->add('debug','Webhook Fired: Order updates with status '.$order_data['status']);
@@ -509,4 +512,9 @@ function bk_check_codes_quantity(){
   if(20 > count($serials)) {
     bk_mail_insufficient_activation_codes();
   }
+}
+
+add_filter('woocommerce_max_webhook_delivery_failures','bk_max_webhook_failures');
+function bk_max_webhook_failures(){
+  return 1000;
 }

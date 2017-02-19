@@ -188,13 +188,13 @@ function bk_save_product_meta($post_id) {
 		update_post_meta( $post_id, '_continuata_sku', '' );
 	} elseif ( $new_sku !== $sku ) {
 		if ( ! empty( $new_sku ) ) {
-			$unique_sku = wc_product_has_unique_sku( $post_id, $new_sku );
-
-			if ( ! $unique_sku ) {
-				WC_Admin_Meta_Boxes::add_error( __( 'Continuata SKU must be unique.', 'fablesounds' ) );
-			} else {
+			// $unique_sku = wc_product_has_unique_sku( $post_id, $new_sku );
+			//
+			// if ( ! $unique_sku ) {
+			// 	WC_Admin_Meta_Boxes::add_error( __( 'Continuata SKU must be unique.', 'fablesounds' ) );
+			// } else {
 				update_post_meta( $post_id, '_continuata_sku', $new_sku );
-			}
+			// }
 		} else {
 			update_post_meta( $post_id, '_continuata_sku', '' );
 		}
@@ -220,7 +220,7 @@ function bk_save_product_meta($post_id) {
 	update_post_meta( $post_id, 'bk_product_update', $is_update );
 	update_post_meta( $post_id, 'bk_product_backup', $is_download );
 	update_post_meta( $post_id, 'bk_product_url', $product_url );
-	
+
 }
 
 add_action('woocommerce_product_options_general_product_data','bk_product_is_new');
