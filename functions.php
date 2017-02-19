@@ -387,7 +387,8 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
     			$order_data['serial_data'][] = $serial_data;
 
-          bk_create_serial_number($product_sku,$order_data['order_number'],$serial_id,$customer_username);
+          // bk_create_serial_number($product_sku,$order_data['order_number'],$serial_id,$customer_username);
+          $nr_serial = bk_assign_serial_number();
 
           $serial_index++;
     		} // foreach
@@ -480,7 +481,6 @@ function bk_return_empty_cart_shop_url() {
 }
 
 add_action('woocommerce_payment_complete', 'bk_assign_vouchers');
-
 function bk_assign_vouchers($order_id){
   $order = new WC_Order( $order_id );
   $username = "Guest";

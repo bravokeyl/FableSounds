@@ -83,7 +83,7 @@ function fs_render_serial_numbers_columns( $column ) {
 			if ( $snseller ) {
 				echo esc_attr($snseller);
 			} else {
-				echo '&ndash;';
+				echo 'Direct';
 			}
     break;
     case 'product_id' :

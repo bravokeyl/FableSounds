@@ -61,6 +61,40 @@ function bk_create_serial_number($sku,$order_id,$ac_id,$username){
   }
 }
 
+function bk_assign_serial_number($serial,$sku){
+  $code = array();
+  $args = array(
+    'post_type' => 'fs_serial_numbers',
+    'posts_per_page' => '1',
+    'meta_query' => array(
+      'relation' => 'AND',
+      array(
+        'key' => 'bk_sn_status',
+        'value' => "nreg",
+        'compare' => '='
+      ),
+      array(
+        'key' => 'bk_sn_seller_name',
+        'value' => '',
+        'compare' => '='
+      )
+    ),
+    'post_status' => 'publish'
+  );
+
+  $query = new WP_Query($args);
+  wp_die(print_r($query->request));
+  if($query->have_posts()){
+    while($query->have_posts()){
+      $query->the_post();
+      array_push($code, get_the_ID());
+    }
+    wp_reset_postdata();
+  }
+
+  return $code;
+}
+
 function bk_product_upgrade($product_id) {
   $is_product_upgrade = get_post_meta($product_id,'bk_product_upgrade',true);
   if( "yes" == $is_product_upgrade ){
@@ -223,11 +257,11 @@ function bk_current_user_eligible_to_upgrade($product_id,$sku) {
 add_action('woocommerce_add_to_cart','bk_check_add_to_cart',10,6);
 function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data ) {
   $codes_available = bk_activation_codes_available();
+  $product = new WC_Product($product_id);
+  $sku = $product->get_sku();
+  $is_product_upgrade = bk_product_upgrade($product_id);
+  $product_url = get_post_meta($product_id,'bk_product_url',true);
   if($codes_available){
-    $product = new WC_Product($product_id);
-    $sku = $product->get_sku();
-    $is_product_upgrade = bk_product_upgrade($product_id);
-    $product_url = get_post_meta($product_id,'bk_product_url',true);
     if($is_product_upgrade){
       $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
       if($eligible) {
@@ -238,6 +272,10 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
         exit;
       }
     }
+  } else {
+    wc_add_notice( "Sorry for the inconvenience : Activation codes are unavailable. We are notified.", 'error' );
+    wp_safe_redirect(esc_url($product_url));
+    exit;
   }
 }
 
