@@ -387,6 +387,8 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
     			$order_data['serial_data'][] = $serial_data;
 
+          bk_create_serial_number($product_sku,$order_data['order_number'],$serial_id);
+
           $serial_index++;
     		} // foreach
         return $order_data;

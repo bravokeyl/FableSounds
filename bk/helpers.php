@@ -14,8 +14,28 @@ function bk_mail_insufficient_activation_codes($count='0'){
 function bk_get_sku($pid) {
   return false;
 }
-function bk_create_serial_number(){
-
+function bk_create_serial_number($sku,$order_id,$ac_id){
+  $serial_id = -1;
+  $author_id = 1;
+  $slug = $sku.'-'.$order_id.'-'.$ac_id.'-'.wp_rand(1000,9999);
+  $title = strtoupper($sku)."-".$order_id."-".$ac_id."-".wp_rand(1000,9999);
+  $serial_id = wp_insert_post(
+    array(
+      'comment_status'	=>	'closed',
+      'ping_status'		=>	'closed',
+      'post_author'		=>	$author_id,
+      'post_name'		=>	$slug,
+      'post_title'		=>	$title,
+      'post_status'		=>	'publish',
+      'post_type'		=>	'fs_serial_numbers'
+    )
+  );
+  if($serial_id){
+    update_post_meta($serial_id,'bk_sn_product_sku', $sku );
+    update_post_meta($serial_id,'bk_sn_status','nreg');
+    update_post_meta($serial_id,'bk_sn_seller_name', "Direct Buy");
+    update_post_meta($serial_id,'bk_sn_date', current_time('mysql'));
+  }
 }
 
 function bk_product_upgrade($product_id) {
