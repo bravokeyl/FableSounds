@@ -273,8 +273,17 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
       }
     }
   } else {
+    $admin_email = sanitize_email(get_option('admin_email'));
+    $to = array( $admin_email, 'bravokeyl@gmail.com' );
+    $subject = 'No Activation codes';
+    $user = wp_get_current_user();
+    $user_name = $user->user_lgoin;
+    $body = 'User '.$user_name.' tried to buy '.$sku.' but activation codes are ran out, please add more codes.';
+    $headers[] = 'Content-Type: text/html; charset=UTF-8';
+    $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
+    wp_mail( $to, $subject, $body, $headers );
     wc_add_notice( "Sorry for the inconvenience : Activation codes are unavailable. We are notified.", 'error' );
-    wp_safe_redirect(esc_url($product_url));
+    wp_safe_redirect(esc_url(home_url('/my-account')));
     exit;
   }
 }
