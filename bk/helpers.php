@@ -277,7 +277,12 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
     $to = array( $admin_email, 'bravokeyl@gmail.com' );
     $subject = 'No Activation codes';
     $user = wp_get_current_user();
-    $user_name = $user->user_lgoin;
+    if($user){
+      $user_name = $user->user_lgoin;
+    }else {
+      $user_name = "Guest";
+    }
+
     $body = 'User '.$user_name.' tried to buy '.$sku.' but activation codes are ran out, please add more codes.';
     $headers[] = 'Content-Type: text/html; charset=UTF-8';
     $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
