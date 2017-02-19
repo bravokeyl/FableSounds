@@ -6,7 +6,7 @@ function bk_mail_insufficient_activation_codes($count='0'){
   if( 0 == $count) {
     $subject = 'Insufficient Activation codes';
   }
-  $body = 'Activation codes are ran out, please add more codes.';
+  $body = 'Activation codes ran out, please add more codes.';
   $headers[] = 'Content-Type: text/html; charset=UTF-8';
   $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
   wp_mail( $to, $subject, $body, $headers );
@@ -83,7 +83,8 @@ function bk_assign_serial_number($serial,$sku){
   );
 
   $query = new WP_Query($args);
-  wp_die(print_r($query->request));
+
+  // wp_die(print_r($query->request));
   if($query->have_posts()){
     while($query->have_posts()){
       $query->the_post();
@@ -284,7 +285,7 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
       $user_name = "Guest";
     }
 
-    $body = 'User '.$user_name.' tried to buy '.$sku.' but activation codes are ran out, please add more codes.';
+    $body = 'User '.$user_name.' tried to buy '.$sku.' but activation codes ran out, please add more codes.';
     $headers[] = 'Content-Type: text/html; charset=UTF-8';
     $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
     wp_mail( $to, $subject, $body, $headers );
