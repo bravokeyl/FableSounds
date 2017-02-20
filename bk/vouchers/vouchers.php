@@ -79,17 +79,18 @@ function fs_render_vouchers_columns( $column ) {
   $vouchers_voucher_date =  get_post_meta( $post->ID, 'bk_voucher_date', true );
   $vouchers_user_login = get_post_meta( $post->ID, 'bk_voucher_user_login', true );
   $vouchers_user = get_user_by( 'login', $vouchers_user_login );
+	// wp_die(print_r($vouchers_user));
   switch ( $column ) {
     case 'product_sku' :
 			if ( $vouchers_product_sku ) {
-				print_r(get_the_title($vouchers_product_sku));
+				echo $vouchers_product_sku;
 			} else {
 				echo '&ndash;';
 			}
     break;
 		case 'user_email' :
 			if ( $vouchers_user ) {
-				echo sanitize_email($vouchers_user->user_email);
+				echo $vouchers_user->user_email;
 			} else {
 				echo '&ndash;';
 			}
@@ -116,4 +117,88 @@ function fs_render_vouchers_columns( $column ) {
 			}
     break;
   }
+}
+
+add_action( 'restrict_manage_posts', 'bk_admin_vouchers_filter_restrict_manage_posts' );
+function bk_admin_vouchers_filter_restrict_manage_posts(){
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+
+    if ('fs_vouchers' == $type){
+        $values = array(
+            'Not Used' => 'nused',
+            'Used' => 'used',
+        );
+        $current_user = isset($_GET['fs_user_login'])? $_GET['fs_user_login']:'';
+        $current_seller = isset($_GET['fs_seller_name'])? $_GET['fs_seller_name']:'';
+        $current_sku = isset($_GET['fs_product_sku'])? $_GET['fs_product_sku']:'';
+        ?>
+        <input type="text" name="fs_user_login" placeholder="Username" value="<?php echo $current_user;?>" style="max-width: 150px;"/>
+        <!-- <input type="text" name="fs_seller_name" placeholder="Seller Name" value="<?php echo $current_seller;?>" style="max-width: 140px;"/> -->
+        <input type="text" name="fs_product_sku" placeholder="SKU" value="<?php echo $current_sku;?>" style="max-width: 150px;"/>
+        <select name="fs_serial_status">
+        <option value=""><?php _e('Status', 'fablesounds'); ?></option>
+        <?php
+            $current_v = isset($_GET['fs_serial_status'])? $_GET['fs_serial_status']:'';
+            foreach ($values as $label => $value) {
+                printf
+                    (
+                        '<option value="%s"%s>%s</option>',
+                        $value,
+                        $value == $current_v? ' selected="selected"':'',
+                        $label
+                    );
+                }
+        ?>
+        </select>
+        <?php
+    }
+}
+
+add_filter( 'parse_query', 'bk_vouchers_filter' );
+function bk_vouchers_filter( $query ){
+    global $pagenow;
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+    $fs_sn_user = '';
+    $fs_sn_status = '';
+    $bk_meta_query = array(
+      'relation' => 'AND',
+    );
+    if ( 'fs_vouchers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_status']) && $_GET['fs_serial_status'] != '') {
+        // $query->query_vars['meta_key'] = 'bk_sn_status';
+        $fs_sn_status = $_GET['fs_serial_status'];
+        // $query->query_vars['meta_value'] = $fs_sn_status;
+        $bk_meta_query[] = array(
+            'key'       => 'bk_voucher_status',
+            'value'     => $fs_sn_status,
+            'compare'   => '='
+        );
+    }
+    if ( 'fs_vouchers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
+
+        // $query->query_vars['meta_key'] = 'bk_sn_user_login';
+        $fs_sn_user = $_GET['fs_user_login'];
+        // $query->query_vars['meta_value'] = $fs_sn_user;
+        $bk_meta_query[] = array(
+            'key'       => 'bk_voucher_user_login',
+            'value'     => $fs_sn_user,
+            'compare'   => '='
+        );
+    }
+    if ( 'fs_vouchers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_product_sku']) && $_GET['fs_product_sku'] != '') {
+        $fs_product_sku = $_GET['fs_product_sku'];
+        $bk_meta_query[] = array(
+            'key'       => 'bk_voucher_product_sku',
+            'value'     => $fs_product_sku,
+            'compare'   => '='
+        );
+    }
+
+
+    $query->set('meta_query', $bk_meta_query);
 }
