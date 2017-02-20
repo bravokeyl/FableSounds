@@ -233,7 +233,7 @@ function bk_product_is_new() {
 	global $post;
 	woocommerce_wp_text_input( array( 'id' => 'bk_product_url', 'label' => __( 'Product URL', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'This is the URL used in the cart pages.', 'fablesounds' ) ) );
 	woocommerce_wp_checkbox( array( 'id' => 'bk_product_upgrade', 'label' => __( 'Voucher Required?', 'fablesounds' ),'description' => __( 'Is this product a upgrade and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
-	woocommerce_wp_textarea_input( array( 'id' => 'bk_product_message', 'label' => __( 'Product Message', 'fablesounds' ), 'class' => 'widefat' ) );
+	woocommerce_wp_textarea_input( array( 'id' => 'bk_product_message', 'label' => __( 'Ineligible Message', 'fablesounds' ), 'class' => 'widefat' ) );
 	?>
 	<p class="form-field">
 		<label for="bk_eligible_products"><?php _e( 'Eligible Products', 'fablesounds' ); ?></label>
