@@ -364,6 +364,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     $bk_customer_id = get_post_meta( $bk_order_id, '_customer_user', true );
     $customer_obj = get_user_by('id',$bk_customer_id);
     $customer_username = $customer_obj->user_login;
+
     if( 'processing' == $order_data['status'] ){
       $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
       $serials = bk_get_unused_activation_codes($quantity);
@@ -536,7 +537,7 @@ function bk_assign_vouchers($order_id){
     //Email to Admin "Shortage of Activation codes"
     bk_mail_insufficient_activation_codes();
   }
-
+  bk_add_user_to_list($username);
   return $order_id;
 }
 
@@ -548,6 +549,23 @@ function bk_check_codes_quantity(){
   if(20 > $count) {
     bk_mail_insufficient_activation_codes($count);
   }
+}
+
+// add_action('woocommerce_payment_complete', 'bk_add_user_to_list',12);
+function bk_add_user_to_list($username){
+  $icontact_id = get_contact_id($user_name);
+  if($icontact_id) {
+
+  }else {
+    $icontact_res = add_user_to_icontact($email, $firstName, $lastName, $user_name);
+    $icontact_id = get_contact_id($user_name);
+    $bk_wclogger = new WC_Logger();
+    $bk_wclogger->add('info','Adding user to icontact: icontact id - '.$icontact_id);
+    update_user_meta($user->ID,'bk_icontact_id',$icontact_id);
+    // global $icontact_lists;
+    // add_user_to_list($icontact_id,$icontact_lists[$products_dropdown_val]);
+  }
+
 }
 
 add_filter('woocommerce_max_webhook_delivery_failures','bk_max_webhook_failures');
