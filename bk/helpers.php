@@ -108,9 +108,10 @@ function bk_add_to_cart( $atts ) {
   $atts = shortcode_atts( array(
         'label' => 'Add to Cart',
         'id' => '0',
-        'sku' => '',
+        'eligible_product_id' => '',
         'type' => 'upgrade',
-        'nlabel' => 'Login to find out if you are eligible'
+        'nlabel' => 'Login to find out if you are eligible',
+        'sku' => ''
   ), $atts, 'fable_cart' );
 
   $url = '';
@@ -119,7 +120,7 @@ function bk_add_to_cart( $atts ) {
   $href = '';
   $eligible = false;
   $label = $atts['label'];
-
+  $eligible_product_id = $atts['eligible_product_id'];
   if( "new" === $atts['type'] ){
     $href = 'href="/cart/?add-to-cart='.$pid.'"';
   } else {
@@ -142,7 +143,7 @@ function bk_add_to_cart( $atts ) {
 
     }else {
       if(!empty($atts['sku'])) {
-        $eligible = bk_current_user_eligible_to_upgrade($atts['id'],$atts['sku']);
+        $eligible = bk_current_user_eligible_to_upgrade($eligible_product_id,$atts['sku']);
       }
       if($eligible){
       } else {
