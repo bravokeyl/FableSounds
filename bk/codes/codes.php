@@ -159,3 +159,88 @@ function bk_show_user_id_column_content($value, $column_name, $user_id) {
 		}
     return $value;
 }
+
+add_action( 'restrict_manage_posts', 'bk_admin_codes_filter_restrict_manage_posts' );
+function bk_admin_codes_filter_restrict_manage_posts(){
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+
+    if ('fs_activation_codes' == $type){
+        $values = array(
+            'Not Used' => 'nused',
+            'Used' => 'used',
+        );
+        $current_user = isset($_GET['fs_user_login'])? $_GET['fs_user_login']:'';
+        $current_seller = isset($_GET['fs_seller_name'])? $_GET['fs_seller_name']:'';
+        $current_sku = isset($_GET['fs_product_sku'])? $_GET['fs_product_sku']:'';
+        ?>
+        <input type="text" name="fs_user_login" placeholder="Username" value="<?php echo $current_user;?>" style="max-width: 150px;"/>
+        <!-- <input type="text" name="fs_seller_name" placeholder="Seller Name" value="<?php echo $current_seller;?>" style="max-width: 140px;"/> -->
+        <input type="text" name="fs_product_sku" placeholder="SKU" value="<?php echo $current_sku;?>" style="max-width: 150px;"/>
+        <select name="fs_serial_status">
+        <option value=""><?php _e('Status', 'fablesounds'); ?></option>
+        <?php
+            $current_v = isset($_GET['fs_serial_status'])? $_GET['fs_serial_status']:'';
+            foreach ($values as $label => $value) {
+                printf
+                    (
+                        '<option value="%s"%s>%s</option>',
+                        $value,
+                        $value == $current_v? ' selected="selected"':'',
+                        $label
+                    );
+                }
+        ?>
+        </select>
+        <?php
+    }
+}
+
+
+add_filter( 'parse_query', 'bk_codes_filter' );
+function bk_codes_filter( $query ){
+    global $pagenow;
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+    $fs_sn_user = '';
+    $fs_sn_status = '';
+    $bk_meta_query = array(
+      'relation' => 'AND',
+    );
+    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_status']) && $_GET['fs_serial_status'] != '') {
+        // $query->query_vars['meta_key'] = 'bk_sn_status';
+        $fs_sn_status = $_GET['fs_serial_status'];
+        // $query->query_vars['meta_value'] = $fs_sn_status;
+        $bk_meta_query[] = array(
+            'key'       => 'bk_ac_status',
+            'value'     => $fs_sn_status,
+            'compare'   => '='
+        );
+    }
+    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
+
+        // $query->query_vars['meta_key'] = 'bk_sn_user_login';
+        $fs_sn_user = $_GET['fs_user_login'];
+        // $query->query_vars['meta_value'] = $fs_sn_user;
+        $bk_meta_query[] = array(
+            'key'       => 'bk_ac_user_login',
+            'value'     => $fs_sn_user,
+            'compare'   => '='
+        );
+    }
+    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_product_sku']) && $_GET['fs_product_sku'] != '') {
+        $fs_product_sku = $_GET['fs_product_sku'];
+        $bk_meta_query[] = array(
+            'key'       => 'bk_ac_product_sku',
+            'value'     => $fs_product_sku,
+            'compare'   => '='
+        );
+    }
+
+
+    $query->set('meta_query', $bk_meta_query);
+}

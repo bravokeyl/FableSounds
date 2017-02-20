@@ -31,9 +31,9 @@ function bk_ac_meta_box($object, $box) {
 
   <?php wp_nonce_field( basename( __FILE__ ), 'bk_ac_meta_nonce' ); ?>
    <p>
-  	<label for="bk-ac-user-email"><?php _e( "User ID:", 'bk' ); ?>
-    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_email', true ); ?>
-      <input type="text" name="bk-ac-user-email" class="" id="bk-ac-user-email" value="<?php echo esc_html($user_id);?>" />
+  	<label for="bk-ac-user-login"><?php _e( "User Name:", 'bk' ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_login', true ); ?>
+      <input type="text" name="bk-ac-user-login" class="" id="bk-ac-user-login" value="<?php echo esc_html($user_id);?>" />
     </label>
    </p>
    <p>
@@ -93,13 +93,13 @@ function bk_save_post_meta( $post_id, $post ) {
 	$meta_keys = array();
 
 	if( 'fs_activation_codes' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-ac-user-email'] ) ? intval($_POST['bk-ac-user-email']) : '' );
+		$buid = ( isset( $_POST['bk-ac-user-login'] ) ? $_POST['bk-ac-user-login'] : '' );
 	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
 	  $bstatus= ( isset( $_POST['bk-ac-status'] ) ? esc_attr($_POST['bk-ac-status']) : '' );
 	  $bdate = ( isset( $_POST['bk-ac-date'] ) ? $_POST['bk-ac-date'] : '' );
 
 	  $meta_keys = array(
-	    'bk_ac_user_email' => $buid,
+	    'bk_ac_user_login' => $buid,
 	    'bk_ac_product_sku' => $bpid,
 	    'bk_ac_status' => $bstatus,
 	    'bk_ac_date' => $bdate

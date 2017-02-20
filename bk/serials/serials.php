@@ -139,7 +139,6 @@ function fs_render_serial_numbers_columns( $column ) {
 }
 
 add_action( 'restrict_manage_posts', 'bk_admin_serials_filter_restrict_manage_posts' );
-
 function bk_admin_serials_filter_restrict_manage_posts(){
     $type = 'post';
     if (isset($_GET['post_type'])) {
