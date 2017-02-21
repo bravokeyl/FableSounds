@@ -148,8 +148,8 @@ function bk_sn_meta_box($object, $box) {
   	<label for="bk_sn_distributed"><?php _e( "Distributed:", 'bk' ); ?>
     	<?php $dist = get_post_meta( $object->ID, 'bk_sn_distributed', true );?>
 			<select name="bk-sn-distributed" id="bk-sn-distributed">
-          <option value="nreg" <?php selected( $dist, '0' ); ?>>No</option>
-          <option value="reg" <?php selected( $dist, '1' ); ?>>Yes</option>
+          <option value="0" <?php selected( $dist, '0' ); ?>>No</option>
+          <option value="1" <?php selected( $dist, '1' ); ?>>Yes</option>
       </select>
     </label>
    </p>
