@@ -143,7 +143,7 @@ function bk_add_to_cart( $atts ) {
 
     }else {
       if(!empty($atts['sku'])) {
-        $eligible = bk_current_user_eligible_to_upgrade($pid,$atts['sku']);
+        $eligible = bk_current_user_eligible_to_upgrade($pid);
       }
       if($eligible){
       } else {
@@ -204,7 +204,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   return $voucher_id;
 }
 
-function bk_get_user_product_vouchers($username,$sku){
+function bk_get_user_product_vouchers($username,$sku,$product_bought){
   $args = array(
     'post_type' => 'fs_vouchers',
     'post_status' => 'publish',
@@ -226,6 +226,11 @@ function bk_get_user_product_vouchers($username,$sku){
         'value' => $sku,
         'compare' => '='
       ),
+      // array(
+      //   'key'   => 'bk_voucher_product_bought',
+      //   'value' => $sku,
+      //   'compare' => '='
+      // )
     )
   );
   $vquery = new WP_Query($args);
@@ -235,13 +240,14 @@ function bk_get_user_product_vouchers($username,$sku){
 }
 
 /* Handle upgrades */
-function bk_current_user_eligible_to_upgrade($product_id,$sku) {
+function bk_current_user_eligible_to_upgrade($product_id) {
 
   global $woocommerce;
   $current_user= wp_get_current_user();
   $customer_email = $current_user->email;
   $user_id = $current_user->ID;
   $user_login = $current_user->user_login;
+  // $product_bought = get_post_meta($product_id);
   if($user_id) { //0 means not logged in or guest user
     $vouchers = bk_get_user_product_vouchers($user_login,$product_id);
     // if ( wc_customer_bought_product( $customer_email, $user_id, $product_id) ){
@@ -262,12 +268,13 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
   $sku = $product->get_sku();
   $is_product_upgrade = bk_product_upgrade($product_id);
   $product_url = get_post_meta($product_id,'bk_product_url',true);
+  // $product_bought = get_post_meta();
   if(empty($product_url)) {
     $product_url = esc_url(home_url('/my-account'));
   }
   if($codes_available){
     if($is_product_upgrade){
-      $eligible = bk_current_user_eligible_to_upgrade($product_id,$sku);
+      $eligible = bk_current_user_eligible_to_upgrade($product_id);
       if($eligible) {
 
       } else {
