@@ -24,6 +24,14 @@ function bk_add_post_meta_boxes() {
     'normal',
     'default'
   );
+	add_meta_box(
+    'bk-voucher-meta',
+    esc_html__( 'Extra Fields', 'bk' ),
+    'bk_voucher_meta_box',
+    array('fs_vouchers'),
+    'normal',
+    'default'
+  );
 }
 
 function bk_ac_meta_box($object, $box) {
@@ -60,79 +68,38 @@ function bk_ac_meta_box($object, $box) {
 <?php
 }
 
-function bk_save_post_meta( $post_id, $post ) {
+function bk_voucher_meta_box($object, $box) {
+	?>
 
-	$post_type = get_post_type_object( $post->post_type );
-
-	if( 'fs_activation_codes' == $post->post_type) {
-	  if ( !isset( $_POST['bk_ac_meta_nonce'] ) || !wp_verify_nonce( $_POST['bk_ac_meta_nonce'], basename( __FILE__ ) ) )
-	    return $post_id;
-	}
-
-	if( 'fs_serial_numbers' == $post->post_type) {
-	  if ( !isset( $_POST['bk_sn_meta_nonce'] ) || !wp_verify_nonce( $_POST['bk_sn_meta_nonce'], basename( __FILE__ ) ) )
-	    return $post_id;
-	}
-
-
-  if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
-    return $post_id;
-
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-    return $post_id;
-  }
-
-  if ( wp_is_post_autosave( $post_id ) ) {
-    return $post_id;
-  }
-
-  if ( wp_is_post_revision( $post_id ) ) {
-    return $post_id;
-  }
-
-	$meta_keys = array();
-
-	if( 'fs_activation_codes' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-ac-user-login'] ) ? $_POST['bk-ac-user-login'] : '' );
-	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
-	  $bstatus= ( isset( $_POST['bk-ac-status'] ) ? esc_attr($_POST['bk-ac-status']) : '' );
-	  $bdate = ( isset( $_POST['bk-ac-date'] ) ? $_POST['bk-ac-date'] : '' );
-
-	  $meta_keys = array(
-	    'bk_ac_user_login' => $buid,
-	    'bk_ac_product_sku' => $bpid,
-	    'bk_ac_status' => $bstatus,
-	    'bk_ac_date' => $bdate
-	  );
-
-	}
-
-	if( 'fs_serial_numbers' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-sn-user-login'] ) ? $_POST['bk-sn-user-login'] : '' );
-	  $bseller = ( isset( $_POST['bk-sn-seller-name'] ) ? esc_attr($_POST['bk-sn-seller-name']) : '' );
-		$bpid = ( isset( $_POST['bk-sn-product-sku'] ) ? esc_attr($_POST['bk-sn-product-sku']) : '' );
-		$bstatus = isset( $_POST['bk-sn-status'] ) ? esc_attr( $_POST['bk-sn-status']) : '';
-	  $bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
-		$bdcode = isset( $_POST['bk-download-code'] ) ? esc_attr( $_POST['bk-download-code']) : '';
-	  $bdealer_price = ( isset( $_POST['bk-dealer-price'] ) ? $_POST['bk-dealer-price'] : '' );
-		$bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
-
-	  $meta_keys = array(
-	    'bk_sn_user_login' => $buid,
-			'bk_sn_seller_name' => $bseller,
-	    'bk_sn_product_sku' => $bpid,
-	    'bk_sn_status' => $bstatus,
-	    'bk_download_code' => $bdcode,
-			'bk_dealer_price' => $bdealer_price,
-			'bk_sn_date' => $bdate
-	  );
-	}
-
-  foreach ($meta_keys as $meta_key => $new_meta_value) {
-    $meta_value = get_post_meta( $post_id, $meta_key, true );
-    update_post_meta( $post_id, $meta_key, $new_meta_value );
-  }
-
+  <?php wp_nonce_field( basename( __FILE__ ), 'bk_voucher_meta_nonce' ); ?>
+   <p>
+  	<label for="bk-voucher-user-login"><?php _e( "User Name:", 'bk' ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_voucher_user_login', true ); ?>
+      <input type="text" name="bk-voucher-user-login" class="" id="bk-voucher-user-login" value="<?php echo esc_html($user_id);?>" />
+    </label>
+   </p>
+   <p>
+  	<label for="bk-voucher-product-sku"><?php _e( "Product SKU:", 'bk' ); ?>
+    <?php $product_id = get_post_meta( $object->ID, 'bk_voucher_product_sku', true ); ?>
+      <input type="text" name="bk-voucher-product-sku" class="" id="bk-voucher-product-sku" value="<?php echo esc_html($product_id);?>" />
+    </label>
+   </p>
+   <p>
+  	<label for="bk-voucher-status"><?php _e( "Status:", 'bk' ); ?>
+    <?php $status = get_post_meta( $object->ID, 'bk_voucher_status', true );?>
+			<select name="bk-voucher-status" id="bk-voucher-status">
+					<option value="nused" <?php selected( $status, 'nused' ); ?>>Unused</option>
+					<option value="used" <?php selected( $status, 'used' ); ?>>Used</option>
+			</select>
+    </label>
+   </p>
+   <p>
+  	<label for="bk-voucher-date"><?php _e( "Date:", 'bk' ); ?>
+    <?php $date = get_post_meta( $object->ID, 'bk_voucher_date', true ); ?>
+      <input type="text" name="bk-voucher-date" class="" id="bk-voucher-date" value="<?php echo esc_html($date);?>" />
+    </label>
+   </p>
+<?php
 }
 
 function bk_sn_meta_box($object, $box) {
@@ -186,6 +153,95 @@ function bk_sn_meta_box($object, $box) {
 <?php
 }
 
+function bk_save_post_meta( $post_id, $post ) {
+
+	$post_type = get_post_type_object( $post->post_type );
+
+	if( 'fs_activation_codes' == $post->post_type) {
+	  if ( !isset( $_POST['bk_ac_meta_nonce'] ) || !wp_verify_nonce( $_POST['bk_ac_meta_nonce'], basename( __FILE__ ) ) )
+	    return $post_id;
+	}
+
+	if( 'fs_serial_numbers' == $post->post_type) {
+	  if ( !isset( $_POST['bk_sn_meta_nonce'] ) || !wp_verify_nonce( $_POST['bk_sn_meta_nonce'], basename( __FILE__ ) ) )
+	    return $post_id;
+	}
+
+
+  if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+    return $post_id;
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+    return $post_id;
+  }
+
+  if ( wp_is_post_autosave( $post_id ) ) {
+    return $post_id;
+  }
+
+  if ( wp_is_post_revision( $post_id ) ) {
+    return $post_id;
+  }
+
+	$meta_keys = array();
+
+	if( 'fs_activation_codes' == $post->post_type) {
+		$buid = ( isset( $_POST['bk-ac-user-login'] ) ? $_POST['bk-ac-user-login'] : '' );
+	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
+	  $bstatus= ( isset( $_POST['bk-ac-status'] ) ? esc_attr($_POST['bk-ac-status']) : '' );
+	  $bdate = ( isset( $_POST['bk-ac-date'] ) ? $_POST['bk-ac-date'] : '' );
+
+	  $meta_keys = array(
+	    'bk_ac_user_login' => $buid,
+	    'bk_ac_product_sku' => $bpid,
+	    'bk_ac_status' => $bstatus,
+	    'bk_ac_date' => $bdate
+	  );
+
+	}
+
+	if( 'fs_vouchers' == $post->post_type) {
+		$buid = ( isset( $_POST['bk-voucher-user-login'] ) ? $_POST['bk-voucher-user-login'] : '' );
+	  $bpid = ( isset( $_POST['bk-voucher-product-sku'] ) ? esc_attr($_POST['bk-voucher-product-sku']) : '' );
+	  $bstatus= ( isset( $_POST['bk-voucher-status'] ) ? esc_attr($_POST['bk-voucher-status']) : '' );
+	  $bdate = ( isset( $_POST['bk-voucher-date'] ) ? $_POST['bk-voucher-date'] : '' );
+
+	  $meta_keys = array(
+	    'bk_voucher_user_login' => $buid,
+	    'bk_voucher_product_sku' => $bpid,
+	    'bk_voucher_status' => $bstatus,
+	    'bk_voucher_date' => $bdate
+	  );
+
+	}
+
+	if( 'fs_serial_numbers' == $post->post_type) {
+		$buid = ( isset( $_POST['bk-sn-user-login'] ) ? $_POST['bk-sn-user-login'] : '' );
+	  $bseller = ( isset( $_POST['bk-sn-seller-name'] ) ? esc_attr($_POST['bk-sn-seller-name']) : '' );
+		$bpid = ( isset( $_POST['bk-sn-product-sku'] ) ? esc_attr($_POST['bk-sn-product-sku']) : '' );
+		$bstatus = isset( $_POST['bk-sn-status'] ) ? esc_attr( $_POST['bk-sn-status']) : '';
+	  $bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
+		$bdcode = isset( $_POST['bk-download-code'] ) ? esc_attr( $_POST['bk-download-code']) : '';
+	  $bdealer_price = ( isset( $_POST['bk-dealer-price'] ) ? $_POST['bk-dealer-price'] : '' );
+		$bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
+
+	  $meta_keys = array(
+	    'bk_sn_user_login' => $buid,
+			'bk_sn_seller_name' => $bseller,
+	    'bk_sn_product_sku' => $bpid,
+	    'bk_sn_status' => $bstatus,
+	    'bk_download_code' => $bdcode,
+			'bk_dealer_price' => $bdealer_price,
+			'bk_sn_date' => $bdate
+	  );
+	}
+
+  foreach ($meta_keys as $meta_key => $new_meta_value) {
+    $meta_value = get_post_meta( $post_id, $meta_key, true );
+    update_post_meta( $post_id, $meta_key, $new_meta_value );
+  }
+
+}
 
 add_action('woocommerce_product_options_sku','bk_product_meta');
 function bk_product_meta() {
