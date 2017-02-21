@@ -171,7 +171,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
   if(is_array($sku_arr)){
     foreach($sku_arr as $key => $pid){
-      $slug = 'activation-code-id-'.$ac_id.'-'.$pid;
+      $slug = 'voucher-code-id-'.$ac_id.'-'.$pid;
     	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-".$pid;
       if( null == get_page_by_title( $title ) ) {
         $bk_wclogger->add('debug','Creating Voucher '.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
@@ -189,6 +189,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
 
         if($voucher_id){
           update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr[$key] );
+          update_post_meta($voucher_id,'bk_voucher_product_bought', $product_id );
           update_post_meta($voucher_id,'bk_voucher_status','nused');
           update_post_meta($voucher_id,'bk_voucher_user_login', $username);
           update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
