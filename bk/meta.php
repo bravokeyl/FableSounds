@@ -144,6 +144,15 @@ function bk_sn_meta_box($object, $box) {
       </select>
     </label>
    </p>
+	 <p>
+  	<label for="bk_sn_distributed"><?php _e( "Distributed:", 'bk' ); ?>
+    	<?php $dist = get_post_meta( $object->ID, 'bk_sn_distributed', true );?>
+			<select name="bk-sn-distributed" id="bk-sn-distributed">
+          <option value="nreg" <?php selected( $dist, '0' ); ?>>No</option>
+          <option value="reg" <?php selected( $dist, '1' ); ?>>Yes</option>
+      </select>
+    </label>
+   </p>
    <p>
   	<label for="bk-sn-date"><?php _e( "Date:", 'bk' ); ?>
     <?php $date = get_post_meta( $object->ID, 'bk_sn_date', true ); ?>
@@ -224,6 +233,7 @@ function bk_save_post_meta( $post_id, $post ) {
 		$bdcode = isset( $_POST['bk-download-code'] ) ? esc_attr( $_POST['bk-download-code']) : '';
 	  $bdealer_price = ( isset( $_POST['bk-dealer-price'] ) ? $_POST['bk-dealer-price'] : '' );
 		$bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
+		$bdist = ( isset( $_POST['bk-sn-distributed'] ) ? $_POST['bk-sn-distributed'] : '' );
 
 	  $meta_keys = array(
 	    'bk_sn_user_login' => $buid,
@@ -232,7 +242,8 @@ function bk_save_post_meta( $post_id, $post ) {
 	    'bk_sn_status' => $bstatus,
 	    'bk_download_code' => $bdcode,
 			'bk_dealer_price' => $bdealer_price,
-			'bk_sn_date' => $bdate
+			'bk_sn_date' => $bdate,
+			'bk_sn_distributed' => $bdist
 	  );
 	}
 
