@@ -135,6 +135,12 @@ function bk_sn_meta_box($object, $box) {
       <input type="text" name="bk-dealer-price" class="" id="bk-dealer-price" value="<?php echo esc_attr($product_id);?>" />
     </label>
    </p>
+	 <p>
+  	<label for="bk-serial-code-count"><?php _e( "Activation code count:", 'bk' ); ?>
+    <?php $product_id = get_post_meta( $object->ID, 'bk_sn_activation_code_count', true ); ?>
+      <input type="text" name="bk-serial-code-count" class="" id="bk-serial-code-count" value="<?php echo esc_attr($product_id);?>" />
+    </label>
+   </p>
    <p>
   	<label for="bk-sn-status"><?php _e( "Status:", 'bk' ); ?>
     	<?php $status = get_post_meta( $object->ID, 'bk_sn_status', true );?>
@@ -234,6 +240,7 @@ function bk_save_post_meta( $post_id, $post ) {
 	  $bdealer_price = ( isset( $_POST['bk-dealer-price'] ) ? $_POST['bk-dealer-price'] : '' );
 		$bdate = ( isset( $_POST['bk-sn-date'] ) ? $_POST['bk-sn-date'] : '' );
 		$bdist = ( isset( $_POST['bk-sn-distributed'] ) ? $_POST['bk-sn-distributed'] : '' );
+		$bserialcount = ( isset( $_POST['bk-serial-code-count'] ) ? $_POST['bk-serial-code-count'] : '' );
 
 	  $meta_keys = array(
 	    'bk_sn_user_login' => $buid,
@@ -243,7 +250,8 @@ function bk_save_post_meta( $post_id, $post ) {
 	    'bk_download_code' => $bdcode,
 			'bk_dealer_price' => $bdealer_price,
 			'bk_sn_date' => $bdate,
-			'bk_sn_distributed' => $bdist
+			'bk_sn_distributed' => $bdist,
+			'bk_sn_activation_code_count' => $bserialcount
 	  );
 	}
 
