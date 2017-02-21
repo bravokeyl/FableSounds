@@ -143,7 +143,7 @@ function bk_add_to_cart( $atts ) {
 
     }else {
       if(!empty($atts['sku'])) {
-        $eligible = bk_current_user_eligible_to_upgrade($eligible_product_id,$atts['sku']);
+        $eligible = bk_current_user_eligible_to_upgrade($pid,$atts['sku']);
       }
       if($eligible){
       } else {
