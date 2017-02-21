@@ -71,8 +71,10 @@ function fs_serial_numbers_columns($existing_columns){
   $columns['user_id'] = __( 'User Login', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
   $columns['download_code'] = __( 'Download Code', 'fablesounds' );
+	$columns['serial_activation_code_count'] = __( 'Activation codes count', 'fablesounds' );
 	$columns['serial_distributed'] = __( 'Is Distributed?', 'fablesounds' );
   $columns['serial_date'] = __( 'Date', 'fablesounds' );
+
   return $columns;
 }
 function fs_render_serial_numbers_columns( $column ) {
@@ -140,6 +142,14 @@ function fs_render_serial_numbers_columns( $column ) {
 				echo 'Yes';
 			} else {
 				echo 'No';
+			}
+    break;
+		case 'serial_activation_code_count' :
+			$sncount = get_post_meta( $post->ID, 'bk_sn_activation_code_count', true );
+			if ( $sncount ) {
+				echo $sncount;
+			} else {
+				echo '&ndash;';
 			}
     break;
 
