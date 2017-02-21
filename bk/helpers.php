@@ -33,6 +33,7 @@ function bk_activation_codes_available(){
   }
   return true;
 }
+
 function bk_get_sku($pid) {
   return false;
 }
