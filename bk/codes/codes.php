@@ -206,41 +206,42 @@ function bk_codes_filter( $query ){
     if (isset($_GET['post_type'])) {
         $type = $_GET['post_type'];
     }
-    $fs_sn_user = '';
-    $fs_sn_status = '';
-    $bk_meta_query = array(
-      'relation' => 'AND',
-    );
-    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_status']) && $_GET['fs_serial_status'] != '') {
-        // $query->query_vars['meta_key'] = 'bk_sn_status';
-        $fs_sn_status = $_GET['fs_serial_status'];
-        // $query->query_vars['meta_value'] = $fs_sn_status;
-        $bk_meta_query[] = array(
-            'key'       => 'bk_ac_status',
-            'value'     => $fs_sn_status,
-            'compare'   => '='
-        );
-    }
-    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
+		if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php') {
+	    $fs_sn_user = '';
+	    $fs_sn_status = '';
+	    $bk_meta_query = array(
+	      'relation' => 'AND',
+	    );
+	    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_status']) && $_GET['fs_serial_status'] != '') {
+	        // $query->query_vars['meta_key'] = 'bk_sn_status';
+	        $fs_sn_status = $_GET['fs_serial_status'];
+	        // $query->query_vars['meta_value'] = $fs_sn_status;
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_ac_status',
+	            'value'     => $fs_sn_status,
+	            'compare'   => '='
+	        );
+	    }
+	    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
 
-        // $query->query_vars['meta_key'] = 'bk_sn_user_login';
-        $fs_sn_user = $_GET['fs_user_login'];
-        // $query->query_vars['meta_value'] = $fs_sn_user;
-        $bk_meta_query[] = array(
-            'key'       => 'bk_ac_user_login',
-            'value'     => $fs_sn_user,
-            'compare'   => '='
-        );
-    }
-    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_product_sku']) && $_GET['fs_product_sku'] != '') {
-        $fs_product_sku = $_GET['fs_product_sku'];
-        $bk_meta_query[] = array(
-            'key'       => 'bk_ac_product_sku',
-            'value'     => $fs_product_sku,
-            'compare'   => '='
-        );
-    }
+	        // $query->query_vars['meta_key'] = 'bk_sn_user_login';
+	        $fs_sn_user = $_GET['fs_user_login'];
+	        // $query->query_vars['meta_value'] = $fs_sn_user;
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_ac_user_login',
+	            'value'     => $fs_sn_user,
+	            'compare'   => '='
+	        );
+	    }
+	    if ( 'fs_activation_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_product_sku']) && $_GET['fs_product_sku'] != '') {
+	        $fs_product_sku = $_GET['fs_product_sku'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_ac_product_sku',
+	            'value'     => $fs_product_sku,
+	            'compare'   => '='
+	        );
+	    }
 
-
-    $query->set('meta_query', $bk_meta_query);
+	    $query->set('meta_query', $bk_meta_query);
+		}//end post type meta
 }

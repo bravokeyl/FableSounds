@@ -211,51 +211,53 @@ function bk_serials_filter( $query ){
     if (isset($_GET['post_type'])) {
         $type = $_GET['post_type'];
     }
-    $fs_sn_user = '';
-    $fs_sn_status = '';
-    $bk_meta_query = array(
-      'relation' => 'AND',
-    );
-    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_status']) && $_GET['fs_serial_status'] != '') {
-        $fs_sn_status = $_GET['fs_serial_status'];
-        $bk_meta_query[] = array(
-            'key'       => 'bk_sn_status',
-            'value'     => $fs_sn_status,
-            'compare'   => '='
-        );
-    }
-    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
-        $fs_sn_user = $_GET['fs_user_login'];
-        $bk_meta_query[] = array(
-            'key'       => 'bk_sn_user_login',
-            'value'     => $fs_sn_user,
-            'compare'   => '='
-        );
-    }
-    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_product_sku']) && $_GET['fs_product_sku'] != '') {
-        $fs_product_sku = $_GET['fs_product_sku'];
-        $bk_meta_query[] = array(
-            'key'       => 'bk_sn_product_sku',
-            'value'     => $fs_product_sku,
-            'compare'   => '='
-        );
-    }
-    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_seller_name']) && $_GET['fs_seller_name'] != '') {
-        $fs_sn_seller = $_GET['fs_seller_name'];
-        $bk_meta_query[] = array(
-            'key'       => 'bk_sn_seller_name',
-            'value'     => $fs_sn_seller,
-            'compare'   => '='
-        );
-    }
-		if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_distributed']) && $_GET['fs_serial_distributed'] != '') {
-        $fs_sn_dist = $_GET['fs_serial_distributed'];
-        $bk_meta_query[] = array(
-            'key'       => 'bk_sn_distributed',
-            'value'     => $fs_sn_dist,
-            'compare'   => '='
-        );
-    }
-		// wp_die(print_r($bk_meta_query));
-    $query->set('meta_query', $bk_meta_query);
+		if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' ){
+	    $fs_sn_user = '';
+	    $fs_sn_status = '';
+	    $bk_meta_query = array(
+	      'relation' => 'AND',
+	    );
+	    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_status']) && $_GET['fs_serial_status'] != '') {
+	        $fs_sn_status = $_GET['fs_serial_status'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_sn_status',
+	            'value'     => $fs_sn_status,
+	            'compare'   => '='
+	        );
+	    }
+	    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
+	        $fs_sn_user = $_GET['fs_user_login'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_sn_user_login',
+	            'value'     => $fs_sn_user,
+	            'compare'   => '='
+	        );
+	    }
+	    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_product_sku']) && $_GET['fs_product_sku'] != '') {
+	        $fs_product_sku = $_GET['fs_product_sku'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_sn_product_sku',
+	            'value'     => $fs_product_sku,
+	            'compare'   => '='
+	        );
+	    }
+	    if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_seller_name']) && $_GET['fs_seller_name'] != '') {
+	        $fs_sn_seller = $_GET['fs_seller_name'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_sn_seller_name',
+	            'value'     => $fs_sn_seller,
+	            'compare'   => '='
+	        );
+	    }
+			if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_distributed']) && $_GET['fs_serial_distributed'] != '') {
+	        $fs_sn_dist = $_GET['fs_serial_distributed'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_sn_distributed',
+	            'value'     => $fs_sn_dist,
+	            'compare'   => '='
+	        );
+	    }
+			// wp_die(print_r($bk_meta_query));
+	    $query->set('meta_query', $bk_meta_query);
+		}//end post type check
 }
