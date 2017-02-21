@@ -70,8 +70,8 @@ function fs_serial_numbers_columns($existing_columns){
   $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
   $columns['user_id'] = __( 'User Login', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
-
   $columns['download_code'] = __( 'Download Code', 'fablesounds' );
+	$columns['serial_distributed'] = __( 'Is Distributed?', 'fablesounds' );
   $columns['serial_date'] = __( 'Date', 'fablesounds' );
   return $columns;
 }
@@ -134,6 +134,14 @@ function fs_render_serial_numbers_columns( $column ) {
 				echo '&ndash;';
 			}
     break;
+		case 'serial_distributed' :
+			$sndistributed = get_post_meta( $post->ID, 'bk_sn_distributed', true );
+			if ( $sndistributed ) {
+				echo 'Yes';
+			} else {
+				echo 'No';
+			}
+    break;
 
   }
 }
@@ -149,6 +157,10 @@ function bk_admin_serials_filter_restrict_manage_posts(){
         $values = array(
             'Not Registered' => 'nreg',
             'Registered' => 'reg',
+        );
+				$dvalues = array(
+            'No' => '0',
+            'Yes' => '1',
         );
         $current_user = isset($_GET['fs_user_login'])? $_GET['fs_user_login']:'';
         $current_seller = isset($_GET['fs_seller_name'])? $_GET['fs_seller_name']:'';
@@ -172,6 +184,21 @@ function bk_admin_serials_filter_restrict_manage_posts(){
                 }
         ?>
         </select>
+				<select name="fs_serial_distributed">
+        <option value=""><?php _e('Distributed', 'fablesounds'); ?></option>
+        <?php
+            $current_d = isset($_GET['fs_serial_distributed'])? $_GET['fs_serial_distributed']:'';
+            foreach ($dvalues as $l => $v) {
+                printf
+                    (
+                        '<option value="%s"%s>%s</option>',
+                        $v,
+                        $v == $current_d? ' selected="selected"':'',
+                        $l
+                    );
+                }
+        ?>
+        </select>
         <?php
     }
 }
@@ -190,9 +217,7 @@ function bk_serials_filter( $query ){
       'relation' => 'AND',
     );
     if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_status']) && $_GET['fs_serial_status'] != '') {
-        // $query->query_vars['meta_key'] = 'bk_sn_status';
         $fs_sn_status = $_GET['fs_serial_status'];
-        // $query->query_vars['meta_value'] = $fs_sn_status;
         $bk_meta_query[] = array(
             'key'       => 'bk_sn_status',
             'value'     => $fs_sn_status,
@@ -200,10 +225,7 @@ function bk_serials_filter( $query ){
         );
     }
     if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
-
-        // $query->query_vars['meta_key'] = 'bk_sn_user_login';
         $fs_sn_user = $_GET['fs_user_login'];
-        // $query->query_vars['meta_value'] = $fs_sn_user;
         $bk_meta_query[] = array(
             'key'       => 'bk_sn_user_login',
             'value'     => $fs_sn_user,
@@ -226,6 +248,14 @@ function bk_serials_filter( $query ){
             'compare'   => '='
         );
     }
-
+		if ( 'fs_serial_numbers' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_serial_distributed']) && $_GET['fs_serial_distributed'] != '') {
+        $fs_sn_dist = $_GET['fs_serial_distributed'];
+        $bk_meta_query[] = array(
+            'key'       => 'bk_sn_distributed',
+            'value'     => $fs_sn_dist,
+            'compare'   => '='
+        );
+    }
+		// wp_die(print_r($bk_meta_query));
     $query->set('meta_query', $bk_meta_query);
 }
