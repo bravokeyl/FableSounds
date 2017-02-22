@@ -119,7 +119,10 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           if($is_upgrade){
             $bk_apiLogger->add('debug','Product upgrade bought by user: '.$customer_username);
             $bk_apiLogger->add('debug','Changing the voucher status for order:'.$bk_order_id.', product id: '.$product_sku);
-            bk_change_voucher_status($product_id,$customer_username);
+            $vstatus = bk_change_voucher_status($product_id,$customer_username);
+            if(!$vstatus){
+              $bk_apiLogger->add('debug','Unable to change the status for voucher as no voucher found: '.$customer_username);
+            }
           }
 
           $serial_index++;

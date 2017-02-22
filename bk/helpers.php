@@ -353,6 +353,9 @@ function bk_change_voucher_status($product_id,$username){
       update_post_meta($vid,'bk_voucher_used_date', current_time('mysql'));
     }
     wp_reset_postdata();
+    return true;
+  } else {
+    return false;
   }
 
 }
