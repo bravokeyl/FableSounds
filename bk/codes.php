@@ -100,7 +100,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           $nr_serial = bk_assign_serial_number($product_sku);
           if(1 == count($nr_serial)){
             // wp_die(print_r($nr_serial));
-            $bk_apiLogger->add('debug','Continuata Webhook Fired: Assigning serial number '.$nr_serial);
+            $bk_apiLogger->add('debug','Continuata Webhook Fired: Assigning serial number ID:'.$nr_serial[0]);
             update_post_meta( $nr_serial[0], 'bk_sn_status', "reg" );
             update_post_meta( $nr_serial[0], 'bk_sn_user_login', $customer_username );
             update_post_meta( $serial_id, 'bk_ac_serial_activation', get_the_title($nr_serial[0]) );
