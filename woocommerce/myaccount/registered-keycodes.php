@@ -46,7 +46,7 @@ if($activation_qe->have_posts()){?>
         <tr>
           <td>
             <?php
-            $acpid = wc_get_product_id_by_sku( $acproductsku )
+            $acpid = wc_get_product_id_by_sku( $acproductsku );
             echo get_the_title($acpid);
             ?>
           </td>
