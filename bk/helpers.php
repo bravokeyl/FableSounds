@@ -83,7 +83,12 @@ function bk_assign_serial_number($sku){
         'key' => 'bk_sn_product_sku',
         'value' => $sku,
         'compare' => '='
-      )
+      ),
+      array(
+        'key' => 'bk_sn_activation_code_count',
+        'value' => '1',
+        'compare' => '='
+      ),
     ),
     'post_status' => 'publish'
   );
