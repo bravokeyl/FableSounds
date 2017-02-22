@@ -37,9 +37,9 @@ $GLOBALS['icontact_lists'] = array(
 
 
 function add_user_to_icontact($email, $firstName, $lastName, $userName) {
-	error_log('adding user to icontact...');
-	error_log('email = '.$email.', user_id = '.$userName.', firstName = '.$firstName.', lastName = '.$lastName);
-
+  $bk_wclogger = new WC_Logger();
+  $bk_wclogger->add('info','adding user to icontact...');
+  $bk_wclogger->add('email = '.$email.', user_id = '.$userName.', firstName = '.$firstName.', lastName = '.$lastName);
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
   // wp_die($userName);
