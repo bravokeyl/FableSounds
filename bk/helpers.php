@@ -345,7 +345,7 @@ function bk_change_voucher_status($product_id,$username){
   $vquery = new WP_Query($args);
   if($vquery->have_posts()){
     while($vquery->have_posts()){
-      $query->the_post();
+      $vquery->the_post();
       $vid = get_the_ID();
       $bk_vLogger = new WC_Logger();
       $bk_vLogger->add('debug','Changing Voucher status for voucher : '.$vid.' found for user : '.$username.' Product ID: '.$product_id);
