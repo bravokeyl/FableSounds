@@ -412,6 +412,9 @@ function bk_enqueue_scripts(){
   $frontend_script_path = $assets_path . 'js/frontend/';
   // make sure to enqueue this only on login reg page
   wp_enqueue_script( 'wc-country-select', $frontend_script_path . 'country-select' . $suffix . '.js' );
+  if(is_account_page()){
+    wp_enqueue_script( 'bk-js', get_stylesheet_directory_uri().'/bk/js/bk.js', array('jquery'),'', true );
+  }
 }
 add_filter( 'wp_mail_from', function() {
     return 'wordpress@fablesounds.com';
