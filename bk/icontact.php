@@ -30,19 +30,18 @@ $GLOBALS['config'] = array(
 
 $GLOBALS['icontact_lists'] = array(
 	'BKFDR' => 268236,
+  'BKFUL' => 268236,
+  'BKFUG' => 268236,
 	'BLDR' => 268237,
 	'BGDR' => 268238,
 );
 
-
-
 function add_user_to_icontact($email, $firstName, $lastName, $userName) {
   $bk_wclogger = new WC_Logger();
-  $bk_wclogger->add('info','adding user to icontact...');
-  $bk_wclogger->add('info','email = '.$email.', user_id = '.$userName.', firstName = '.$firstName.', lastName = '.$lastName);
+  $bk_wclogger->add('icontact','Adding user to icontact...');
+  $bk_wclogger->add('icontact','Email = '.$email.', userName= '.$userName.', firstName = '.$firstName.', lastName = '.$lastName);
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
-  // wp_die($userName);
 	$response = callResource("/a/{$acc}/c/{$clf}/contacts",
 		'POST', array(
 			array(
@@ -113,23 +112,10 @@ function dump_all_contacts() {
 	$response = callResource("/a/{$acc}/c/{$clf}/contacts", 'GET');
 	dump($response);
 }
-/*
-function add_to_list($contactId, $listId)
-{
-	$response = callResource("/a/{$acc}/c/{$clf}/subscriptions",
-		'POST', array(
-			array(
-				'contactId' => $contactId,
-				'listId'  => $listId,
-				'status' => 'normal'
-			)
-		));
-	dump($response);
-}
-*/
 
 function add_user_to_list($contactId, $listId) {
-	error_log('adding user '.$userName.' to mailing list: '.$listId);
+  $bk_wclogger = new WC_Logger();
+  $bk_wclogger->add('icontact','Adding user with contact ID: '.$contactId.' to icontact list ID: '.$listId);
 
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
