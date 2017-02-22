@@ -348,7 +348,7 @@ function bk_change_voucher_status($product_id,$username){
       $query->the_post();
       $vid = get_the_ID();
       $bk_vLogger = new WC_Logger();
-      $bk_apiLogger->add('debug','Changing Voucher status: Voucher : '.$vid.' found for user : '.$username.' Product ID: '.$product_id);
+      $bk_vLogger->add('debug','Changing Voucher status for voucher : '.$vid.' found for user : '.$username.' Product ID: '.$product_id);
       update_post_meta($vid,'bk_voucher_status','used');
       update_post_meta($vid,'bk_voucher_used_date', current_time('mysql'));
     }
