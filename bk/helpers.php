@@ -62,11 +62,11 @@ function bk_create_serial_number($sku,$order_id,$ac_id,$username){
   }
 }
 
-function bk_assign_serial_number($quantity){
+function bk_assign_serial_number($sku){
   $code = array();
   $args = array(
     'post_type' => 'fs_serial_numbers',
-    'posts_per_page' => $quantity,
+    'posts_per_page' => 1,
     'meta_query' => array(
       'relation' => 'AND',
       array(
@@ -75,8 +75,13 @@ function bk_assign_serial_number($quantity){
         'compare' => '='
       ),
       array(
-        'key' => 'bk_sn_seller_name',
-        'value' => '',
+        'key' => 'bk_sn_distributed',
+        'value' => '0',
+        'compare' => '='
+      ),
+      array(
+        'key' => 'bk_sn_product_sku',
+        'value' => $sku,
         'compare' => '='
       )
     ),

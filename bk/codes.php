@@ -61,7 +61,8 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     if( 'completed' == $order_data['status'] ){
       $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
       $serials = bk_get_unused_activation_codes($quantity);
-      $bk_apiLogger->add('debug','Continuata Webhook Fired: Serials found : '.count($serials).' Quantity required: '.$quantity);
+      $bk_apiLogger->add('debug','Continuata Webhook Fired: Codes found : '.count($serials).' Quantity required: '.$quantity);
+      $bk_apiLogger->add('debug','Continuata Webhook Fired: Serial found : '.count($nr_serial).' Quantity required: '.$quantity);
       if($quantity == count($serials)){
         $serial_index = 0;
         foreach ( $order->get_items() as $item_id => $item ) {
@@ -81,7 +82,6 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           update_post_meta( $serial_id, 'bk_ac_product_sku', $product_sku );
           update_post_meta( $serial_id, 'bk_ac_user_email', $cemail );
           update_post_meta( $serial_id, 'bk_ac_user_login', $customer_username );
-          update_post_meta( $serial_id, 'bk_ac_serial_activation', $undistributed_serials );
           update_post_meta( $serial_id, 'bk_ac_date', current_time('mysql') );
           update_post_meta( $serial_id, 'order_data', $order_data );
 
@@ -97,13 +97,14 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     			$order_data['serial_data'][] = $serial_data;
 
           // bk_create_serial_number($product_sku,$order_data['order_number'],$serial_id,$customer_username);
-          $nr_serial = bk_assign_serial_number($quantity);
-          if($quantity == count($nr_serial)){
-            update_post_meta( $nr_serial[$serial_index], 'bk_ac_status', "used" );
-            update_post_meta( $nr_serial[$serial_index], 'bk_ac_product_sku', $product_sku );
-            update_post_meta( $nr_serial[$serial_index], 'bk_ac_user_email', $cemail );
-            update_post_meta( $nr_serial[$serial_index], 'bk_ac_user_login', $customer_username );
-            update_post_meta( $nr_serial[$serial_index], 'bk_ac_date', current_time('mysql') );
+          $nr_serial = bk_assign_serial_number($product_sku);
+          if(1 == count($nr_serial)){
+            wp_die(print_r($nr_serial));
+            update_post_meta( $nr_serial[0], 'bk_sn_status', "used" );
+            update_post_meta( $nr_serial[0], 'bk_sn_user_email', $cemail );
+            update_post_meta( $nr_serial[0], 'bk_sn_user_login', $customer_username );
+            update_post_meta( $serial_id, 'bk_ac_serial_activation', get_the_title($nr_serial[0]) );
+            update_post_meta( $nr_serial[0], 'bk_sn_date', current_time('mysql') );
           } else {
             $admin_email = sanitize_email(get_option('admin_email'));
             $to = array( $admin_email, 'bravokeyl@gmail.com' );
