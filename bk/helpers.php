@@ -326,7 +326,7 @@ function bk_change_voucher_status($product_id,$username){
       'relation' => 'AND',
       array(
         'key'   => 'bk_voucher_status',
-        'value' => 'nused',
+        'value' => 'used',
         'compare' => '='
       ),
       array(

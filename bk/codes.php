@@ -62,7 +62,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
       $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
       $serials = bk_get_unused_activation_codes($quantity);
       $bk_apiLogger->add('debug','Continuata Webhook Fired: Codes found : '.count($serials).' Quantity required: '.$quantity);
-      $bk_apiLogger->add('debug','Continuata Webhook Fired: Serial found : '.count($nr_serial).' Quantity required: '.$quantity);
+
       if($quantity == count($serials)){
         $serial_index = 0;
         foreach ( $order->get_items() as $item_id => $item ) {
@@ -99,6 +99,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
           // bk_create_serial_number($product_sku,$order_data['order_number'],$serial_id,$customer_username);
           $nr_serial = bk_assign_serial_number($product_sku);
+          $bk_apiLogger->add('debug','Continuata Webhook Fired: Serial found : '.count($nr_serial));
           if(1 == count($nr_serial)){
             // wp_die(print_r($nr_serial));
             $bk_apiLogger->add('debug','Continuata Webhook Fired: Assigning serial number ID:'.$nr_serial[0]);
