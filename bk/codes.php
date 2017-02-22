@@ -26,27 +26,28 @@ function bk_assign_vouchers($order_id){
     //Email to Admin "Shortage of Activation codes"
     bk_mail_insufficient_activation_codes();
   }
-  bk_add_user_to_list($username);
+  bk_add_user_to_list($username,$product_sku);
   return $order_id;
 }
 
 // add_action('woocommerce_payment_complete', 'bk_add_user_to_list',12);
-function bk_add_user_to_list($user_name){
-  $icontact_id = get_contact_id($user_name);
-  if($icontact_id) {
+function bk_add_user_to_list($user_name,$icontact_list){
+  $user = get_user_by('login',$user_name);
+  $email = $user->user_email;
+  $firstName = $user->first_name;
+  $lastName = $user->last_name;
+  $icontact_id = get_user_meta($user->ID,'bk_icontact_id',true);
+  global $icontact_lists;
 
-  }else {
-    $user = get_user_by('login',$user_name);
-    $email = $user->user_email;
-    $firstName = $user->first_name;
-    $lastName = $user->last_name;
+  if($icontact_id) {
+    add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
+  } else {
     $icontact_res = add_user_to_icontact($email, $firstName, $lastName, $user_name);
     $icontact_id = get_contact_id($user_name);
     $bk_wclogger = new WC_Logger();
     $bk_wclogger->add('info','Added user to icontact: icontact id - '.$icontact_id);
     update_user_meta($user->ID,'bk_icontact_id',$icontact_id);
-    // global $icontact_lists;
-    // add_user_to_list($icontact_id,$icontact_lists[$products_dropdown_val]);
+    add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
   }
 
 }
