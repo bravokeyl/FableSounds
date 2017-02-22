@@ -36,7 +36,7 @@ function bk_add_user_to_list($user_name){
   if($icontact_id) {
 
   }else {
-    $user = get_user_by('user_login',$user_name);
+    $user = get_user_by('login',$user_name);
     $email = $user->user_email;
     $firstName = $user->first_name;
     $lastName = $user->last_name;
