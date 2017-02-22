@@ -86,6 +86,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           update_post_meta( $serial_id, 'order_data', $order_data );
 
           $continuata_sku = get_post_meta($product_id,'_continuata_sku',true);
+          $is_upgrade = bk_product_upgrade($product_id);
 
           $serial = get_the_title($serial_id);
           $serial_data = array(
@@ -114,6 +115,11 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
             wp_mail( $to, $subject, $body, $headers );
           }
+
+          if($is_upgrade){
+            bk_change_voucher_status($product_id,$customer_username);
+          }
+
           $serial_index++;
     		} // foreach
         return $order_data;

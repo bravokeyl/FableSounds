@@ -317,6 +317,42 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
   }
 }
 
+function bk_change_voucher_status($product_id,$username){
+  $args = array(
+    'post_type' => 'fs_vouchers',
+    'post_status' => 'publish',
+    'posts_per_page' => '1',
+    'meta_query' => array(
+      'relation' => 'AND',
+      array(
+        'key'   => 'bk_voucher_status',
+        'value' => 'nused',
+        'compare' => '='
+      ),
+      array(
+        'key'   => 'bk_voucher_user_login',
+        'value' => $username,
+        'compare' => '='
+      ),
+      array(
+        'key'   => 'bk_voucher_product_sku',
+        'value' => $product_id,
+        'compare' => '='
+      ),
+    )
+  );
+
+  $vquery = new WP_Query($args);
+  if($vquery->have_posts()){
+    while($vquery->have_posts()){
+      $query->the_post();
+      update_post_meta(get_the_ID(),'bk_voucher_status','used');
+      update_post_meta(get_the_ID(),'bk_voucher_used_date', current_time('mysql'));
+    }
+    wp_reset_postdata();
+  }
+
+}
 
 // add_filter('really_simple_csv_importer_save_meta', function($meta, $post, $is_update) {
 //     foreach ($meta as $key => $value) {
