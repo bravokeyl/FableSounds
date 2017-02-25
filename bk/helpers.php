@@ -11,6 +11,7 @@ function bk_mail_insufficient_activation_codes($count='0'){
   $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
   wp_mail( $to, $subject, $body, $headers );
 }
+
 function bk_mail_insufficient_serial_codes($sku,$username){
   $admin_email = sanitize_email(get_option('admin_email'));
   $to = array( $admin_email, 'bravokeyl@gmail.com' );
@@ -20,6 +21,7 @@ function bk_mail_insufficient_serial_codes($sku,$username){
   $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
   wp_mail( $to, $subject, $body, $headers );
 }
+
 function bk_activation_codes_available(){
   $args = array(
     'post_type' => 'fs_activation_codes',
@@ -42,6 +44,7 @@ function bk_activation_codes_available(){
   }
   return true;
 }
+
 function bk_create_serial_number($sku,$order_id,$ac_id,$username){
   $serial_id = -1;
   $author_id = 1;
