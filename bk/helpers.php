@@ -220,7 +220,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   return $voucher_id;
 }
 
-function bk_get_user_product_vouchers($username,$sku,$product_bought){
+function bk_get_user_product_vouchers($username,$sku){
   $args = array(
     'post_type' => 'fs_vouchers',
     'post_status' => 'publish',
@@ -259,16 +259,12 @@ function bk_get_user_product_vouchers($username,$sku,$product_bought){
 function bk_current_user_eligible_to_upgrade($product_id) {
 
   global $woocommerce;
-  $current_user= wp_get_current_user();
+  $current_user = wp_get_current_user();
   $customer_email = $current_user->email;
   $user_id = $current_user->ID;
   $user_login = $current_user->user_login;
-  // $product_bought = get_post_meta($product_id);
-  if($user_id) { //0 means not logged in or guest user
+  if($user_id) {
     $vouchers = bk_get_user_product_vouchers($user_login,$product_id);
-    // if ( wc_customer_bought_product( $customer_email, $user_id, $product_id) ){
-    //   return true;
-    // }
     if($vouchers > 0){
       return true;
     }
