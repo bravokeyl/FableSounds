@@ -362,6 +362,28 @@ function bk_change_voucher_status($product_id,$username){
 
 }
 
+add_action('woocommerce_customer_save_address','bk_log_customer_address',10,2);
+function bk_log_customer_address( $user_id, $load_address) {
+  $account_logger = new WC_Logger();
+  $user = get_user_by('id',$user_id);
+  $email = get_option( 'admin_email', '' );
+  $subject = "Customer Saved/Changed Address";
+  // format email
+  $message = 'Username: ' . $user->user_login . "\n";
+  $message .= 'User email: ' . $user->user_email . "\n";
+  $message .= 'User first name: ' . $user->user_firstname . "\n";
+  $message .= 'User last name: ' . $user->user_lastname . "\n";
+  $message .= "\n";
+  $message .= "\n";
+  // make sure we have all of the required data
+  if ( empty ( $email ) ) {
+    return;
+  }
+  // send email
+  // wp_mail( $email, $subject, $message );
+  $account_logger->add('account-address','User: '.$user->user_login.'('.$user->user_email.') saved their address');
+
+}
 // add_filter('really_simple_csv_importer_save_meta', function($meta, $post, $is_update) {
 //     foreach ($meta as $key => $value) {
 //       if('bk_voucher_imp_date' == $key) {
