@@ -265,6 +265,7 @@ function bk_save_post_meta( $post_id, $post ) {
 add_action('woocommerce_product_options_sku','bk_product_meta');
 function bk_product_meta() {
 	woocommerce_wp_text_input( array( 'id' => '_continuata_sku', 'label' => '<abbr title="'. __( 'Continuata Stock Keeping Unit', 'fablesounds' ) .'">' . __( 'Continuata SKU', 'fablesounds' ) . '</abbr>', 'desc_tip' => 'true', 'description' => __( 'This is the SKU that we send to Continuata.', 'fablesounds' ) ) );
+	woocommerce_wp_text_input( array( 'id' => '_activation_sku', 'label' => '<abbr title="'. __( 'Continuata Stock Keeping Unit', 'fablesounds' ) .'">' . __( 'Activation SKU', 'fablesounds' ) . '</abbr>', 'desc_tip' => 'true', 'description' => __( 'This is the SKU used for activation codes.', 'fablesounds' ) ) );
 }
 
 add_action('woocommerce_process_product_meta','bk_save_product_meta');
@@ -272,6 +273,8 @@ function bk_save_product_meta($post_id) {
 	// Unique Continuata SKU
 	$sku     = get_post_meta( $post_id, '_continuata_sku', true );
 	$new_sku = (string) wc_clean( $_POST['_continuata_sku'] );
+	$asku     = get_post_meta( $post_id, '_activation_sku', true );
+	$new_asku = (string) wc_clean( $_POST['_activation_sku'] );
 	$eligble_products = (string) wc_clean( $_POST['bk_eligible_products'] );
 	$is_upgrade = $is_upgrade = $is_download = 'no';
 
@@ -282,6 +285,16 @@ function bk_save_product_meta($post_id) {
 				update_post_meta( $post_id, '_continuata_sku', $new_sku );
 		} else {
 			update_post_meta( $post_id, '_continuata_sku', '' );
+		}
+	}
+
+	if ( '' == $new_asku ) {
+		update_post_meta( $post_id, '_activation_sku', '' );
+	} elseif ( $new_asku !== $asku ) {
+		if ( ! empty( $new_asku ) ) {
+				update_post_meta( $post_id, '_activation_sku', $new_asku );
+		} else {
+			update_post_meta( $post_id, '_activation_sku', '' );
 		}
 	}
 
