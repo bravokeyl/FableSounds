@@ -10,43 +10,6 @@ include(get_stylesheet_directory().'/bk/icontact.php');
 include(get_stylesheet_directory().'/bk/helpers.php');
 include(get_stylesheet_directory().'/bk/woo-settings.php');
 
-// function bk_assign_activation_code_after_registration($order_id){
-//   $order = new WC_Order( $order_id );
-//
-//   $customer_obj = $order->get_user();
-//   $customer_email = sanitize_email($customer_obj->user_name);
-//   // $customer_login = $customer_obj->user_login;
-//
-//   $order_ids = array();
-//   $order_items = $order->get_items();
-//   // wp_die(print_r($order_items));
-//   foreach ( $order_items as $item ) {
-//       $product_id = $item['product_id'];
-//       $pr = wc_get_product( $product_id );
-// 	  	$psku = $pr->get_sku();
-//       // if($item['qty']) {
-//         array_push($order_ids,$psku);
-//       // }
-//       // $product_name = $item['name'];
-//       // $order_ids[$product_id] = $product_name;
-//   }
-//   // wp_die(print_r($order_ids));
-//   $order_num = sizeof($order_ids);
-//
-//   if( $order_num > 0){
-//     $activation_code_ids = bk_get_unused_activation_codes($order_num);
-//     for($i=0;$i<sizeof($activation_code_ids);$i++){
-//       update_post_meta($activation_code_ids[$i], 'bk_ac_status', "used");
-//       update_post_meta($activation_code_ids[$i], 'bk_ac_product_sku', $order_ids[$i]);
-//       update_post_meta($activation_code_ids[$i], 'bk_ac_user_email', $customer_email);
-//       update_post_meta($activation_code_ids[$i], 'bk_ac_date', current_time('mysql'));
-//     }
-//   }
-//
-// }
-//add_action('woocommerce_order_status_completed','bk_assign_activation_code_after_registration');
-
-
 function bk_get_unused_activation_codes($number,$sku){
   $code = array();
   $args = array(

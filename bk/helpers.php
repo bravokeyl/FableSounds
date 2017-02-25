@@ -22,6 +22,22 @@ function bk_mail_insufficient_serial_codes($sku,$username){
   wp_mail( $to, $subject, $body, $headers );
 }
 
+function bk_product_upgrade($product_id) {
+  $is_product_upgrade = get_post_meta($product_id,'bk_product_upgrade',true);
+  if( "yes" == $is_product_upgrade ){
+    return true;
+  }
+  return false;
+}
+
+function bk_product_update($product_id) {
+  $is_product_update = get_post_meta($product_id,'bk_product_update',true);
+  if( "yes" == $is_product_update ){
+    return true;
+  }
+  return false;
+}
+
 function bk_activation_codes_available(){
   $args = array(
     'post_type' => 'fs_activation_codes',
@@ -47,6 +63,12 @@ function bk_activation_codes_available(){
 
 function bk_assign_serial_number( $sku,$codes_count = '1' ){
   $code = array();
+  $no_codes_req = bk_product_update();
+
+  if($no_codes_req){
+    $codes_count = 0;
+  }
+  
   $args = array(
     'post_type' => 'fs_serial_numbers',
     'posts_per_page' => 1,
@@ -88,14 +110,6 @@ function bk_assign_serial_number( $sku,$codes_count = '1' ){
   }
 
   return $code;
-}
-
-function bk_product_upgrade($product_id) {
-  $is_product_upgrade = get_post_meta($product_id,'bk_product_upgrade',true);
-  if( "yes" == $is_product_upgrade ){
-    return true;
-  }
-  return false;
 }
 
 function bk_add_to_cart( $atts ) {
