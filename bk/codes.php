@@ -7,6 +7,10 @@ function bk_assign_vouchers($order_id){
   $items = $order->get_items();
   $username = $user->user_login;
   $quantity = intval($order->get_item_count());
+
+  $bk_pay_logger = new WC_Logger();
+  $bk_pay_logger->add('fablesounds','Info: Payment complete for order: '.$order_id.' user: '.$username);
+
   foreach ( $items as $item_id => $item ) {
     $product     = $order->get_product_from_item( $item );
     $product_id  = null;
@@ -18,17 +22,19 @@ function bk_assign_vouchers($order_id){
     $asku = get_post_meta($product_id,'_activation_sku',true);
     $serial = bk_get_unused_activation_codes(1,$asku);
     if(1 == count($serial)){
+      $bk_pay_logger->add('fablesounds','Debug: Activation codes found: order -'.$order_id.' product SKU - '.$product_sku.' (Activation SKU:'.$asku.')');
       bk_assign_voucher_to_user($username,$serial[0],$product_id,$product_sku);
     } else {
       //Email to Admin "Shortage of Activation codes"
-      bk_mail_insufficient_activation_codes();
+      $bk_pay_logger->add('fablesounds','Error: No activation codes found: order -'.$order_id.' product SKU - '.$product_sku.' (Activation SKU:'.$asku.')');
+      bk_mail_insufficient_activation_codes(0);
     }
   }//end foreach
+
   bk_add_user_to_list($username,$product_sku);
   return $order_id;
 }
 
-// add_action('woocommerce_payment_complete', 'bk_add_user_to_list',12);
 function bk_add_user_to_list($user_name,$icontact_list){
   $user = get_user_by('login',$user_name);
   $email = $user->user_email;
@@ -38,14 +44,18 @@ function bk_add_user_to_list($user_name,$icontact_list){
   global $icontact_lists;
   $bk_wclogger = new WC_Logger();
   if($icontact_id) {
-    $bk_wclogger->add('icontact','Adding user to List - '.$icontact_list);
+    $bk_wclogger->add('fablesounds','Debug: Adding user to List - '.$icontact_list);
     add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
   } else {
     $icontact_res = add_user_to_icontact($email, $firstName, $lastName, $user_name);
     $icontact_id = get_contact_id($user_name);
     $bk_wclogger->add('icontact','Added user to icontact: icontact id - '.$icontact_id);
-    update_user_meta($user->ID,'bk_icontact_id',$icontact_id);
-    add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
+    if($icontact_id){
+      update_user_meta($user->ID,'bk_icontact_id',$icontact_id);
+      add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
+    } else{
+      $bk_wclogger->add('fablesounds','Error: Unable tpo create contact in icontact');
+    }
   }
 
 }
@@ -168,6 +178,7 @@ function bk_all_unused_activation_codes($number){
 
   return $code;
 }
+
 add_action('woocommerce_payment_complete', 'bk_check_codes_quantity',15);
 function bk_check_codes_quantity(){
   $all = '-1';

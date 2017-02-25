@@ -161,10 +161,10 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
   if(is_array($sku_arr)){
     foreach($sku_arr as $key => $pid){
-      $slug = 'voucher-code-id-'.$ac_id.'-'.$pid;
-    	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-".$pid;
+      $slug = strtolower($username).'-voucher-code-id-'.$ac_id.'-'.$pid;
+    	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-for-".$pid;
       if( null == get_page_by_title( $title ) ) {
-        $bk_wclogger->add('debug','Creating Voucher '.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
+        $bk_wclogger->add('fablesounds','Debug: Creating Voucher '.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
         $voucher_id = wp_insert_post(
     			array(
     				'comment_status'	=>	'closed',
@@ -185,7 +185,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
           update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
         }
       } else {
-        $bk_wclogger->add('warning','Cannot create vocuher '.$title.' and user '.$username.' : Product '.$product_sku);
+        $bk_wclogger->add('fablesounds','Error: Cannot create vocuher '.$title.' and user '.$username.' : Product '.$product_sku);
         $voucher_id = -2;
       }
     }

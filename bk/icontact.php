@@ -38,8 +38,8 @@ $GLOBALS['icontact_lists'] = array(
 
 function add_user_to_icontact($email, $firstName, $lastName, $userName) {
   $bk_wclogger = new WC_Logger();
-  $bk_wclogger->add('icontact','Adding user to icontact...');
-  $bk_wclogger->add('icontact','Email = '.$email.', userName= '.$userName.', firstName = '.$firstName.', lastName = '.$lastName);
+  $bk_wclogger->add('fablesounds','Debug: Adding user to icontact...');
+  $bk_wclogger->add('fablesounds','Debug: Email = '.$email.', userName= '.$userName.', firstName = '.$firstName.', lastName = '.$lastName);
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
 	$response = callResource("/a/{$acc}/c/{$clf}/contacts",
@@ -115,7 +115,7 @@ function dump_all_contacts() {
 
 function add_user_to_list($contactId, $listId) {
   $bk_wclogger = new WC_Logger();
-  $bk_wclogger->add('icontact','Adding user with contact ID: '.$contactId.' to icontact list ID: '.$listId);
+  $bk_wclogger->add('fablesounds','Debug: Adding user with contact ID: '.$contactId.' to icontact list ID: '.$listId);
 
 	$acc = $GLOBALS['config']['accountId'];
 	$clf = $GLOBALS['config']['clientFolderId'];
