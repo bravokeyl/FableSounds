@@ -77,7 +77,7 @@ function fs_render_halion_codes_columns( $column ) {
   global $post, $woocommerce;
   $halion_code_type =  get_post_meta( $post->ID, 'bk_halion_code_type', true );
   $halion_user_login = get_post_meta( $post->ID, 'bk_halion_user_login', true );
-  $halion_user = get_user_by( 'login', $halion_user_email );
+  $halion_user = get_user_by( 'login', $halion_user_login );
   switch ( $column ) {
     case 'code_type' :
 			if ( $halion_code_type ) {
