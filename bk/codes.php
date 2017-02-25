@@ -72,7 +72,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
     $customer_username = $customer_obj->user_login;
 
     if( 'completed' == $order_data['status'] ){
-      $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
+      $bk_apiLogger->add('fablesounds','Debug: Order updates with status '.$order_data['status']);
       $serial_index = 0;
       foreach ( $order->get_items() as $item_id => $item ) {
   			$product     = $order->get_product_from_item( $item );
@@ -89,7 +89,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
         if( 1 == count($serials)){
           $serial_id = $serials[0];
-          $bk_apiLogger->add('debug','Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail.' - Serial ID:'. $serial_id);
+          $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail.' - activation code ID:'. $serial_id);
 
           update_post_meta( $serial_id, 'bk_ac_status', "used" );
           update_post_meta( $serial_id, 'bk_ac_product_sku', $product_sku );
@@ -109,8 +109,8 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           );
 
     			$order_data['serial_data'][] = $serial_data;
-          $nr_serial = bk_assign_serial_number($product_sku);
-          $bk_apiLogger->add('debug','Continuata Webhook Fired: Serial found : '.count($nr_serial));
+          $nr_serial = bk_assign_serial_number($product_sku,1);
+          $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Serial found : '.count($nr_serial));
           if(1 == count($nr_serial)){
             // wp_die(print_r($nr_serial));
             $bk_apiLogger->add('debug','Continuata Webhook Fired: Assigning serial number ID:'.$nr_serial[0]);
@@ -119,32 +119,28 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             update_post_meta( $serial_id, 'bk_ac_serial_activation', get_the_title($nr_serial[0]) );
             update_post_meta( $nr_serial[0], 'bk_sn_date', current_time('mysql') );
           } else {
-            $admin_email = sanitize_email(get_option('admin_email'));
-            $to = array( $admin_email, 'bravokeyl@gmail.com' );
-            $subject = 'Not enough serial numbers';
-            $body = 'Not enough serial numbers.';
-            $headers[] = 'Content-Type: text/html; charset=UTF-8';
-            $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
-            wp_mail( $to, $subject, $body, $headers );
+            $bk_apiLogger->add('fablesounds','Error: No serial found for product: '.$product_sku.', order '.$order_data['order_number']);
+            bk_mail_insufficient_serial_codes($product_sku,$customer_username);
           }
 
           if($is_upgrade){
-            $bk_apiLogger->add('debug','Product upgrade bought by user: '.$customer_username);
-            $bk_apiLogger->add('debug','Changing the voucher status for order:'.$bk_order_id.', product id: '.$product_sku);
+            $bk_apiLogger->add('fablesounds','Debug: Product upgrade bought by user: '.$customer_username);
+            $bk_apiLogger->add('fablesounds','Debug: Changing the voucher status for order:'.$bk_order_id.', product id: '.$product_sku);
             $vstatus = bk_change_voucher_status($product_id,$customer_username);
           }
+
         } else {
           // Not enough activation codes for product SKU
-          $bk_apiLogger->add('error','Continuata Webhook Fired: Order id '.$order_data['order_number']);
-          $bk_apiLogger->add('error','Continuata Webhook Fired: Shortage of Activation codes');
-          $bk_apiLogger->add('error','Continuata Webhook Fired: Activation codes Required: '.$quantity.' : Available '.count($serials));
+          $bk_apiLogger->add('fablesounds','Error: Order id '.$order_data['order_number']);
+          $bk_apiLogger->add('fablesounds','Error: Shortage of Activation codes');
+          $bk_apiLogger->add('fablesounds','Error: Activation codes Required: '.$quantity.' : Available '.count($serials));
           bk_mail_insufficient_activation_codes();
           return false;
         }
   		} // foreach
       return $order_data;
     } else {
-      $bk_apiLogger->add('debug','Webhook Fired: Order updates with status '.$order_data['status']);
+      $bk_apiLogger->add('fablesounds','Debug: Webhook Fired: Order updates with status '.$order_data['status']);
     }
 
     return false;

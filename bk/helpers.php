@@ -332,20 +332,18 @@ function bk_change_voucher_status($product_id,$username){
   );
   $bk_vLogger = new WC_Logger();
   $vquery = new WP_Query($args);
-  $bk_vLogger->add('debug','Changing Voucher status for voucher : '.$vquery->request.' found for user : '.$username.' Product ID: '.$product_id);
   if($vquery->have_posts()){
     while($vquery->have_posts()){
       $vquery->the_post();
       $vid = get_the_ID();
-
-      $bk_vLogger->add('debug','Changing Voucher status for voucher : '.$vid.' found for user : '.$username.' Product ID: '.$product_id);
+      $bk_vLogger->add('fablesounds','Debug: Changing voucher status for voucher : '.$vid.' found for user : '.$username.' Product ID: '.$product_id);
       update_post_meta($vid,'bk_voucher_status','used');
       update_post_meta($vid,'bk_voucher_used_date', current_time('mysql'));
     }
     wp_reset_postdata();
     return true;
   } else {
-    $bk_apiLogger->add('debug','Unable to change the status for voucher as no voucher found for product id: '.$product_id.' Username '.$username);
+    $bk_apiLogger->add('fablesounds','Error: Unable to change the status of voucher as no voucher found for product id: '.$product_id.' user: '.$username);
     return false;
   }
 
