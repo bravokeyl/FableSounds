@@ -276,7 +276,7 @@ function bk_save_product_meta($post_id) {
 	$asku     = get_post_meta( $post_id, '_activation_sku', true );
 	$new_asku = (string) wc_clean( $_POST['_activation_sku'] );
 	$eligble_products = (string) wc_clean( $_POST['bk_eligible_products'] );
-	$is_upgrade = $is_upgrade = $is_download = 'no';
+	$is_upgrade = $is_update = $is_download = 'no';
 
 	if ( '' == $new_sku ) {
 		update_post_meta( $post_id, '_continuata_sku', '' );
@@ -301,6 +301,9 @@ function bk_save_product_meta($post_id) {
 	if ( ! empty( $_POST['bk_product_upgrade'] ) ) {
 		$is_upgrade = 'yes';
 	}
+	if ( ! empty( $_POST['bk_product_update'] ) ) {
+		$is_update = 'yes';
+	}
 	if ( ! empty( $_POST['bk_product_message'] ) ) {
 		$product_message = $_POST['bk_product_message'];
 	}
@@ -312,6 +315,7 @@ function bk_save_product_meta($post_id) {
 
 	update_post_meta( $post_id, 'bk_eligible_products', $eligble_products_arr );
 	update_post_meta( $post_id, 'bk_product_upgrade', $is_upgrade );
+	update_post_meta( $post_id, 'bk_product_update', $is_update );
 	update_post_meta( $post_id, 'bk_product_url', $product_url );
 	update_post_meta( $post_id, 'bk_product_message', $product_message );
 }
@@ -321,6 +325,7 @@ function bk_product_is_new() {
 	global $post;
 	woocommerce_wp_text_input( array( 'id' => 'bk_product_url', 'label' => __( 'Product URL', 'fablesounds' ), 'desc_tip' => 'true', 'description' => __( 'This is the URL used in the cart pages.', 'fablesounds' ) ) );
 	woocommerce_wp_checkbox( array( 'id' => 'bk_product_upgrade', 'label' => __( 'Voucher Required?', 'fablesounds' ),'description' => __( 'Is this product a upgrade and needs other product to be bought to become eligible?', 'fablesounds' ) ) );
+	woocommerce_wp_checkbox( array( 'id' => 'bk_product_update', 'label' => __( 'No activation codes required?', 'fablesounds' ),'description' => __( 'Is this product a update and needs no activation codes?', 'fablesounds' ) ) );
 	woocommerce_wp_textarea_input( array( 'id' => 'bk_product_message', 'label' => __( 'Ineligible Message', 'fablesounds' ), 'class' => 'widefat' ) );
 	?>
 	<p class="form-field">
