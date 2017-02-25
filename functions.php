@@ -290,24 +290,6 @@ function bk_save_register_keys_details(){
   }
 }
 
-function bk_get_product_name_by_sku($productsku){
-  switch(strtoupper($productsku)) {
-    case "BGDR":
-      $product_name = "Broadway Gig";
-      break;
-    case "BLDR":
-      $product_name = "Broadway Lites";
-      break;
-    case "BKFDR":
-      $product_name = "Broadway Big Band – Kontakt Edition";
-      break;
-    default:
-      $product_name = "NA";
-  }
-
-  return $product_name;
-}
-
 include(get_stylesheet_directory().'/bk/halion/form-handler.php');
 
 function bk_save_extra_register_fields( $customer_id ) {
