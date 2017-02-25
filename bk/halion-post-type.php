@@ -64,8 +64,9 @@ function fs_halion_codes_columns($existing_columns){
 
   $columns                = array();
   $columns['cb']          = $existing_columns['cb'];
-  $columns['title'] = __( 'Serial Number', 'fablesounds' );
-  $columns['user_email'] = __( 'User Email', 'fablesounds' );
+  $columns['title'] = __( 'Halion code', 'fablesounds' );
+  $columns['code_type'] = __( 'Type', 'fablesounds' );
+	$columns['user_email'] = __( 'User Email', 'fablesounds' );
   $columns['user_name'] = __( 'User Name', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
   $columns['serial_date'] = __( 'Date', 'fablesounds' );
@@ -74,22 +75,27 @@ function fs_halion_codes_columns($existing_columns){
 }
 function fs_render_halion_codes_columns( $column ) {
   global $post, $woocommerce;
-  $halion_brass_code =  get_post_meta( $post->ID, 'bk_halion_brass_code', true );
-  $halion_reeds_code =  get_post_meta( $post->ID, 'bk_halion_reeds_code', true );
-  $halion_rythm_code =  get_post_meta( $post->ID, 'bk_halion_rythm_code', true );
-  $halion_user_email = get_post_meta( $post->ID, 'bk_halion_user_email', true );
-  $halion_user= get_user_by( 'email', $halion_user_email );
+  $halion_code_type =  get_post_meta( $post->ID, 'bk_halion_code_type', true );
+  $halion_user_login = get_post_meta( $post->ID, 'bk_halion_user_login', true );
+  $halion_user = get_user_by( 'login', $halion_user_email );
   switch ( $column ) {
-    case 'user_email' :
-			if ( $halion_user_email ) {
-				echo sanitize_email($halion_user_email);
+    case 'code_type' :
+			if ( $halion_code_type ) {
+				echo $halion_code_type;
+			} else {
+				echo '&ndash;';
+			}
+    break;
+		case 'user_email' :
+			if ( $halion_user ) {
+				echo sanitize_email($halion_user->user_email);
 			} else {
 				echo '&ndash;';
 			}
     break;
     case 'user_name' :
-			if ( $halion_user ) {
-				echo esc_attr($halion_user->display_name);
+			if ( $halion_user_login ) {
+				echo $halion_user_login;
 			} else {
 				echo '&ndash;';
 			}
