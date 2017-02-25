@@ -11,6 +11,15 @@ function bk_mail_insufficient_activation_codes($count='0'){
   $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
   wp_mail( $to, $subject, $body, $headers );
 }
+function bk_mail_insufficient_serial_codes($sku,$username){
+  $admin_email = sanitize_email(get_option('admin_email'));
+  $to = array( $admin_email, 'bravokeyl@gmail.com' );
+  $subject = 'No Serial codes for product '.$sku;
+  $body = 'User '.$username.' tried to buy product '.$sku.' but serial numbers codes ran out, please add more codes.';
+  $headers[] = 'Content-Type: text/html; charset=UTF-8';
+  $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
+  wp_mail( $to, $subject, $body, $headers );
+}
 function bk_activation_codes_available(){
   $args = array(
     'post_type' => 'fs_activation_codes',
@@ -32,10 +41,6 @@ function bk_activation_codes_available(){
     return false;
   }
   return true;
-}
-
-function bk_get_sku($pid) {
-  return false;
 }
 function bk_create_serial_number($sku,$order_id,$ac_id,$username){
   $serial_id = -1;
@@ -62,7 +67,7 @@ function bk_create_serial_number($sku,$order_id,$ac_id,$username){
   }
 }
 
-function bk_assign_serial_number($sku){
+function bk_assign_serial_number( $sku,$codes_count = '1' ){
   $code = array();
   $args = array(
     'post_type' => 'fs_serial_numbers',
@@ -86,7 +91,7 @@ function bk_assign_serial_number($sku){
       ),
       array(
         'key' => 'bk_sn_activation_code_count',
-        'value' => '1',
+        'value' => $codes_count,
         'compare' => '='
       ),
     ),
@@ -274,44 +279,58 @@ function bk_current_user_eligible_to_upgrade($product_id) {
 
 add_action('woocommerce_add_to_cart','bk_check_add_to_cart',10,6);
 function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data ) {
-  $codes_available = bk_activation_codes_available();
+  $user = wp_get_current_user();
+  if($user->ID){
+    $user_name = $user->user_login;
+  } else {
+    $user_name = "Guest";
+  }
   $product = new WC_Product($product_id);
   $sku = $product->get_sku();
+  $asku = get_post_meta($product_id,'_activation_sku',true);
+  $codes_available = bk_get_unused_activation_codes( 1, $asku );
+
+  $bk_add_to_cart_logger = new WC_Logger();
+  $bk_add_to_cart_logger->add('fablesounds', 'Debug: '.$user_name.' is trying to add product with SKU : '.$sku.' (activation SKU: '.$asku.') to the cart.');
+
   $serials_available = bk_assign_serial_number($sku);
   $is_product_upgrade = bk_product_upgrade($product_id);
   $product_url = get_post_meta($product_id,'bk_product_url',true);
-  // $product_bought = get_post_meta();
+
   if(empty($product_url)) {
     $product_url = esc_url(home_url('/my-account'));
   }
-  if($codes_available && (0 < count($serials_available)) ){
-    if($is_product_upgrade){
-      $eligible = bk_current_user_eligible_to_upgrade($product_id);
-      if($eligible) {
 
-      } else {
-        wc_add_notice( "You are not eligible to upgrade. Please register a product or buy a new one.", 'error' );
-        wp_safe_redirect(esc_url($product_url));
-        exit;
-      }
+  if($codes_available && (0 < count($codes_available)) ){
+    if($serials_available && (0 < count($serials_available)) ){
+      if($is_product_upgrade){
+        $eligible = bk_current_user_eligible_to_upgrade($product_id);
+        if(!$eligible) {
+          $bk_add_to_cart_logger->add('fablesounds', 'Info: Ineligible to buy product SKU: '.$sku.' (activation SKU: '.$asku.'), user: '.$user_name);
+          wc_add_notice( "You are not eligible to upgrade. Please register a product or buy a new one.", 'error' );
+          wp_safe_redirect(esc_url($product_url));
+          exit;
+        } // Ineligible to upgrade
+      } // end is product upgrade
+    } else {
+      // No serials available for product
+      $bk_add_to_cart_logger->add('fablesounds', 'Error: No serial codes found for product SKU: '.$sku.' (activation SKU: '.$asku.'), user: '.$user_name);
+      bk_mail_insufficient_serial_codes($sku,$user_name);
+      wc_add_notice( "This product is out of stock. We are notified. Please check back later.", 'error' );
+      wp_safe_redirect(esc_url(home_url('/my-account')));
+      exit;
     }
   } else {
+    // No activation codes available
+    $bk_add_to_cart_logger->add('fablesounds', 'Error: No activation codes found for product SKU '.$sku.' (activation SKU: '.$asku.'), user: '.$user_name);
     $admin_email = sanitize_email(get_option('admin_email'));
     $to = array( $admin_email, 'bravokeyl@gmail.com' );
     $subject = 'No Activation codes';
-    $user = wp_get_current_user();
-
-    if($user){
-      $user_name = $user->user_login;
-    }else {
-      $user_name = "Guest";
-    }
-
-    $body = 'User '.$user_name.' tried to buy '.$sku.' but activation/serial numbers codes ran out, please add more codes.';
+    $body = 'User '.$user_name.' tried to buy '.$sku.' but activation codes ran out, please add more codes.';
     $headers[] = 'Content-Type: text/html; charset=UTF-8';
     $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
     wp_mail( $to, $subject, $body, $headers );
-    wc_add_notice( "Sorry for the inconvenience : Activation codes are unavailable. We are notified.", 'error' );
+    wc_add_notice( "This product is out of stock. We are notified. Please check back later.", 'error' );
     wp_safe_redirect(esc_url(home_url('/my-account')));
     exit;
   }
