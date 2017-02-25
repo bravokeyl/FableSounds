@@ -21,17 +21,21 @@ function bk_add_halion_meta_boxes() {
 function bk_halion_meta_box($object, $box) {
 	?>
 
-  <?php wp_nonce_field( basename( __FILE__ ), 'bk_ac_meta_nonce' ); ?>
+  <?php wp_nonce_field( basename( __FILE__ ), 'bk_halion_meta_nonce' ); ?>
    <p>
-  	<label for="bk-halion-user-email"><?php _e( "User ID:", 'bk' ); ?>
-    <?php $user_id = get_post_meta( $object->ID, 'bk_ac_user_login', true ); ?>
-      <input type="text" name="bk-halion-user-email" class="" id="bk-halion-user-email" value="<?php echo esc_html($user_id);?>" />
+  	<label for="bk-halion-user-login"><?php _e( "User Name:", 'bk' ); ?>
+    <?php $user_id = get_post_meta( $object->ID, 'bk_halion_user_login', true ); ?>
+      <input type="text" name="bk-halion-user-login" class="" id="bk-halion-user-login" value="<?php echo esc_html($user_id);?>" />
     </label>
    </p>
-   <p>
-  	<label for="bk-ac-product-sku"><?php _e( "Product SKU:", 'bk' ); ?>
-    <?php $product_id = get_post_meta( $object->ID, 'bk_ac_product_sku', true ); ?>
-      <input type="text" name="bk-ac-product-sku" class="" id="bk-ac-product-sku" value="<?php echo esc_html($product_id);?>" />
+	 <p>
+  	<label for="bk-halion-code-type"><?php _e( "Code Type:", 'bk' ); ?>
+    <?php $type = get_post_meta( $object->ID, 'bk_halion_code_type', true );?>
+			<select name="bk-halion-code-type" id="bk-halion-code-type">
+					<option value="brass" <?php selected( $type, 'brass' ); ?>>Brass</option>
+					<option value="reeds" <?php selected( $type, 'reeds' ); ?>>Reeds</option>
+					<option value="rythm" <?php selected( $type, 'rythm' ); ?>>Rythm</option>
+			</select>
     </label>
    </p>
    <p>
@@ -57,7 +61,7 @@ function bk_save_halion_meta( $post_id, $post ) {
 	$post_type = get_post_type_object( $post->post_type );
 
 	if( 'fs_halion_codes' == $post->post_type) {
-	  if ( !isset( $_POST['bk_ac_meta_nonce'] ) || !wp_verify_nonce( $_POST['bk_ac_meta_nonce'], basename( __FILE__ ) ) )
+	  if ( !isset( $_POST['bk_halion_meta_nonce'] ) || !wp_verify_nonce( $_POST['bk_halion_meta_nonce'], basename( __FILE__ ) ) )
 	    return $post_id;
 	}
 
@@ -79,14 +83,14 @@ function bk_save_halion_meta( $post_id, $post ) {
 	$meta_keys = array();
 
 	if( 'fs_halion_codes' == $post->post_type) {
-		$buid = ( isset( $_POST['bk-halion-user-email'] ) ? intval($_POST['bk-halion-user-email']) : '' );
-	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
+		$buid = ( isset( $_POST['bk-halion-user-login'] ) ? $_POST['bk-halion-user-login'] : '' );
+	  $bpid = ( isset( $_POST['bk-halion-code-type'] ) ? esc_attr($_POST['bk-halion-code-type']) : '' );
 	  $bstatus= ( isset( $_POST['bk-halion-status'] ) ? esc_attr($_POST['bk-halion-status']) : '' );
 	  $bdate = ( isset( $_POST['bk-halion-date'] ) ? $_POST['bk-halion-date'] : '' );
 
 	  $meta_keys = array(
-	    'bk_halion_user_email' => $buid,
-	    'bk_ac_product_sku' => $bpid,
+	    'bk_halion_user_login' => $buid,
+	    'bk_halion_code_type' => $bpid,
 	    'bk_halion_status' => $bstatus,
 	    'bk_halion_date' => $bdate
 	  );
