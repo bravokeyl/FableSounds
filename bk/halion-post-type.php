@@ -65,14 +65,8 @@ function fs_halion_codes_columns($existing_columns){
   $columns                = array();
   $columns['cb']          = $existing_columns['cb'];
   $columns['title'] = __( 'Serial Number', 'fablesounds' );
-  $columns['brass'] = __( 'Brass Code', 'fablesounds' );
-  $columns['reeds'] = __( 'Reeds Code', 'fablesounds' );
-  $columns['rythm'] = __( 'Rythm Code', 'fablesounds' );
-  // $columns['seller_name']        = __( 'Seller Name', 'fablesounds' );
-  // $columns['product_id']      = __( 'Product SKU', 'fablesounds' );
   $columns['user_email'] = __( 'User Email', 'fablesounds' );
   $columns['user_name'] = __( 'User Name', 'fablesounds' );
-  //$columns['products']    = __( 'Product IDs', 'fablesounds' );
   $columns['status']       = __( 'Status', 'fablesounds' );
   $columns['serial_date'] = __( 'Date', 'fablesounds' );
 
@@ -86,27 +80,6 @@ function fs_render_halion_codes_columns( $column ) {
   $halion_user_email = get_post_meta( $post->ID, 'bk_halion_user_email', true );
   $halion_user= get_user_by( 'email', $halion_user_email );
   switch ( $column ) {
-    case 'brass' :
-			if ( $halion_brass_code ) {
-				echo esc_attr($halion_brass_code);
-			} else {
-				echo '&ndash;';
-			}
-    break;
-    case 'reeds' :
-			if ( $halion_reeds_code ) {
-				echo esc_attr($halion_reeds_code);
-			} else {
-				echo '&ndash;';
-			}
-    break;
-    case 'rythm' :
-			if ( $halion_rythm_code ) {
-				echo esc_attr($halion_rythm_code);
-			} else {
-				echo '&ndash;';
-			}
-    break;
     case 'user_email' :
 			if ( $halion_user_email ) {
 				echo sanitize_email($halion_user_email);
