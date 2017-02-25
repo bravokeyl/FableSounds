@@ -143,11 +143,37 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 }
 add_filter( 'woocommerce_api_order_response', 'bk_add_serial_to_line_item', 10, 2 );
 
+function bk_all_unused_activation_codes($number){
+  $code = array();
+  $args = array(
+    'post_type' => 'fs_activation_codes',
+    'posts_per_page' => $number,
+    'meta_query' => array(
+      array(
+        'key' => 'bk_ac_status',
+        'value' => "nused",
+        'compare' => '='
+      )
+    ),
+    'post_status' => 'publish'
+  );
 
+  $query = new WP_Query($args);
+  //wp_die(print_r($query));
+  if($query->have_posts()){
+    while($query->have_posts()){
+      $query->the_post();
+      array_push($code, get_the_ID());
+    }
+    wp_reset_postdata();
+  }
+
+  return $code;
+}
 add_action('woocommerce_payment_complete', 'bk_check_codes_quantity',15);
 function bk_check_codes_quantity(){
   $all = '-1';
-  $serials = bk_get_unused_activation_codes($all);
+  $serials = bk_all_unused_activation_codes($all);
   $count = count($serials);
   if(20 > $count) {
     bk_mail_insufficient_activation_codes($count);
