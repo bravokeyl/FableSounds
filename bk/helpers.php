@@ -175,10 +175,6 @@ function bk_add_to_cart( $atts ) {
 }
 add_shortcode( 'fable_cart', 'bk_add_to_cart' );
 
-function bk_create_voucher(){
-
-}
-
 function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
   $voucher_id = -1;
   $author_id = 1;
