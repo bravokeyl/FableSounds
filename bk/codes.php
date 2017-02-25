@@ -7,25 +7,23 @@ function bk_assign_vouchers($order_id){
   $items = $order->get_items();
   $username = $user->user_login;
   $quantity = intval($order->get_item_count());
-  $serials = bk_get_unused_activation_codes($quantity);
-  $serial_index = 0;
-  if(count($serials) == $quantity ) {
-    foreach ( $items as $item_id => $item ) {
-      $product     = $order->get_product_from_item( $item );
-      $product_id  = null;
-      $product_sku = null;
-
-      if ( is_object( $product ) ) {
-        $product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
-        $product_sku = $product->get_sku();
-      }
-      bk_assign_voucher_to_user($username,$serials[$serial_index],$product_id,$product_sku);
-      $serial_index++;
+  foreach ( $items as $item_id => $item ) {
+    $product     = $order->get_product_from_item( $item );
+    $product_id  = null;
+    $product_sku = null;
+    if ( is_object( $product ) ) {
+      $product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
+      $product_sku = $product->get_sku();
     }
-  } else {
-    //Email to Admin "Shortage of Activation codes"
-    bk_mail_insufficient_activation_codes();
-  }
+    $asku = get_post_meta($product_id,'_activation_sku',true);
+    $serial = bk_get_unused_activation_codes(1,$asku);
+    if(1 == count($serial)){
+      bk_assign_voucher_to_user($username,$serial[0],$product_id,$product_sku);
+    } else {
+      //Email to Admin "Shortage of Activation codes"
+      bk_mail_insufficient_activation_codes();
+    }
+  }//end foreach
   bk_add_user_to_list($username,$product_sku);
   return $order_id;
 }
@@ -65,22 +63,22 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
     if( 'completed' == $order_data['status'] ){
       $bk_apiLogger->add('debug','Continuata Webhook Fired: Order updates with status '.$order_data['status']);
-      $serials = bk_get_unused_activation_codes($quantity);
-      $bk_apiLogger->add('debug','Continuata Webhook Fired: Codes found : '.count($serials).' Quantity required: '.$quantity);
+      $serial_index = 0;
+      foreach ( $order->get_items() as $item_id => $item ) {
+  			$product     = $order->get_product_from_item( $item );
+  			$product_id  = null;
+  			$product_sku = null;
 
-      if($quantity == count($serials)){
-        $serial_index = 0;
-        foreach ( $order->get_items() as $item_id => $item ) {
-    			$product     = $order->get_product_from_item( $item );
-    			$product_id  = null;
-    			$product_sku = null;
+  			if ( is_object( $product ) ) {
+  				$product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
+  				$product_sku = $product->get_sku();
+  			}
 
-    			if ( is_object( $product ) ) {
-    				$product_id  = ( isset( $product->variation_id ) ) ? $product->variation_id : $product->id;
-    				$product_sku = $product->get_sku();
-    			}
+        $asku = get_post_meta($product_id,'_activation_sku',true);
+        $serials = bk_get_unused_activation_codes(1,$asku);
 
-          $serial_id = $serials[$serial_index];
+        if( 1 == count($serials)){
+          $serial_id = $serials[0];
           $bk_apiLogger->add('debug','Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail.' - Serial ID:'. $serial_id);
 
           update_post_meta( $serial_id, 'bk_ac_status', "used" );
@@ -127,17 +125,16 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             $bk_apiLogger->add('debug','Changing the voucher status for order:'.$bk_order_id.', product id: '.$product_sku);
             $vstatus = bk_change_voucher_status($product_id,$customer_username);
           }
-
-          $serial_index++;
-    		} // foreach
-        return $order_data;
-      } else {
-        $bk_apiLogger->add('error','Continuata Webhook Fired: Order id '.$order_data['order_number']);
-        $bk_apiLogger->add('error','Continuata Webhook Fired: Shortage of Activation codes');
-        $bk_apiLogger->add('error','Continuata Webhook Fired: Activation codes Required: '.$quantity.' : Available '.count($serials));
-        bk_mail_insufficient_activation_codes();
-        return false;
-      }
+        } else {
+          // Not enough activation codes for product SKU
+          $bk_apiLogger->add('error','Continuata Webhook Fired: Order id '.$order_data['order_number']);
+          $bk_apiLogger->add('error','Continuata Webhook Fired: Shortage of Activation codes');
+          $bk_apiLogger->add('error','Continuata Webhook Fired: Activation codes Required: '.$quantity.' : Available '.count($serials));
+          bk_mail_insufficient_activation_codes();
+          return false;
+        }
+  		} // foreach
+      return $order_data;
     } else {
       $bk_apiLogger->add('debug','Webhook Fired: Order updates with status '.$order_data['status']);
     }

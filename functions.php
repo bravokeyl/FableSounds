@@ -47,15 +47,21 @@ function bk_assign_activation_code_after_registration($order_id){
 //add_action('woocommerce_order_status_completed','bk_assign_activation_code_after_registration');
 
 
-function bk_get_unused_activation_codes($number){
+function bk_get_unused_activation_codes($number,$sku){
   $code = array();
   $args = array(
     'post_type' => 'fs_activation_codes',
     'posts_per_page' => $number,
     'meta_query' => array(
+      'relation' => 'AND',
       array(
         'key' => 'bk_ac_status',
         'value' => "nused",
+        'compare' => '='
+      ),
+      array(
+        'key' => 'bk_ac_product_sku',
+        'value' => $sku,
         'compare' => '='
       )
     ),
