@@ -118,3 +118,102 @@ function fs_render_halion_codes_columns( $column ) {
     break;
   }
 }
+
+add_action( 'restrict_manage_posts', 'bk_halion_filter_restrict_manage_posts' );
+function bk_halion_filter_restrict_manage_posts(){
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+
+    if ('fs_halion_codes' == $type){
+        $values = array(
+          'Not Registered' => 'nreg',
+          'Registered' => 'reg',
+        );
+				$types = array(
+          'Brass' => 'brass',
+          'Reeds' => 'reeds',
+					'Rythm' => 'rythm',
+        );
+
+        $current_user = isset($_GET['fs_user_login'])? $_GET['fs_user_login']:'';
+        $current_seller = isset($_GET['fs_seller_name'])? $_GET['fs_seller_name']:'';
+        ?>
+        <input type="text" name="fs_user_login" placeholder="Username" value="<?php echo $current_user;?>" style="max-width: 150px;"/>
+				<select name="bk_halion_status">
+        <option value=""><?php _e('Status', 'fablesounds'); ?></option>
+        <?php
+            $current_v = isset($_GET['bk_halion_status'])? $_GET['bk_halion_status']:'';
+            foreach ($values as $label => $value) {
+                printf
+                    (
+                        '<option value="%s"%s>%s</option>',
+                        $value,
+                        $value == $current_v? ' selected="selected"':'',
+                        $label
+                    );
+                }
+        ?>
+        </select>
+				<select name="fs_halion_type">
+        <option value=""><?php _e('Type', 'fablesounds'); ?></option>
+        <?php
+            $current_t = isset($_GET['fs_halion_type'])? $_GET['fs_halion_type']:'';
+            foreach ($types as $label => $value) {
+                printf
+                    (
+                        '<option value="%s"%s>%s</option>',
+                        $value,
+                        $value == $current_t? ' selected="selected"':'',
+                        $label
+                    );
+                }
+        ?>
+        </select>
+        <?php
+    }
+}
+
+
+add_filter( 'parse_query', 'bk_halion_codes_filter' );
+function bk_halion_codes_filter( $query ){
+    global $pagenow;
+    $type = 'post';
+    if (isset($_GET['post_type'])) {
+        $type = $_GET['post_type'];
+    }
+		if ( 'fs_halion_codes' == $type && is_admin() && $pagenow=='edit.php') {
+	    $fs_sn_user = '';
+	    $fs_halion_status = '';
+	    $bk_meta_query = array(
+	      'relation' => 'AND',
+	    );
+	    if ( 'fs_halion_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['bk_halion_status']) && $_GET['bk_halion_status'] != '') {
+	        $fs_halion_status = $_GET['bk_halion_status'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_halion_status',
+	            'value'     => $fs_halion_status,
+	            'compare'   => '='
+	        );
+	    }
+	    if ( 'fs_halion_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_user_login']) && $_GET['fs_user_login'] != '') {
+	        $fs_sn_user = $_GET['fs_user_login'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_halion_user_login',
+	            'value'     => $fs_sn_user,
+	            'compare'   => '='
+	        );
+	    }
+	    if ( 'fs_halion_codes' == $type && is_admin() && $pagenow=='edit.php' && isset($_GET['fs_halion_type']) && $_GET['fs_halion_type'] != '') {
+	        $fs_halion_type = $_GET['fs_halion_type'];
+	        $bk_meta_query[] = array(
+	            'key'       => 'bk_halion_code_type',
+	            'value'     => $fs_halion_type,
+	            'compare'   => '='
+	        );
+	    }
+
+	    $query->set('meta_query', $bk_meta_query);
+		}//end post type meta
+}
