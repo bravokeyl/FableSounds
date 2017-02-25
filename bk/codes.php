@@ -49,12 +49,12 @@ function bk_add_user_to_list($user_name,$icontact_list){
   } else {
     $icontact_res = add_user_to_icontact($email, $firstName, $lastName, $user_name);
     $icontact_id = get_contact_id($user_name);
-    $bk_wclogger->add('icontact','Added user to icontact: icontact id - '.$icontact_id);
     if($icontact_id){
+      $bk_wclogger->add('fablesounds','Added user '.$user_name.' to icontact: icontact id - '.$icontact_id);
       update_user_meta($user->ID,'bk_icontact_id',$icontact_id);
       add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
     } else{
-      $bk_wclogger->add('fablesounds','Error: Unable tpo create contact in icontact');
+      $bk_wclogger->add('fablesounds','Error: Unable to create contact in icontact for user '.$user_name);
     }
   }
 
