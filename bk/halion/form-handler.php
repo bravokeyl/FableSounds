@@ -78,7 +78,7 @@ function bk_register_halion_keys(){
           update_post_meta(intval($reeds_serial[0]),'bk_halion_date',current_time('mysql'));
           update_post_meta(intval($rythm_serial[0]),'bk_halion_date',current_time('mysql'));
 
-          wc_add_notice( __( 'Serial Number successfully registered.', 'fablesounds' ) );
+          wc_add_notice( __( 'Halion product serial number successfully registered.', 'fablesounds' ) );
           wp_safe_redirect( wc_get_endpoint_url( 'registered-keycodes' ) );
     			exit;
         }
