@@ -68,7 +68,7 @@ function bk_assign_serial_number( $sku,$codes_count = '1' ){
   if($no_codes_req){
     $codes_count = 0;
   }
-  
+
   $args = array(
     'post_type' => 'fs_serial_numbers',
     'posts_per_page' => 1,
@@ -124,7 +124,7 @@ function bk_add_to_cart( $atts ) {
 
   $url = '';
   $pid = intval($atts['id']);
-  $class = "grve-btn grve-btn-medium grve-round grve-bg-primary-1";
+  $class = "grve-btn grve-btn-medium grve-round grve-bg-primary-1 grve-bg-hover-primary-1 grve-btn-line";
   $href = '';
   $eligible = false;
   $label = $atts['label'];
