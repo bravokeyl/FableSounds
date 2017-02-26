@@ -300,7 +300,7 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
       // No serials available for product
       $bk_add_to_cart_logger->add('fablesounds', 'Error: No serial codes found for product SKU: '.$sku.' (activation SKU: '.$asku.'), user: '.$user_name);
       bk_mail_insufficient_serial_codes($sku,$user_name);
-      wc_add_notice( "This product is out of stock. We are notified. Please check back later.", 'error' );
+      wc_add_notice( "This product is temporarily out of stock. Please check back later.", 'error' );
       wp_safe_redirect(esc_url(home_url('/my-account')));
       exit;
     }
