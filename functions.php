@@ -149,6 +149,11 @@ function bk_check_serial_number($serial,$sku){
         'key' => 'bk_sn_product_sku',
         'value' => $sku,
         'compare' => '='
+      ),
+      array(
+        'key' => 'bk_sn_distributed',
+        'value' => '1',
+        'compare' => '='
       )
     ),
     'post_status' => 'publish'
@@ -192,13 +197,11 @@ function bk_save_register_keys_details(){
       return;
     }else {
       $bk_serial_key = strtoupper($_POST['bk_serial_key1'])."-".strtoupper($_POST['bk_serial_key2'])."-".strtoupper($_POST['bk_serial_key3'])."-".strtoupper($_POST['bk_serial_key4'])."-".strtoupper($_POST['bk_serial_key5']);
-      // wp_die(print_r($bk_serial_key));
       $bk_serial_key_val     = ! empty( $bk_serial_key )? esc_attr($bk_serial_key) : '';
 
       if ( !empty( $bk_serial_key_val ) ) {
         $products_dropdown_val = ! empty( $_POST['bk_serial_key1'] )? esc_attr(strtoupper($_POST['bk_serial_key1'])): '';
         $serial_found = bk_check_serial_number($bk_serial_key_val,$products_dropdown_val);
-        // wp_die(print_r($serial_found));
         $activation_code_id = bk_get_unused_activation_codes(1,$products_dropdown_val);
         if( 0 < count($activation_code_id )){
           if(empty($serial_found)){
@@ -209,7 +212,6 @@ function bk_save_register_keys_details(){
             $bk_current_user = wp_get_current_user();
             $username = $bk_current_user->user_login;
             update_post_meta(intval($serial_found[0]),'bk_sn_status','reg');
-            //update_post_meta(intval($serial_found[0]),'bk_sn_product_sku',$products_dropdown_val);
             update_post_meta(intval($serial_found[0]),'bk_sn_user_login',$username);
             update_post_meta(intval($serial_found[0]),'bk_sn_date',current_time('mysql'));
 
@@ -219,7 +221,6 @@ function bk_save_register_keys_details(){
               update_post_meta($activation_code_id[0], 'bk_ac_product_sku', $products_dropdown_val);
               update_post_meta($activation_code_id[0], 'bk_ac_user_login', $bk_current_user->user_login);
               update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
-              //bk_create_order($products_dropdown_val);
               $selected_product_id = wc_get_product_id_by_sku( $products_dropdown_val );
               $voucher_id = bk_assign_voucher_to_user($username,$activation_code_id[0],$selected_product_id,$products_dropdown_val);
               $icontact_id = get_user_meta($bk_current_user->ID,'bk_icontact_id',true);
