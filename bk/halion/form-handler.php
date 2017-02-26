@@ -1,4 +1,44 @@
 <?php
+function bk_halion_voucher_to_user($username,$ac_id,$product_id,$product_sku){
+  $voucher_id = -1;
+  $author_id = 1;
+
+  $bk_wclogger = new WC_Logger();
+  $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
+  if(is_array($sku_arr)){
+    foreach($sku_arr as $key => $pid){
+      $slug = strtolower($username).'-voucher-code-id-'.$ac_id.'-'.$pid;
+    	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-for-".$pid;
+      if( null == get_page_by_title( $title ) ) {
+        $bk_wclogger->add('fablesounds','Debug: Creating Halion Voucher '.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
+        $voucher_id = wp_insert_post(
+    			array(
+    				'comment_status'	=>	'closed',
+    				'ping_status'		=>	'closed',
+    				'post_author'		=>	$author_id,
+    				'post_name'		=>	$slug,
+    				'post_title'		=>	$title,
+    				'post_status'		=>	'publish',
+    				'post_type'		=>	'fs_vouchers'
+    			)
+    		);
+
+        if($voucher_id){
+          update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr[$key] );
+          update_post_meta($voucher_id,'bk_voucher_product_bought', $product_id );
+          update_post_meta($voucher_id,'bk_voucher_status','nused');
+          update_post_meta($voucher_id,'bk_voucher_user_login', $username);
+          update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
+        }
+      } else {
+        $bk_wclogger->add('fablesounds','Error: Cannot create Halion vocuher '.$title.' and user '.$username.' : Product '.$product_sku);
+        $voucher_id = -2;
+      }
+    }
+  }
+
+  return $voucher_id;
+}
 function bk_check_halion_keys($serial,$type){
   $code = array();
   $args = array(
@@ -68,16 +108,21 @@ function bk_register_halion_keys(){
     			exit;
         } else {
           $bk_current_user = wp_get_current_user();
+          $username = $bk_current_user->user_login;
           update_post_meta(intval($brass_serial[0]),'bk_halion_status','reg');
           update_post_meta(intval($reeds_serial[0]),'bk_halion_status','reg');
           update_post_meta(intval($rythm_serial[0]),'bk_halion_status','reg');
-          update_post_meta(intval($brass_serial[0]),'bk_halion_user_login',$bk_current_user->user_login);
-          update_post_meta(intval($reeds_serial[0]),'bk_halion_user_login',$bk_current_user->user_login);
-          update_post_meta(intval($rythm_serial[0]),'bk_halion_user_login',$bk_current_user->user_login);
+          update_post_meta(intval($brass_serial[0]),'bk_halion_user_login',$username);
+          update_post_meta(intval($reeds_serial[0]),'bk_halion_user_login',$username);
+          update_post_meta(intval($rythm_serial[0]),'bk_halion_user_login',$username);
           update_post_meta(intval($brass_serial[0]),'bk_halion_date',current_time('mysql'));
           update_post_meta(intval($reeds_serial[0]),'bk_halion_date',current_time('mysql'));
           update_post_meta(intval($rythm_serial[0]),'bk_halion_date',current_time('mysql'));
 
+          $product_sku = 'BHFB';
+          $ac_id = 'HAL-000';
+          $product_id = wc_get_product_id_by_sku($product_sku);
+          bk_halion_voucher_to_user($username,$ac_id,$product_id,$product_sku);
           wc_add_notice( __( 'Halion product serial number successfully registered.', 'fablesounds' ) );
           wp_safe_redirect( wc_get_endpoint_url( 'registered-keycodes' ) );
     			exit;
