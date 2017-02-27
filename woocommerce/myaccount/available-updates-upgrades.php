@@ -51,10 +51,12 @@ if($activation_qe->have_posts()){?>
     $acproduct_id = get_post_meta( $activation_acid, 'bk_voucher_product_sku', true );
     global $woocommerce;
     $cart_url = $woocommerce->cart->get_cart_url();
+    $product = wc_get_product( $acproduct_id );
+    $order_thumb = $product->get_image();
     ?>
         <tr>
-          <td>
-            <?php echo $i;?>
+          <td class="product-thumb">
+            <?php echo $order_thumb;?>
           </td>
           <td>
             <?php echo get_the_title($acproduct_id);?>
@@ -124,6 +126,7 @@ if($updates_qe->have_posts()){?>
     $update_product_id = get_post_meta( $updates_acid, 'bk_voucher_product_sku', true );
     global $woocommerce;
     $cart_url = $woocommerce->cart->get_cart_url();
+
     ?>
         <tr>
           <td>

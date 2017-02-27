@@ -47,6 +47,13 @@
     -ms-touch-action: manipulation;
     touch-action: manipulation;
 }
+.woocommerce .product-thumb img {
+  width: 40px;
+  height: 40px;
+}
+.woocommerce ht, .woocommerce td {
+  vertical-align: middle;
+}
 @media only screen and (min-width: 480px) {
   .bk-small {
     max-width: 100px;
