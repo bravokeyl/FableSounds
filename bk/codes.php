@@ -146,6 +146,13 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
         } else {
           // Not enough activation codes for product SKU
           $bk_apiLogger->add('fablesounds','Error: Order id '.$order_data['order_number']);
+          $bk_apiLogger->add('fablesounds','Error: Product id '.$order_data['line_items'][$serial_index]['sku']);
+          $bk_apiLogger->add('fablesounds','Error: Billing First Name '.$order_data['billing_address']['first_name']);
+          $bk_apiLogger->add('fablesounds','Error: Billing Last Name '.$order_data['billing_address']['last_name']);
+          $bk_apiLogger->add('fablesounds','Error: Billing Email '.$order_data['billing_address']['email']);
+          $bk_apiLogger->add('fablesounds','Error: Order Currency '.$order_data['currency']);
+          $bk_apiLogger->add('fablesounds','Error: Order Total '.$order_data['total']);
+          $bk_apiLogger->add('fablesounds','Error: Product Total '.$order_data['line_items'][$serial_index]['total']);
           $bk_apiLogger->add('fablesounds','Error: Shortage of Activation codes');
           $bk_apiLogger->add('fablesounds','Error: Activation codes Required: '.$quantity.' : Available '.count($serials));
           bk_mail_insufficient_activation_codes();
