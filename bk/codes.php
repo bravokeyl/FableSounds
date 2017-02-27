@@ -118,6 +118,11 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             "serial" => $serial
           );
 
+          if(is_array($order_data['line_items'])){
+            $ptotal = $order_data['line_items'][$serial_index]['total'];
+            $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Product total : '.$ptotal);
+          }
+
     			$order_data['serial_data'][] = $serial_data;
           $nr_serial = bk_assign_serial_number($product_sku,1);
           $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Serial found : '.count($nr_serial));
@@ -146,6 +151,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           bk_mail_insufficient_activation_codes();
           return false;
         }
+        $serial_index++;
   		} // foreach
       return $order_data;
     } else {

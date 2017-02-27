@@ -63,7 +63,7 @@ function bk_activation_codes_available(){
 
 function bk_assign_serial_number( $sku,$codes_count = '1' ){
   $code = array();
-  $no_codes_req = bk_product_update();
+  $no_codes_req = bk_product_update($sku);
 
   if($no_codes_req){
     $codes_count = 0;
