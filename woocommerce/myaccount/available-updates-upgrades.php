@@ -27,7 +27,7 @@ $activation_qe = new WP_Query($activation_args);
 
 if($activation_qe->have_posts()){?>
   <br/>
-  <h4 class="updates-table-title">Available Upgrades</h4>
+  <h4 class="upgrades-table-title">Available Upgrades</h4>
   <table class="row">
     <thead>
       <tr>
@@ -75,5 +75,78 @@ if($activation_qe->have_posts()){?>
 </table><?php
   wp_reset_postdata();
 } else {
-  echo "<p>No new products registered.</p>";
+  echo "<p>No product upgrades available.</p>";
+}?>
+<hr />
+<?php
+$update_args = array(
+  'post_type'      => 'fs_serial_numbers',
+  'post_status'    => 'publish',
+  'posts_per_page' => '-1',
+  'meta_query'     => array(
+    'relation' => 'AND',
+    array(
+      'key'     => 'bk_sn_user_login',
+      'value'   => $current_user->user_login,
+      'compare' => '='
+    ),
+    array(
+      'key'     => 'bk_voucher_status',
+      'value'   => 'nreg',
+      'compare' => '='
+    ),
+  ),
+);
+$updates_qe = new WP_Query($update_args);
+
+if($updates_qe->have_posts()){?>
+  <h4 class="updates-table-title">Available Upgrades</h4>
+  <table class="row">
+    <thead>
+      <tr>
+        <th>
+          <?php _e("SNo.","bk");?>
+        </th>
+        <th>
+          <?php _e("Product Name","bk");?>
+        </th>
+        <th>
+          <?php _e("Buy","bk");?>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+  <?php
+  $j = 1;
+  while ($updates_qe->have_posts()) {
+    $updates_qe->the_post();
+    $updates_acid = get_the_ID();
+    $update_product_id = get_post_meta( $updates_acid, 'bk_voucher_product_sku', true );
+    global $woocommerce;
+    $cart_url = $woocommerce->cart->get_cart_url();
+    ?>
+        <tr>
+          <td>
+            <?php echo $j;?>
+          </td>
+          <td>
+            <?php echo get_the_title($updates_acid);?>
+          </td>
+          <td>
+            <?php
+            $c_url = add_query_arg( array(
+                'add-to-cart' => $acproduct_id,
+            ), $cart_url );
+             ?>
+            <a href="<?php echo esc_url($c_url);?>">Update now</a>
+          </td>
+        </tr>
+    <?php
+    $j++;
+  }?>
+  </tbody>
+</table><?php
+  wp_reset_postdata();
+} else {
+  echo "<p>No product updates available.</p>";
 }
