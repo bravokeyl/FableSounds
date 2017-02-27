@@ -203,6 +203,8 @@ function bk_save_register_keys_details(){
       $bk_serial_key_val     = ! empty( $bk_serial_key )? esc_attr($bk_serial_key) : '';
 
       if ( !empty( $bk_serial_key_val ) ) {
+        $bk_registerLogger = new WC_Logger();
+
         $products_dropdown_val = ! empty( $_POST['bk_serial_key1'] )? esc_attr(strtoupper($_POST['bk_serial_key1'])): '';
         $serial_found = bk_check_serial_number($bk_serial_key_val,$products_dropdown_val);
         $activation_code_id = bk_get_unused_activation_codes(1,$products_dropdown_val);
@@ -214,11 +216,14 @@ function bk_save_register_keys_details(){
           } else {
             $bk_current_user = wp_get_current_user();
             $username = $bk_current_user->user_login;
+            $bk_registerLogger->add('fablesounds','Debug: User: '.$username.' is registering a key '.$bk_serial_key);
+
             update_post_meta(intval($serial_found[0]),'bk_sn_status','reg');
             update_post_meta(intval($serial_found[0]),'bk_sn_user_login',$username);
             update_post_meta(intval($serial_found[0]),'bk_sn_date',current_time('mysql'));
 
             if(!empty($activation_code_id)) {
+              $bk_registerLogger->add('fablesounds','Debug: Activation code given to '.$username.' for registering a key '.$bk_serial_key.' : '.$activation_code_id[0]);
               update_post_meta($activation_code_id[0], 'bk_ac_status', "used");
               update_post_meta($activation_code_id[0], 'bk_ac_serial_activation', get_the_title( $serial_found[0]));
               update_post_meta($activation_code_id[0], 'bk_ac_product_sku', $products_dropdown_val);
