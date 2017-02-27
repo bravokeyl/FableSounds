@@ -49,6 +49,8 @@ if($activation_qe->have_posts()){?>
     $activation_qe->the_post();
     $activation_acid = get_the_ID();
     $acproduct_id = get_post_meta( $activation_acid, 'bk_voucher_product_sku', true );
+    global $woocommerce;
+    $cart_url = $woocommerce->cart->get_cart_url();
     ?>
         <tr>
           <td>
@@ -58,7 +60,12 @@ if($activation_qe->have_posts()){?>
             <?php echo get_the_title($acproduct_id);?>
           </td>
           <td>
-            <a href=''>Upgrade now</a>
+            <?php
+            $c_url = add_query_arg( array(
+                'add-to-cart' => $acproduct_id,
+            ), $cart_url );
+             ?>
+            <a href="<?php echo esc_url($c_url);?>">Upgrade now</a>
           </td>
         </tr>
     <?php
