@@ -90,14 +90,18 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
         if('register' == $product_register){
           $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Product Register Order ');
         }
-        if(!$no_codes_req || !('register' == $product_register)){
-          $serials = bk_get_unused_activation_codes(1,$asku);
-        }else {
+        if(!$no_codes_req ){
+          if( !('register' == $product_register) ) {
+            $serials = bk_get_unused_activation_codes(1,$asku);
+          } else {
+            $serials = array( 'update_product'=> 1 ); //dummy arr to have count of 1
+          }
+        } else {
           $serials = array( 'update_product'=> 1 ); //dummy arr to have count of 1
         }
 
         if( 1 == count($serials)){
-          if(!$no_codes_req || !('register' == $product_register)){
+          if(!$no_codes_req && !('register' == $product_register)){
             $serial_id = $serials[0];
             $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail.' - activation code ID:'. $serial_id);
 
