@@ -185,6 +185,7 @@ function bk_create_order($sku){
     $order->add_product( get_product( $pid ), 1 );
     $order->update_status('completed', 'Programatically changing order status');
     update_post_meta($order->id, '_customer_user', get_current_user_id() );
+    update_post_meta($order->id, 'bk_order_type', 'register' );
     return $order;
   }
   // $order->set_address( $address_billing, 'billing' );
@@ -225,7 +226,7 @@ function bk_save_register_keys_details(){
               update_post_meta($activation_code_id[0], 'bk_ac_date', current_time('mysql'));
               $selected_product_id = wc_get_product_id_by_sku( $products_dropdown_val );
               $voucher_id = bk_assign_voucher_to_user($username,$activation_code_id[0],$selected_product_id,$products_dropdown_val);
-              
+
               bk_create_order($products_dropdown_val);
               $icontact_id = get_user_meta($bk_current_user->ID,'bk_icontact_id',true);
               global $icontact_lists;

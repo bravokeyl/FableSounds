@@ -85,16 +85,19 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
   			}
 
         $asku = get_post_meta($product_id,'_activation_sku',true);
-        $no_codes_req = bk_product_update();
-
-        if(!$no_codes_req){
+        $no_codes_req = bk_product_update($product_id);
+        $product_register = get_post_meta($bk_order_id,'bk_order_type',true);
+        if('register' == $product_register){
+          $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Product Register Order ');
+        }
+        if(!$no_codes_req || !('register' == $product_register)){
           $serials = bk_get_unused_activation_codes(1,$asku);
         }else {
           $serials = array( 'update_product'=> 1 ); //dummy arr to have count of 1
         }
 
         if( 1 == count($serials)){
-          if(!$no_codes_req){
+          if(!$no_codes_req || !('register' == $product_register)){
             $serial_id = $serials[0];
             $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail.' - activation code ID:'. $serial_id);
 
@@ -104,39 +107,43 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             update_post_meta( $serial_id, 'bk_ac_user_login', $customer_username );
             update_post_meta( $serial_id, 'bk_ac_date', current_time('mysql') );
             update_post_meta( $serial_id, 'order_data', $order_data );
+            
+            $continuata_sku = get_post_meta($product_id,'_continuata_sku',true);
+            $serial = get_the_title($serial_id);
+            $serial_data = array(
+              "product_id" => $product_id,
+              "product_sku" => $continuata_sku,
+              "serial" => $serial
+            );
+
+            if(is_array($order_data['line_items'])){
+              $ptotal = $order_data['line_items'][$serial_index]['total'];
+              $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Product total : '.$ptotal);
+            }
+
+      			$order_data['serial_data'][] = $serial_data;
+
           } else {
             $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail);
           }
 
-          $continuata_sku = get_post_meta($product_id,'_continuata_sku',true);
+
           $is_upgrade = bk_product_upgrade($product_id);
 
-          $serial = get_the_title($serial_id);
-          $serial_data = array(
-            "product_id" => $product_id,
-            "product_sku" => $continuata_sku,
-            "serial" => $serial
-          );
-
-          if(is_array($order_data['line_items'])){
-            $ptotal = $order_data['line_items'][$serial_index]['total'];
-            $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Product total : '.$ptotal);
-          }
-
-    			$order_data['serial_data'][] = $serial_data;
-          $nr_serial = bk_assign_serial_number($product_sku,1);
-          $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Serial found : '.count($nr_serial));
-          if(1 == count($nr_serial)){
-            $bk_apiLogger->add('debug','Continuata Webhook Fired: Assigning serial number ID:'.$nr_serial[0]);
-            update_post_meta( $nr_serial[0], 'bk_sn_status', "reg" );
-            update_post_meta( $nr_serial[0], 'bk_sn_user_login', $customer_username );
-            update_post_meta( $serial_id, 'bk_ac_serial_activation', get_the_title($nr_serial[0]) );
-            update_post_meta( $nr_serial[0], 'bk_sn_date', current_time('mysql') );
-          } else {
-            $bk_apiLogger->add('fablesounds','Error: No serial found for product: '.$product_sku.', order '.$order_data['order_number']);
-            bk_mail_insufficient_serial_codes($product_sku,$customer_username);
-          }
-
+          if(!('register' == $product_register)){
+            $nr_serial = bk_assign_serial_number($product_sku,1);
+            $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Serial found : '.count($nr_serial));
+            if(1 == count($nr_serial)){
+              $bk_apiLogger->add('debug','Continuata Webhook Fired: Assigning serial number ID:'.$nr_serial[0]);
+              update_post_meta( $nr_serial[0], 'bk_sn_status', "reg" );
+              update_post_meta( $nr_serial[0], 'bk_sn_user_login', $customer_username );
+              update_post_meta( $serial_id, 'bk_ac_serial_activation', get_the_title($nr_serial[0]) );
+              update_post_meta( $nr_serial[0], 'bk_sn_date', current_time('mysql') );
+            } else {
+              $bk_apiLogger->add('fablesounds','Error: No serial found for product: '.$product_sku.', order '.$order_data['order_number']);
+              bk_mail_insufficient_serial_codes($product_sku,$customer_username);
+            }
+          }// No serials for product registered via keys
           if($is_upgrade){
             $bk_apiLogger->add('fablesounds','Debug: Product upgrade bought by user: '.$customer_username);
             $bk_apiLogger->add('fablesounds','Debug: Changing the voucher status for order:'.$bk_order_id.', product id: '.$product_sku);
