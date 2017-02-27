@@ -32,7 +32,7 @@ if($activation_qe->have_posts()){?>
     <thead>
       <tr>
         <th>
-          <?php _e("SNo.","bk");?>
+          <?php _e("Thumbnail","bk");?>
         </th>
         <th>
           <?php _e("Product Name","bk");?>
