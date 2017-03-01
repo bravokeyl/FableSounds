@@ -78,6 +78,11 @@
           $(this).nextAll('.serial-input').eq(0).focus();
       else
           $(this).blur();
+      if( 39 == this.maxLength) {
+        e.preventDefault();
+        return false;
+      }
+
     }
   });
   var kpfu = function(){
