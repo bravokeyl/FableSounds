@@ -72,7 +72,7 @@
          e.preventDefault();
         return false;
     }
-    if( this.value.length == this.maxLength ){
+    if( this.value.length == 4 ){
       var $next = $(this).nextAll('.serial-input').eq(0);
       if ($next.length)
           $(this).nextAll('.serial-input').eq(0).focus();
