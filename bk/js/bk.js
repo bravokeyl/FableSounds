@@ -11,22 +11,14 @@
     }
   });
   sipf.keyup(function () {
-    console.log("First add",this.value.length);
-    // if( 5 == this.value.length ){
-    //   var lc = this.value.substring(4);
-    //
-    //   console.log("Length five", this.value,lc);
-    //   // if( "-" == lc ){
-    //     console.log("Found Dash");
-    //     var $next = $(this).next('.serial-input');
-    //     if ($next.length)
-    //         $(this).next('.serial-input').focus();
-    //     else
-    //         $(this).blur();
-    //   // }
-    // }
+    if( 5 == this.value.length ){
+      var $next = $(this).next('.serial-input');
+      if ($next.length)
+          $(this).next('.serial-input').focus();
+      else
+          $(this).blur();
+    }
     if (this.value.length == this.maxLength || (24 == this.value.length) || (21 == this.value.length) || (20 == this.value.length)) {
-      console.log("Max Characters",this.value);
       var ips = [];
       if((25 == this.value.length)){
         ips = this.value.split('-');

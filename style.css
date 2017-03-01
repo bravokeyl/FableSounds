@@ -51,8 +51,11 @@
   width: 40px;
   height: 40px;
 }
-.woocommerce ht, .woocommerce td {
+.woocommerce th, .woocommerce td {
   vertical-align: middle;
+}
+.woocommerce form .form-row .input-text {
+  text-align: center;
 }
 @media only screen and (min-width: 480px) {
   .bk-small {
