@@ -1,18 +1,30 @@
 (function($){
   var sip = $(".bk-form .serial-input");
   var sipf = $(".bk-form .serial-input#bk_serial_key1");
-  // sip.not("#bk_serial_key1").keyup(function () {
-  //   console.log("Key UP");
-  //   if (this.value.length == this.maxLength) {
-  //     var $next = $(this).next('.serial-input');
-  //     if ($next.length)
-  //         $(this).next('.serial-input').focus();
-  //     else
-  //         $(this).blur();
-  //   }
-  // });
+  sip.not("#bk_serial_key1").keyup(function () {
+    if (this.value.length == this.maxLength) {
+      var $next = $(this).next('.serial-input');
+      if ($next.length)
+          $(this).next('.serial-input').focus();
+      else
+          $(this).blur();
+    }
+  });
   sipf.keyup(function () {
-    console.log("First add");
+    console.log("First add",this.value.length);
+    // if( 5 == this.value.length ){
+    //   var lc = this.value.substring(4);
+    //
+    //   console.log("Length five", this.value,lc);
+    //   // if( "-" == lc ){
+    //     console.log("Found Dash");
+    //     var $next = $(this).next('.serial-input');
+    //     if ($next.length)
+    //         $(this).next('.serial-input').focus();
+    //     else
+    //         $(this).blur();
+    //   // }
+    // }
     if (this.value.length == this.maxLength || (24 == this.value.length) || (21 == this.value.length) || (20 == this.value.length)) {
       console.log("Max Characters",this.value);
       var ips = [];
@@ -38,11 +50,6 @@
         $("#bk_serial_key4").val(ips[3]);
         $("#bk_serial_key5").val(ips[4]);
       }
-      // var $next = $(this).next('.serial-input');
-      // if ($next.length)
-      //     $(this).next('.serial-input').focus();
-      // else
-      //     $(this).blur();
     }
   });
   $("#clear-form").on("click",function(e){
