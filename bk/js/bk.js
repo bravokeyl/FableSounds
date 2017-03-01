@@ -34,7 +34,9 @@
           $(this).next('.serial-input').focus();
       else
           $(this).blur();
-   }
+    }
+  });
+  sipf.keyup(function(e){
     if (this.value.length == this.maxLength || (24 == this.value.length) || (21 == this.value.length) || (20 == this.value.length)) {
       var ips = [];
       if((25 == this.value.length)){
