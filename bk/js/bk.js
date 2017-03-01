@@ -80,4 +80,24 @@
           $(this).blur();
     }
   });
+  var kpfu = function(){
+    if ( (32 == this.value.length) || (39 == this.value.length)) {
+      var ips = [];
+      if((39 == this.value.length)){
+        ips = this.value.split(' ');
+      }
+      if((32 == this.value.length)){
+        ips = this.value.match(/.{1,4}/g); //split at every 4 characters
+      }
+      var cl = $(this).parent().find(".serial-input");
+      if( 8 == ips.length){
+        for(var i=0;i<8;i++){
+          cl.eq(i).val(ips[i]);
+        }
+      }
+    }
+  };
+  $("#bk_old_halion_key11").keyup(kpfu);
+  $("#bk_old_halion_key21").keyup(kpfu);
+  $("#bk_old_halion_key31").keyup(kpfu);
 })(jQuery);
