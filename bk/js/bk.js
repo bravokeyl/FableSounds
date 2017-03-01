@@ -90,6 +90,9 @@
       var ips = [];
       if((39 == this.value.length)){
         ips = this.value.split(' ');
+        if(8 != ips.length){
+          ips = this.value.split('-');
+        }
       }
       if((32 == this.value.length)){
         ips = this.value.match(/.{1,4}/g); //split at every 4 characters
