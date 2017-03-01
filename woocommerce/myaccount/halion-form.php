@@ -7,7 +7,7 @@
     <label for="bk_old_halion_brass_key"><?php _e( 'Enter Activation code 1 : Brass', 'bk' ); ?> <span class="required">*</span></label>
   <?php
     for($i=1;$i<9;$i++){ ?>
-      <input type="text" required class="woocommerce-Input woocommerce-Input--text input-text bk-xsmall"
+      <input type="text" maxlength="4" required class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-xsmall"
       pattern="[A-Za-z0-9]{4}" title="Four digit alphanumeric" name="bk_old_halion_key1<?php echo $i;?>"
       id="bk_old_halion_key1<?php echo $i;?>" value="" />
       <?php if($i != 8){?>
@@ -21,7 +21,7 @@
     <label for="bk_old_halion_reeds_key"><?php _e( 'Enter Activation code 2 : Reeds', 'bk' ); ?> <span class="required">*</span></label>
   <?php
     for($i=1;$i<9;$i++){ ?>
-      <input type="text" required class="woocommerce-Input woocommerce-Input--text input-text bk-xsmall"
+      <input type="text" maxlength="4" required class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-xsmall"
       pattern="[A-Za-z0-9]{4}" title="Four digit alphanumeric" name="bk_old_halion_key2<?php echo $i;?>"
       id="bk_old_halion_key2<?php echo $i;?>" value="" />
       <?php if($i != 8){?>
@@ -35,7 +35,7 @@
     <label for="bk_old_halion_rythm_key"><?php _e( 'Enter Activation code 3 : Rythm', 'bk' ); ?> <span class="required">*</span></label>
   <?php
     for($i=1;$i<9;$i++){ ?>
-      <input type="text" required class="woocommerce-Input woocommerce-Input--text input-text bk-xsmall"
+      <input type="text" maxlength="4" required class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-xsmall"
       pattern="[A-Za-z0-9]{4}" title="Four digit alphanumeric" name="bk_old_halion_key3<?php echo $i;?>"
       id="bk_old_halion_key3<?php echo $i;?>" value="" />
       <?php if($i != 8){?>
