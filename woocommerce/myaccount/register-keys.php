@@ -8,13 +8,13 @@
     <input type="text" required maxLength="25" class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-small" name="bk_serial_key1" id="bk_serial_key1"
     value="" />  &nbsp;&ndash;&nbsp;
     <input type="text" maxLength="4" required class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-small"
-    pattern="[A-Za-z0-9]{4}"title="Four digit alphanumeric" name="bk_serial_key2" id="bk_serial_key2" value="" />  &nbsp;&ndash;&nbsp;
+    pattern="[A-Za-z0-9]{4}" title="Do not include dashes(four characters per box)" name="bk_serial_key2" id="bk_serial_key2" value="" />  &nbsp;&ndash;&nbsp;
     <input type="text" maxLength="4" required class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-small"
-    pattern="[A-Za-z0-9]{4}"title="Four digit alphanumeric" name="bk_serial_key3" id="bk_serial_key3" value="" />  &nbsp;&ndash;&nbsp;
+    pattern="[A-Za-z0-9]{4}" title="Do not include dashes(four characters per box)" name="bk_serial_key3" id="bk_serial_key3" value="" />  &nbsp;&ndash;&nbsp;
     <input type="text" maxLength="4" required class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-small"
-    pattern="[A-Za-z0-9]{4}"title="Four digit alphanumeric" name="bk_serial_key4" id="bk_serial_key4" value="" />  &nbsp;&ndash;&nbsp;
+    pattern="[A-Za-z0-9]{4}" title="Do not include dashes(four characters per box)" name="bk_serial_key4" id="bk_serial_key4" value="" />  &nbsp;&ndash;&nbsp;
     <input type="text" maxLength="4" required class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-small"
-    pattern="[A-Za-z0-9]{4}"title="Four digit alphanumeric" name="bk_serial_key5" id="bk_serial_key5" value="" />
+    pattern="[A-Za-z0-9]{4}" title="Do not include dashes(four characters per box)" name="bk_serial_key5" id="bk_serial_key5" value="" />
     <a href="#" id="clear-form">Clear</a>
   </p>
   <div class="clear"></div>

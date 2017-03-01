@@ -56,6 +56,10 @@
 }
 .woocommerce form .form-row .input-text {
   text-align: center;
+  text-transform: uppercase;
+}
+.red-input {
+  border-color: red !important;
 }
 @media only screen and (min-width: 480px) {
   .bk-small {
