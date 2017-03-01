@@ -1,6 +1,7 @@
 (function($){
   var sip = $(".bk-form .serial-input");
   var sipf = $(".bk-form .serial-input#bk_serial_key1");
+  var halip = $(".halion-form .serial-input");
   sip.not("#bk_serial_key1").keypress(function (e) {
     if ( e.keyCode == 45 ) {
          e.preventDefault();
@@ -65,5 +66,18 @@
   $("#clear-form").on("click",function(e){
     e.preventDefault();
     $(".bk-form .serial-input").val("").removeClass('red-input');
-  })
+  });
+  halip.keypress(function(e){
+    if ( e.keyCode == 45 ) {
+         e.preventDefault();
+        return false;
+    }
+    if( this.value.length == this.maxLength ){
+      var $next = $(this).nextAll('.serial-input').eq(0);
+      if ($next.length)
+          $(this).nextAll('.serial-input').eq(0).focus();
+      else
+          $(this).blur();
+    }
+  });
 })(jQuery);
