@@ -3,15 +3,17 @@
   <?php echo get_option('wc_settings_registered_products_description');?>
 </div>
 <?php
-// function bk_get_act_id($serial){
-//   $id = 0;
-//   global $wpdb;
-//   $results = $wpdb->get_var(
-//       $wpdb->prepare("SELECT * FROM {$wpdb->prefix}post_meta WHERE meta_value=%d", $serial)
-//   );
-//   print_r($results);
-//   return $id;
-// }
+function bk_get_act_id($serial){
+  $id = 0;
+  global $wpdb;
+  $results = $wpdb->get_var( $wpdb->prepare("
+    SELECT post_id
+    FROM $wpdb->postmeta
+    WHERE meta_value = '%s'
+    LIMIT 1
+    ", $serial));
+  return $results;
+}
 $current_user = wp_get_current_user();
 $activation_args = array(
   'post_type'      => 'fs_serial_numbers',
@@ -57,14 +59,15 @@ if($activation_qe->have_posts()){?>
             <?php
             $acpid = wc_get_product_id_by_sku( $acproductsku );
             echo get_the_title($acpid);
-            // bk_get_act_id($activation_acid);
+            $serial = $activation_qe->post->post_title;
+            $acti = bk_get_act_id($serial);
             ?>
           </td>
           <td>
             <?php echo $activation_qe->post->post_title;?>
           </td>
           <td>
-            <?php echo get_post_meta($activation_acid,'bk_ac_serial_activation',true);?>
+            <?php echo get_the_title($acti);?>
           </td>
           <td>
             <?php echo get_post_meta($activation_acid,'bk_sn_date',true);?>
