@@ -3,22 +3,31 @@
   <?php echo get_option('wc_settings_registered_products_description');?>
 </div>
 <?php
+// function bk_get_act_id($serial){
+//   $id = 0;
+//   global $wpdb;
+//   $results = $wpdb->get_var(
+//       $wpdb->prepare("SELECT * FROM {$wpdb->prefix}post_meta WHERE meta_value=%d", $serial)
+//   );
+//   print_r($results);
+//   return $id;
+// }
 $current_user = wp_get_current_user();
 $activation_args = array(
-  'post_type'      => 'fs_activation_codes',
+  'post_type'      => 'fs_serial_numbers',
   'post_status'    => 'publish',
   'posts_per_page' => '-1',
-  'meta_key'       => 'bk_ac_user_login',
+  'meta_key'       => 'bk_sn_user_login',
   'meta_query'     => array(
     array(
-      'key'     => 'bk_ac_user_login',
+      'key'     => 'bk_sn_user_login',
       'value'   => $current_user->user_login,
       'compare' => '='
     )
   ),
 );
 $activation_qe = new WP_Query($activation_args);
-// print_r($q);
+
 if($activation_qe->have_posts()){?>
   <table class="row">
     <thead>
@@ -27,10 +36,10 @@ if($activation_qe->have_posts()){?>
           <?php _e("Product Name","bk");?>
         </th>
         <th>
-          <?php _e("Activation Code","bk");?>
+          <?php _e("Serial Number","bk");?>
         </th>
         <th>
-          <?php _e("Serial Number","bk");?>
+          <?php _e("Activation Code","bk");?>
         </th>
         <th>
           <?php _e("Registration Date","bk");?>
@@ -41,13 +50,14 @@ if($activation_qe->have_posts()){?>
   <?php while ($activation_qe->have_posts()) {
     $activation_qe->the_post();
     $activation_acid = get_the_ID();
-    $acproductsku = get_post_meta( $activation_acid, 'bk_ac_product_sku', true );
+    $acproductsku = get_post_meta( $activation_acid, 'bk_sn_product_sku', true );
     ?>
         <tr>
           <td>
             <?php
             $acpid = wc_get_product_id_by_sku( $acproductsku );
             echo get_the_title($acpid);
+            // bk_get_act_id($activation_acid);
             ?>
           </td>
           <td>
@@ -57,7 +67,7 @@ if($activation_qe->have_posts()){?>
             <?php echo get_post_meta($activation_acid,'bk_ac_serial_activation',true);?>
           </td>
           <td>
-            <?php echo get_post_meta($activation_acid,'bk_ac_date',true);?>
+            <?php echo get_post_meta($activation_acid,'bk_sn_date',true);?>
           </td>
         </tr>
     <?php
