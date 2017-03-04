@@ -111,7 +111,14 @@ function fs_render_halion_codes_columns( $column ) {
     case 'serial_date' :
 			$sndate = get_post_meta( $post->ID, 'bk_halion_date', true );
 			if ( $sndate ) {
-				echo esc_attr($sndate);
+				try {
+          $hc_date_obj = new DateTime();
+          $hc_date = $hc_date_obj->setTimestamp($sndate);
+          $hc_date_formatted = $hc_date->format('Y-m-d H:i:sP');
+        } catch (Exception $e) {
+          $hc_date_formatted = '';
+        }
+				echo esc_attr($hc_date_formatted);
 			} else {
 				echo '&ndash;';
 			}
