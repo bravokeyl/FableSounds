@@ -125,20 +125,20 @@ function bk_sn_meta_box($object, $box) {
    </p>
    <p>
   	<label for="bk-sn-product-sku"><?php _e( "Product SKU:", 'bk' ); ?>
-    <?php $product_id = get_post_meta( $object->ID, 'bk_sn_product_sku', true ); ?>
-      <input type="text" name="bk-sn-product-sku" class="" id="bk-sn-product-sku" value="<?php echo esc_attr($product_id);?>" />
+    <?php $product_sku = get_post_meta( $object->ID, 'bk_sn_product_sku', true ); ?>
+      <input type="text" name="bk-sn-product-sku" class="" id="bk-sn-product-sku" value="<?php echo esc_attr($product_sku);?>" />
     </label>
    </p>
 	 <p>
   	<label for="bk-download-code"><?php _e( "Download Code:", 'bk' ); ?>
-    <?php $product_id = get_post_meta( $object->ID, 'bk_download_code', true ); ?>
-      <input type="text" name="bk-download-code" class="" id="bk-download-code" value="<?php echo esc_attr($product_id);?>" />
+    <?php $download_code = get_post_meta( $object->ID, 'bk_sn_download_code', true ); ?>
+      <input type="text" name="bk-download-code" class="" id="bk-download-code" value="<?php echo esc_attr($download_code);?>" />
     </label>
    </p>
 	 <p>
   	<label for="bk-dealer-price"><?php _e( "Dealer Price:", 'bk' ); ?>
-    <?php $product_id = get_post_meta( $object->ID, 'bk_dealer_price', true ); ?>
-      <input type="text" name="bk-dealer-price" class="" id="bk-dealer-price" value="<?php echo esc_attr($product_id);?>" />
+    <?php $delaer_price = get_post_meta( $object->ID, 'bk_dealer_price', true ); ?>
+      <input type="text" name="bk-dealer-price" class="" id="bk-dealer-price" value="<?php echo esc_attr($delaer_price);?>" />
     </label>
    </p>
 	 <p>
@@ -255,7 +255,7 @@ function bk_save_post_meta( $post_id, $post ) {
 			'bk_sn_seller_name' => $bseller,
 	    'bk_sn_product_sku' => $bpid,
 	    'bk_sn_status' => $bstatus,
-	    'bk_download_code' => $bdcode,
+	    'bk_sn_download_code' => $bdcode,
 			'bk_dealer_price' => $bdealer_price,
 			'bk_sn_date' => $bdate,
 			'bk_sn_distributed' => $bdist,

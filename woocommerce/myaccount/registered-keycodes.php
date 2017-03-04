@@ -46,6 +46,9 @@ if($activation_qe->have_posts()){?>
           <?php _e("Activation Code","bk");?>
         </th>
         <th>
+          <?php _e("Download Code","bk");?>
+        </th>
+        <th>
           <?php _e("Registration Date","bk");?>
         </th>
       </tr>
@@ -55,6 +58,7 @@ if($activation_qe->have_posts()){?>
     $activation_qe->the_post();
     $activation_acid = get_the_ID();
     $acproductsku = get_post_meta( $activation_acid, 'bk_sn_product_sku', true );
+    $downloadcode = get_post_meta( $activation_acid, 'bk_sn_download_code', true );
     ?>
         <tr>
           <td>
@@ -72,6 +76,9 @@ if($activation_qe->have_posts()){?>
           </td>
           <td>
             <?php if($acti) echo get_the_title($acti);?>
+          </td>
+          <td>
+            <?php echo $downloadcode;?>
           </td>
           <td>
             <?php
