@@ -115,9 +115,9 @@ function bk_register_halion_keys(){
           update_post_meta(intval($brass_serial[0]),'bk_halion_user_login',$username);
           update_post_meta(intval($reeds_serial[0]),'bk_halion_user_login',$username);
           update_post_meta(intval($rythm_serial[0]),'bk_halion_user_login',$username);
-          update_post_meta(intval($brass_serial[0]),'bk_halion_date',current_time('mysql'));
-          update_post_meta(intval($reeds_serial[0]),'bk_halion_date',current_time('mysql'));
-          update_post_meta(intval($rythm_serial[0]),'bk_halion_date',current_time('mysql'));
+          update_post_meta(intval($brass_serial[0]),'bk_halion_date',current_time('timestamp'));
+          update_post_meta(intval($reeds_serial[0]),'bk_halion_date',current_time('timestamp'));
+          update_post_meta(intval($rythm_serial[0]),'bk_halion_date',current_time('timestamp'));
 
           $product_sku = 'BHFB';
           $ac_id = 'HAL-000';

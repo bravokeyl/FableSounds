@@ -111,54 +111,76 @@ $halion_args = array(
   'meta_query'     => array(
     array(
       'key'     => 'bk_halion_user_login',
-      'value'   => $current_user->user_email,
+      'value'   => $current_user->user_login,
       'compare' => '='
     )
   ),
 );
+$hal_codes = array();
 $halion_qe = new WP_Query($halion_args);
-if($halion_qe->have_posts()){?>
-  <h4>Your HALION products</h4>
-  <p>Here you can see all the activation codes of products that you bought.</p>
-  <table class="row halion-table">
-    <thead>
-      <tr>
-        <th>
-          <?php _e("Brass Activation Code","bk");?>
-        </th>
-        <th>
-          <?php _e("Reeds Activation Code","bk");?>
-        </th>
-        <th>
-          <?php _e("Rythm Activation Code","bk");?>
-        </th>
-        <th>
-          <?php _e("Assigned Date","bk");?>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-  <?php while ($halion_qe->have_posts()) {
+if($halion_qe->have_posts()){
+
+  while ($halion_qe->have_posts()) {
     $halion_qe->the_post();
     $hal_acid = get_the_ID();
-    ?>
-        <tr>
-          <td>
-            <?php echo get_post_meta($hal_acid,'bk_halion_brass_code',true);?>
-          </td>
-          <td>
-            <?php echo get_post_meta($hal_acid,'bk_halion_reeds_code',true);?>
-          </td>
-          <td>
-            <?php echo get_post_meta($hal_acid,'bk_halion_rythm_code',true);?>
-          </td>
-          <td>
-            <?php echo get_post_meta($hal_acid,'bk_halion_date',true);?>
-          </td>
-        </tr>
-    <?php
-  }?>
-  </tbody>
-</table><?php
+    $hal_code_type = get_post_meta($hal_acid,'bk_halion_code_type',true);
+    $hal_code = get_the_title();
+    $hal_date = get_post_meta($hal_acid,'bk_halion_date',true);
+    $hal_codes[$hal_date][$hal_code_type] = $hal_code;
+    // $hal_codes[$hal_date][$hal_code_type] = array(
+    //   'type' => $hal_code_type,
+    //   'id'   => $hal_acid,
+    //   'code' => $hal_code,
+    //   'date' => $hal_date,
+    // );
+  }
   wp_reset_postdata();
-}
+}?>
+<?php if( 0 < count($hal_codes)){?>
+<h4>Your HALION products</h4>
+<p>Here you can see all the activation codes of products that you bought.</p>
+<table class="row halion-table">
+  <thead>
+    <tr>
+      <th>
+        <?php _e("Brass Activation Code","bk");?>
+      </th>
+      <th>
+        <?php _e("Reeds Activation Code","bk");?>
+      </th>
+      <th>
+        <?php _e("Rythm Activation Code","bk");?>
+      </th>
+      <th>
+        <?php _e("Assigned Date","bk");?>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($hal_codes as $k => $v){ ?>
+    <tr>
+      <td style="text-transform: uppercase;">
+        <?php echo $hal_codes[$k]['brass'];?>
+      </td>
+      <td style="text-transform: uppercase;">
+        <?php echo $hal_codes[$k]['reeds'];?>
+      </td>
+      <td style="text-transform: uppercase;">
+        <?php echo $hal_codes[$k]['rythm'];?>
+      </td>
+      <td style="text-transform: uppercase;">
+        <?php
+        try {
+          $hc_date_obj = new DateTime();
+          $hc_date = $hc_date_obj->setTimestamp($k);
+          $hc_date_formatted = $hc_date->format('Y-m-d H:i:sP');
+        } catch (Exception $e) {
+          $hc_date_formatted = '';
+        }
+        echo $hc_date_formatted;?>
+      </td>
+    </tr>
+    <?php } ?>
+  </tbody>
+</table>
+<?php } ?>
