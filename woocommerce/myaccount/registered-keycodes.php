@@ -138,7 +138,6 @@ if($halion_qe->have_posts()){
 }?>
 <?php if( 0 < count($hal_codes)){?>
 <h4>Your HALION products</h4>
-<p>Here you can see all the activation codes of products that you bought.</p>
 <table class="row halion-table">
   <thead>
     <tr>
