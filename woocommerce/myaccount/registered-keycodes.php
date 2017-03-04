@@ -125,13 +125,13 @@ if($halion_qe->have_posts()){?>
     <thead>
       <tr>
         <th>
-          <?php _e("Brass","bk");?>
+          <?php _e("Brass Activation Code","bk");?>
         </th>
         <th>
-          <?php _e("Reeds","bk");?>
+          <?php _e("Reeds Activation Code","bk");?>
         </th>
         <th>
-          <?php _e("Rythm","bk");?>
+          <?php _e("Rythm Activation Code","bk");?>
         </th>
         <th>
           <?php _e("Assigned Date","bk");?>
