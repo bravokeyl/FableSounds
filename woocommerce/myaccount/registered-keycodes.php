@@ -83,7 +83,7 @@ if($activation_qe->have_posts()){?>
 </table><?php
   wp_reset_postdata();
 } else {
-  echo "<p>No new products registered.</p>";
+  echo "<p>There are no products registered on this account.</p>";
 }
 
 $current_user = wp_get_current_user();
