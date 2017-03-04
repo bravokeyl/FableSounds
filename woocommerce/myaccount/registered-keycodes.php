@@ -74,7 +74,16 @@ if($activation_qe->have_posts()){?>
             <?php if($acti) echo get_the_title($acti);?>
           </td>
           <td>
-            <?php echo get_post_meta($activation_acid,'bk_sn_date',true);?>
+            <?php
+            $sn_date = get_post_meta($activation_acid,'bk_sn_date',true);
+            try {
+              $sn_date_obj = new DateTime($sn_date);
+              $sn_date_formatted = $sn_date_obj->format('Y-m-d H:i:sP');
+            } catch (Exception $e) {
+              $sn_date_formatted = '';
+            }
+
+            echo $sn_date_formatted;?>
           </td>
         </tr>
     <?php
