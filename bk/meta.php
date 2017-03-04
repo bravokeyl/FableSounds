@@ -50,6 +50,12 @@ function bk_ac_meta_box($object, $box) {
       <input type="text" name="bk-ac-product-sku" class="" id="bk-ac-product-sku" value="<?php echo esc_html($product_id);?>" />
     </label>
    </p>
+	 <p>
+  	<label for="bk-ac-serial-code"><?php _e( "Serial number:", 'bk' ); ?>
+    <?php $ac_serial = get_post_meta( $object->ID, 'bk_ac_serial_activation', true ); ?>
+      <input type="text" name="bk-ac-serial-code" class="" id="bk-ac-serial-code" value="<?php echo esc_html($ac_serial);?>" />
+    </label>
+   </p>
    <p>
   	<label for="bk-ac-status"><?php _e( "Status:", 'bk' ); ?>
     <?php $status = get_post_meta( $object->ID, 'bk_ac_status', true );?>
@@ -203,12 +209,14 @@ function bk_save_post_meta( $post_id, $post ) {
 	if( 'fs_activation_codes' == $post->post_type) {
 		$buid = ( isset( $_POST['bk-ac-user-login'] ) ? $_POST['bk-ac-user-login'] : '' );
 	  $bpid = ( isset( $_POST['bk-ac-product-sku'] ) ? esc_attr($_POST['bk-ac-product-sku']) : '' );
+		$bacserial = ( isset( $_POST['bk-ac-serial-code'] ) ? esc_attr($_POST['bk-ac-serial-code']) : '' );
 	  $bstatus= ( isset( $_POST['bk-ac-status'] ) ? esc_attr($_POST['bk-ac-status']) : '' );
 	  $bdate = ( isset( $_POST['bk-ac-date'] ) ? $_POST['bk-ac-date'] : '' );
 
 	  $meta_keys = array(
 	    'bk_ac_user_login' => $buid,
 	    'bk_ac_product_sku' => $bpid,
+			'bk_ac_serial_activation' => $bacserial,
 	    'bk_ac_status' => $bstatus,
 	    'bk_ac_date' => $bdate
 	  );
