@@ -32,9 +32,9 @@ function bk_halion_meta_box($object, $box) {
   	<label for="bk-halion-code-type"><?php _e( "Code Type:", 'bk' ); ?>
     <?php $type = get_post_meta( $object->ID, 'bk_halion_code_type', true );?>
 			<select name="bk-halion-code-type" id="bk-halion-code-type">
-					<option value="brass" <?php selected( $type, 'brass' ); ?>>Brass</option>
-					<option value="reeds" <?php selected( $type, 'reeds' ); ?>>Reeds</option>
-					<option value="rythm" <?php selected( $type, 'rythm' ); ?>>Rythm</option>
+					<option value="brass" <?php selected( strtolower($type), 'brass' ); ?>>Brass</option>
+					<option value="reeds" <?php selected( strtolower($type), 'reeds' ); ?>>Reeds</option>
+					<option value="rythm" <?php selected( strtolower($type), 'rythm' ); ?>>Rythm</option>
 			</select>
     </label>
    </p>

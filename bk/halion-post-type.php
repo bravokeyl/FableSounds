@@ -81,7 +81,7 @@ function fs_render_halion_codes_columns( $column ) {
   switch ( $column ) {
     case 'code_type' :
 			if ( $halion_code_type ) {
-				echo $halion_code_type;
+				echo ucwords($halion_code_type);
 			} else {
 				echo '&ndash;';
 			}
