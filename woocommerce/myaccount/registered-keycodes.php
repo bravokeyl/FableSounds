@@ -148,7 +148,7 @@ if($halion_qe->have_posts()){
         <?php _e("Reeds Activation Code","bk");?>
       </th>
       <th>
-        <?php _e("Rythm Activation Code","bk");?>
+        <?php _e("Rhythm Activation Code","bk");?>
       </th>
       <th>
         <?php _e("Assigned Date","bk");?>
@@ -165,7 +165,7 @@ if($halion_qe->have_posts()){
         <?php echo $hal_codes[$k]['reeds'];?>
       </td>
       <td style="text-transform: uppercase;">
-        <?php echo $hal_codes[$k]['rythm'];?>
+        <?php echo $hal_codes[$k]['rhythm'];?>
       </td>
       <td style="text-transform: uppercase;">
         <?php

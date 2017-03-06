@@ -42,7 +42,7 @@
   ?>
   </p>
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
-    <label for="bk_old_halion_rythm_key"><?php _e( 'Enter Activation code 3 : Rythm', 'bk' ); ?> <span class="required">*</span></label>
+    <label for="bk_old_halion_rhythm_key"><?php _e( 'Enter Activation code 3 : Rhythm', 'bk' ); ?> <span class="required">*</span></label>
   <?php
     for($i=1;$i<9;$i++){
       $ld = 4;

@@ -34,7 +34,7 @@ function bk_halion_meta_box($object, $box) {
 			<select name="bk-halion-code-type" id="bk-halion-code-type">
 					<option value="brass" <?php selected( strtolower($type), 'brass' ); ?>>Brass</option>
 					<option value="reeds" <?php selected( strtolower($type), 'reeds' ); ?>>Reeds</option>
-					<option value="rythm" <?php selected( strtolower($type), 'rythm' ); ?>>Rythm</option>
+					<option value="rhythm" <?php selected( strtolower($type), 'rhythm' ); ?>>Rhythm</option>
 			</select>
     </label>
    </p>

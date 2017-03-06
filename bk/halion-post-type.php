@@ -141,7 +141,7 @@ function bk_halion_filter_restrict_manage_posts(){
 				$types = array(
           'Brass' => 'brass',
           'Reeds' => 'reeds',
-					'Rythm' => 'rythm',
+					'Rhythm' => 'rhythm',
         );
 
         $current_user = isset($_GET['fs_user_login'])? $_GET['fs_user_login']:'';

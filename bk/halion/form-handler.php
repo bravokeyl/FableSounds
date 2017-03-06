@@ -87,22 +87,22 @@ function bk_register_halion_keys(){
         for($i=1;$i<9;$i++) {
           $brass_key = "bk_old_halion_key1".$i;
           $reeds_key = "bk_old_halion_key2".$i;
-          $rythm_key = "bk_old_halion_key3".$i;
+          $rhythm_key = "bk_old_halion_key3".$i;
           $sep = '-';
           if( 8 == $i ){
             $sep = '';
           }
           $halion_serial[0] .= esc_attr(strtoupper($_POST[$brass_key])).$sep;
           $halion_serial[1] .= esc_attr(strtoupper($_POST[$reeds_key])).$sep;
-          $halion_serial[2] .= esc_attr(strtoupper($_POST[$rythm_key])).$sep;
+          $halion_serial[2] .= esc_attr(strtoupper($_POST[$rhythm_key])).$sep;
         }
       }
 
       if ( !empty( $halion_serial[0] ) && !empty( $halion_serial[1] ) && !empty( $halion_serial[2] ) ) {
         $brass_serial = bk_check_halion_keys($halion_serial[0],"brass");
         $reeds_serial = bk_check_halion_keys($halion_serial[1],"reeds");
-        $rythm_serial = bk_check_halion_keys($halion_serial[2],"rythm");
-        if(empty($brass_serial) || empty($reeds_serial) || empty($rythm_serial)){
+        $rhythm_serial = bk_check_halion_keys($halion_serial[2],"rhythm");
+        if(empty($brass_serial) || empty($reeds_serial) || empty($rhythm_serial)){
           wc_add_notice( __( 'Invalid Serial Number, please check it.', 'fablesounds' ),'error' );
           wp_safe_redirect( wc_get_endpoint_url( 'register-halion' ) );
     			exit;
@@ -111,13 +111,13 @@ function bk_register_halion_keys(){
           $username = $bk_current_user->user_login;
           update_post_meta(intval($brass_serial[0]),'bk_halion_status','reg');
           update_post_meta(intval($reeds_serial[0]),'bk_halion_status','reg');
-          update_post_meta(intval($rythm_serial[0]),'bk_halion_status','reg');
+          update_post_meta(intval($rhythm_serial[0]),'bk_halion_status','reg');
           update_post_meta(intval($brass_serial[0]),'bk_halion_user_login',$username);
           update_post_meta(intval($reeds_serial[0]),'bk_halion_user_login',$username);
-          update_post_meta(intval($rythm_serial[0]),'bk_halion_user_login',$username);
+          update_post_meta(intval($rhythm_serial[0]),'bk_halion_user_login',$username);
           update_post_meta(intval($brass_serial[0]),'bk_halion_date',current_time('timestamp'));
           update_post_meta(intval($reeds_serial[0]),'bk_halion_date',current_time('timestamp'));
-          update_post_meta(intval($rythm_serial[0]),'bk_halion_date',current_time('timestamp'));
+          update_post_meta(intval($rhythm_serial[0]),'bk_halion_date',current_time('timestamp'));
 
           $product_sku = 'BHFB';
           $ac_id = 'HAL-000';
