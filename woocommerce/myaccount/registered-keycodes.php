@@ -159,13 +159,13 @@ if($halion_qe->have_posts()){
     <?php foreach ($hal_codes as $k => $v){ ?>
     <tr>
       <td style="text-transform: uppercase;">
-        <?php echo $hal_codes[$k]['brass'];?>
+        <?php echo $hal_codes[$k]['Brass'];?>
       </td>
       <td style="text-transform: uppercase;">
-        <?php echo $hal_codes[$k]['reeds'];?>
+        <?php echo $hal_codes[$k]['Reeds'];?>
       </td>
       <td style="text-transform: uppercase;">
-        <?php echo $hal_codes[$k]['rhythm'];?>
+        <?php echo $hal_codes[$k]['Rhythm'];?>
       </td>
       <td style="text-transform: uppercase;">
         <?php
