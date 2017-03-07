@@ -124,9 +124,10 @@ if($halion_qe->have_posts()){
     $halion_qe->the_post();
     $hal_acid = get_the_ID();
     $hal_code_type = get_post_meta($hal_acid,'bk_halion_code_type',true);
+    $hal_code_type_s = strtolower($hal_code_type);
     $hal_code = get_the_title();
     $hal_date = get_post_meta($hal_acid,'bk_halion_date',true);
-    $hal_codes[$hal_date][$hal_code_type] = $hal_code;
+    $hal_codes[$hal_date][$hal_code_type_s] = $hal_code;
     // $hal_codes[$hal_date][$hal_code_type] = array(
     //   'type' => $hal_code_type,
     //   'id'   => $hal_acid,
@@ -137,7 +138,7 @@ if($halion_qe->have_posts()){
   wp_reset_postdata();
 }?>
 <?php if( 0 < count($hal_codes)){?>
-<h4>Your HALION products</h4>
+<h5>Your Broadway Big Band (HAlion) codes</h5>
 <table class="row halion-table">
   <thead>
     <tr>
@@ -159,13 +160,13 @@ if($halion_qe->have_posts()){
     <?php foreach ($hal_codes as $k => $v){ ?>
     <tr>
       <td style="text-transform: uppercase;">
-        <?php echo $hal_codes[$k]['Brass'];?>
+        <?php echo $hal_codes[$k]['brass'];?>
       </td>
       <td style="text-transform: uppercase;">
-        <?php echo $hal_codes[$k]['Reeds'];?>
+        <?php echo $hal_codes[$k]['reeds'];?>
       </td>
       <td style="text-transform: uppercase;">
-        <?php echo $hal_codes[$k]['Rhythm'];?>
+        <?php echo $hal_codes[$k]['rhythm'];?>
       </td>
       <td style="text-transform: uppercase;">
         <?php
