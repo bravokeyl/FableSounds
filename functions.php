@@ -240,7 +240,7 @@ function bk_save_register_keys_details(){
             } else {
               $to = get_option('admin_email');
               $subject = 'No activation codes';
-              $body = 'No activation codes but the user '.$username.' entered correct serial number';
+              $body = 'No activation codes but the user '.$username.' entered correct serial number : '.$bk_serial_key;
               $headers = array('Content-Type: text/html; charset=UTF-8');
               wp_mail( $to, $subject, $body, $headers );
               wc_add_notice( __( 'Serial Number successfully registered and activation codes will be emailed to you.', 'bk' ) );
@@ -252,7 +252,7 @@ function bk_save_register_keys_details(){
         }else {
           $to = get_option('admin_email');
           $subject = 'No activation codes';
-          $body = 'No activation codes but the user '.$username.' entered correct serial number';
+          $body = 'No activation codes but the user '.$username.' entered correct serial number: '.$bk_serial_key;
           $headers = array('Content-Type: text/html; charset=UTF-8');
           wp_mail( $to, $subject, $body, $headers );
           wc_add_notice( __( 'We are unable to complete your registration at this time. Please contact us at contact@fablesounds.email for help or try again later.', 'bk' ),'error' );
