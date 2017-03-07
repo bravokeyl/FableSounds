@@ -255,7 +255,7 @@ function bk_save_register_keys_details(){
           $body = 'No activation codes but the user '.$username.' entered correct serial number';
           $headers = array('Content-Type: text/html; charset=UTF-8');
           wp_mail( $to, $subject, $body, $headers );
-          wc_add_notice( __( 'We are out of activation codes, we are notified, please try again later.', 'bk' ),'error' );
+          wc_add_notice( __( 'We are unable to complete your registration at this time. Please contact us at contact@fablesounds.email for help or try again later.', 'bk' ),'error' );
           wp_safe_redirect( wc_get_endpoint_url( 'my-account' ) );
           exit;
         }
