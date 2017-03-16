@@ -145,11 +145,11 @@ function bk_check_serial_number($serial,$sku){
         'value' => "nreg",
         'compare' => '='
       ),
-      array(
-        'key' => 'bk_sn_product_sku',
-        'value' => $sku,
-        'compare' => '='
-      ),
+      // array(
+      //   'key' => 'bk_sn_product_sku',
+      //   'value' => $sku,
+      //   'compare' => '='
+      // ),
       array(
         'key' => 'bk_sn_distributed',
         'value' => '1',
