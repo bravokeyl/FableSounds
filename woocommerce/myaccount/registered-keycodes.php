@@ -11,9 +11,6 @@ function bk_get_act_id($serial){
     WHERE meta_value = '%s'
     LIMIT 1
     ", $serial));
-  if(!empty($results)){
-    return $results;
-  }
   return ( $id ) ? intval( $id ) : 0;
 }
 $current_user = wp_get_current_user();
@@ -72,10 +69,10 @@ if($activation_qe->have_posts()){?>
             ?>
           </td>
           <td>
-            <?php echo $activation_qe->post->post_title;?>
+            <?php echo $activation_qe->post->post_title.":".$activation_acid;?>
           </td>
           <td>
-            <?php if($acti) echo get_the_title($acti);?>
+            <?php if($acti) echo get_the_title($acti).":".$acti;?>
           </td>
           <td>
             <?php echo $downloadcode;?>
