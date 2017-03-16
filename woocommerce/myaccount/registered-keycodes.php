@@ -9,6 +9,7 @@ function bk_get_act_id($serial){
     SELECT post_id
     FROM $wpdb->postmeta
     WHERE meta_value = '%s'
+    AND meta_key = 'bk_ac_serial_activation'
     LIMIT 1
     ", $serial));
   return ( $id ) ? intval( $id ) : 0;
@@ -69,10 +70,10 @@ if($activation_qe->have_posts()){?>
             ?>
           </td>
           <td>
-            <?php echo $activation_qe->post->post_title.":".$activation_acid;?>
+            <?php echo $activation_qe->post->post_title;?>
           </td>
           <td>
-            <?php if($acti) echo get_the_title($acti).":".$acti;?>
+            <?php if($acti) echo get_the_title($acti);?>
           </td>
           <td>
             <?php echo $downloadcode;?>
