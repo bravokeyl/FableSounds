@@ -394,3 +394,10 @@ add_filter('woocommerce_max_webhook_delivery_failures','bk_max_webhook_failures'
 function bk_max_webhook_failures(){
   return 1000;
 }
+
+
+function bk_remove_private_protected_from_titles( $format ) {
+	return '%s';
+}
+add_filter( 'protected_title_format', 'bk_remove_private_protected_from_titles' );
+add_filter( 'private_title_format',   'bk_remove_private_protected_from_titles' );
