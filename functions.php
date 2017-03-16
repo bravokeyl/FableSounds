@@ -118,7 +118,7 @@ function bk_register_keys_endpoint_title( $title ) {
 
         remove_filter( 'the_title', 'bk_register_keys_endpoint_title' );
     }elseif( $is_registered && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ){
-       $title = __( 'Your activation codes', 'bk' );
+       $title = __( 'My Products', 'bk' );
 
        remove_filter( 'the_title', 'bk_register_keys_endpoint_title' );
     }elseif( $is_halion && ! is_admin() && is_main_query() && in_the_loop() && is_account_page() ){
