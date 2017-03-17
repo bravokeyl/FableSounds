@@ -237,7 +237,7 @@ function bk_save_register_keys_details(){
               global $icontact_lists;
               add_user_to_list($icontact_id,$icontact_lists[$products_dropdown_val]);
               $myaurl = '<a class="myaccount-url-registered" href="'.esc_url(wc_get_endpoint_url( 'registered-keycodes' )).'">MY PRODUCTS</a>';
-              wc_add_notice( __( 'Serial number successfully registered. Please go to the '.$myaurl.' tab to download your product.', 'bk' ) );
+              wc_add_notice( __( 'Serial number successfully registered.', 'bk' ) );
             } else {
               $to = get_option('admin_email');
               $subject = 'No activation codes';
