@@ -57,16 +57,19 @@ if($activation_qe->have_posts()){?>
     $activation_acid = get_the_ID();
     $acproductsku = get_post_meta( $activation_acid, 'bk_sn_product_sku', true );
     $downloadcode = get_post_meta( $activation_acid, 'bk_sn_download_code', true );
+    $acpid = wc_get_product_id_by_sku( $acproductsku );
+    $product = wc_get_product($acpid);
+    $downloadable_files = $product->get_files();
     ?>
         <tr>
           <td>
             <?php
-            $acpid = wc_get_product_id_by_sku( $acproductsku );
             if($acpid){
               echo get_the_title($acpid);
             }
             $serial = $activation_qe->post->post_title;
             $acti = bk_get_act_id($serial);
+
             ?>
           </td>
           <td>
@@ -77,6 +80,18 @@ if($activation_qe->have_posts()){?>
           </td>
           <td>
             <?php echo $downloadcode;?>
+            <?php
+            if ( ! empty( $downloadable_files ) ) {
+                foreach ( $downloadable_files as $key => $file ) {
+                  $link = $file['file'];
+                  $name = $file['name'];
+                  if(empty($name)){
+                    $name = "Default File name";
+                  }
+                  echo "<a href='".$link."' >".$name."</a>";
+                }
+              }
+           ?>
           </td>
           <td>
             <?php
