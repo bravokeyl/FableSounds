@@ -31,28 +31,10 @@ $activation_args = array(
 $activation_qe = new WP_Query($activation_args);
 
 if($activation_qe->have_posts()){?>
-  <table class="row">
-    <thead>
-      <tr>
-        <th>
-          <?php _e("Product Name","bk");?>
-        </th>
-        <th>
-          <?php _e("Serial Number","bk");?>
-        </th>
-        <th>
-          <?php _e("Activation Code","bk");?>
-        </th>
-        <th>
-          <?php _e("Download Code","bk");?>
-        </th>
-        <th>
-          <?php _e("Registration Date","bk");?>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-  <?php while ($activation_qe->have_posts()) {
+
+  <?php
+   $accordion = 0;
+   while ($activation_qe->have_posts()) {
     $activation_qe->the_post();
     $activation_acid = get_the_ID();
     $acproductsku = get_post_meta( $activation_acid, 'bk_sn_product_sku', true );
@@ -60,56 +42,69 @@ if($activation_qe->have_posts()){?>
     $acpid = wc_get_product_id_by_sku( $acproductsku );
     $product = wc_get_product($acpid);
     $downloadable_files = $product->get_files();
+    $serial = $activation_qe->post->post_title;
+    $acti = bk_get_act_id($serial);
     ?>
-        <tr>
-          <td>
+    <div class="bk-accordion-panel" class="row">
+      <div class="bk-accordion-product-title">
+        <a href="#bk-accordion-<?php echo $accordion;?>"><i class="fa fa-chevron-down"></i><?php if($acpid){ echo get_the_title($acpid); } ?></a>
+      </div>
+      <div id="bk-accordion-<?php echo $accordion;?>" class="bk-accordion-product-content">
+        <div class="bk-accordion-item">
+          <div class="first">Registration Date</div>
+          <div>
             <?php
-            if($acpid){
-              echo get_the_title($acpid);
-            }
-            $serial = $activation_qe->post->post_title;
-            $acti = bk_get_act_id($serial);
-
+              $sn_date = get_post_meta($activation_acid,'bk_sn_date',true);
+              try {
+                $sn_date_obj = new DateTime($sn_date);
+                $sn_date_formatted = $sn_date_obj->format('Y-m-d H:i:sP');
+              } catch (Exception $e) {
+                $sn_date_formatted = '';
+              }
+              echo $sn_date_formatted;
             ?>
-          </td>
-          <td>
-            <?php echo $activation_qe->post->post_title;?>
-          </td>
-          <td>
-            <?php if($acti) echo get_the_title($acti);?>
-          </td>
-          <td>
-            <?php echo $downloadcode;?>
+          </div>
+        </div>
+        <div class="bk-accordion-item">
+          <div class="first">Serial Number</div>
+          <div><?php echo $activation_qe->post->post_title;?></div>
+        </div>
+        <div class="bk-accordion-item">
+          <div class="first">Activation Code</div>
+          <div><?php if($acti) echo get_the_title($acti);?></div>
+        </div>
+        <div class="bk-accordion-item">
+          <div class="first pull-left">Download Code</div>
+          <div><?php  echo $downloadcode; ?></div>
+        </div>
+        <div class="bk-accordion-item">
+          <div class="first">Available Downloads</div>
+          <div class="bk-download-files">
             <?php
             if ( ! empty( $downloadable_files ) ) {
+                $fcount = count($downloadable_files);
+                $fc = 1;
                 foreach ( $downloadable_files as $key => $file ) {
                   $link = $file['file'];
                   $name = $file['name'];
                   if(empty($name)){
                     $name = "Default File name";
                   }
-                  echo "<a href='".$link."' >".$name."</a>";
+                  echo "<a href='".$link."' target='_blank' >".$name."</a>";
+                  if($fc < $fcount){
+                    echo "<span>&nbsp;|&nbsp;</span>";
+                  }
+                  $fc++;
                 }
               }
            ?>
-          </td>
-          <td>
-            <?php
-            $sn_date = get_post_meta($activation_acid,'bk_sn_date',true);
-            try {
-              $sn_date_obj = new DateTime($sn_date);
-              $sn_date_formatted = $sn_date_obj->format('Y-m-d H:i:sP');
-            } catch (Exception $e) {
-              $sn_date_formatted = '';
-            }
-
-            echo $sn_date_formatted;?>
-          </td>
-        </tr>
+         </div>
+       </div>
+      </div>
+    </div>
     <?php
-  }?>
-  </tbody>
-</table><?php
+    $accordion++;
+  }?><?php
   wp_reset_postdata();
 } else {
   echo "<p>There are no products registered on this account.</p>";

@@ -61,6 +61,41 @@
 .red-input {
   border-color: red !important;
 }
+.bk-accordion-product-title {
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: 1px solid #eee;
+  /*border-bottom: none;*/
+  margin-top: -1px;
+}
+.bk-accordion-product-title.last-panel {
+  border-bottom: 1px solid #eee;
+}
+.bk-accordion-product-title i {
+  margin-right: 10px;
+}
+.bk-accordion-item  {
+  border: 1px solid #eee;
+  border-bottom-width: 0px;
+  clear: both;
+  overflow: hidden;
+}
+.bk-accordion-item:last-child {
+  border-bottom: 1px solid #eee;
+}
+.bk-accordion-item  div {
+  padding: 5px 15px;
+  width: 50%;
+  float: left;
+}
+.bk-accordion-item .first {
+  float: left;
+  border-right: 1px solid #eee;
+}
+.bk-accordion-product-content {
+  display: none;
+}
 @media only screen and (min-width: 480px) {
   .bk-small {
     max-width: 100px;

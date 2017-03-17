@@ -108,4 +108,30 @@
   $("#bk_old_halion_key11").keyup(kpfu);
   $("#bk_old_halion_key21").keyup(kpfu);
   $("#bk_old_halion_key31").keyup(kpfu);
+
+
+
+  $(document).ready(function() {
+    function bk_close_accordion() {
+        $('.bk-accordion-panel .bk-accordion-product-title a').removeClass('active');
+        $('.bk-accordion-panel .bk-accordion-product-title a i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+        $('.bk-accordion-panel .bk-accordion-product-content').slideUp(300).removeClass('open');
+    }
+    $('.bk-accordion-product-title').last().addClass('last-panel')
+    $('.bk-accordion-product-title a').click(function(e) {
+        var currentAttrValue = $(this).attr('href');
+        if($(e.target).is('.active')) {
+          $(this).find("i").addClass('fa-chevron-up');
+          bk_close_accordion();
+        }else {
+            bk_close_accordion();
+            $(this).addClass('active');
+            console.log($(this).find("i"),$(this).find("i").addClass('fa-chevron-up'));
+            $(this).find("i").removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            $('.bk-accordion-panel ' + currentAttrValue).slideDown(300).addClass('open');
+        }
+        e.preventDefault();
+    });
+  });
+
 })(jQuery);
