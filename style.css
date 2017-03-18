@@ -96,6 +96,10 @@
 .bk-accordion-product-content {
   display: none;
 }
+#bk-accordion-0,
+.bk-accordion-product-content.open {
+  display: block;
+}
 @media only screen and (min-width: 480px) {
   .bk-small {
     max-width: 100px;
