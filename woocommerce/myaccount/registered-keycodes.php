@@ -47,7 +47,7 @@ if($activation_qe->have_posts()){?>
     ?>
     <div class="bk-accordion-panel" class="row">
       <div class="bk-accordion-product-title">
-        <a href="#bk-accordion-<?php echo $accordion;?>"><i class="fa fa-chevron-down"></i><?php if($acpid){ echo get_the_title($acpid); } ?></a>
+        <a href="#bk-accordion-<?php echo $accordion;?>" class="<?php if(0 == $accordion) echo "active";?> "><i class="fa fa-chevron-down"></i><?php if($acpid){ echo get_the_title($acpid); } ?></a>
       </div>
       <div id="bk-accordion-<?php echo $accordion;?>" class="bk-accordion-product-content">
         <div class="bk-accordion-item">
