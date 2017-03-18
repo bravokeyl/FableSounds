@@ -114,18 +114,17 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
 
             $continuata_sku = get_post_meta($product_id,'_continuata_sku',true);
             $serial = get_the_title($serial_id);
+
             $serial_data = array(
               "product_id" => $product_id,
               "product_sku" => $continuata_sku,
-              "serial" => $serial
+              "activation" => $serial
             );
 
             if(is_array($order_data['line_items'])){
               $ptotal = $order_data['line_items'][$serial_index]['total'];
               $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Product total : '.$ptotal);
             }
-
-      			$order_data['serial_data'][] = $serial_data;
 
           } else {
             $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail);
@@ -143,6 +142,9 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
               update_post_meta( $nr_serial[0], 'bk_sn_user_login', $customer_username );
               update_post_meta( $serial_id, 'bk_ac_serial_activation', get_the_title($nr_serial[0]) );
               update_post_meta( $nr_serial[0], 'bk_sn_date', current_time('mysql') );
+              $downloadcode = get_post_meta( $nr_serial[0], 'bk_sn_download_code', true );
+              $serial_data['serial'] = $downloadcode;
+              $order_data['serial_data'][] = $serial_data;
             } else {
               $bk_apiLogger->add('fablesounds','Error: No serial found for product: '.$product_sku.', order '.$order_data['order_number']);
               bk_mail_insufficient_serial_codes($product_sku,$customer_username);
