@@ -118,7 +118,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             $serial_data = array(
               "product_id" => $product_id,
               "product_sku" => $continuata_sku,
-              "activation" => $serial
+              // "activation" => $serial
             );
 
             if(is_array($order_data['line_items'])){
