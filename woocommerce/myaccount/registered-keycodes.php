@@ -146,7 +146,7 @@ if($halion_qe->have_posts()){
   wp_reset_postdata();
 }?>
 <?php if( 0 < count($hal_codes)){?>
-<h5>Your Broadway Big Band (HAlion) codes</h5>
+<h5 style="margin-top:20px;">Your Broadway Big Band (HAlion) codes</h5>
 <table class="row halion-table">
   <thead>
     <tr>
