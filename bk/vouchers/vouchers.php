@@ -74,7 +74,8 @@ function fs_vouchers_columns($existing_columns){
 }
 function fs_render_vouchers_columns( $column ) {
   global $post, $woocommerce;
-  $vouchers_product_sku =  get_post_meta( $post->ID, 'bk_voucher_product_sku', true );
+  $vouchers_product_id =  get_post_meta( $post->ID, 'bk_voucher_product_sku', true );
+	$vouchers_product_sku = get_post_meta( $vouchers_product_id, '_sku', true );
   $vouchers_voucher_status =  get_post_meta( $post->ID, 'bk_voucher_status', true );
   $vouchers_voucher_date =  get_post_meta( $post->ID, 'bk_voucher_date', true );
   $vouchers_user_login = get_post_meta( $post->ID, 'bk_voucher_user_login', true );
