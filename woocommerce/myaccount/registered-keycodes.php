@@ -28,7 +28,7 @@ $activation_args = array(
     )
   ),
   'orderby' => 'meta_value',
-  'order' => 'ASC'
+  'order' => 'DESC'
 );
 $activation_qe = new WP_Query($activation_args);
 
