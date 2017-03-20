@@ -2,7 +2,7 @@
 <div>
   <?php echo get_option('wc_settings_register_new_product_description');?>
 </div>
-<form action="" method="post" class="bk-form">
+<form action="" method="post" class="bk-form bk-form-center">
   <p class="woocommerce-FormRow woocommerce-FormRow--first form-row">
     <label for="bk_serial_key"><?php _e( 'Register serial number', 'bk' ); ?> <span class="required">*</span></label>
     <input type="text" required maxLength="25" class="serial-input woocommerce-Input woocommerce-Input--text input-text bk-small" name="bk_serial_key1" id="bk_serial_key1"

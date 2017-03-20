@@ -54,7 +54,7 @@
 .woocommerce th, .woocommerce td {
   vertical-align: middle;
 }
-.woocommerce form .form-row .input-text {
+.bk-form-center .form-row .input-text {
   text-align: center;
   text-transform: uppercase;
 }
