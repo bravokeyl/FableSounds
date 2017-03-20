@@ -402,3 +402,5 @@ function bk_remove_private_protected_from_titles( $format ) {
 }
 add_filter( 'protected_title_format', 'bk_remove_private_protected_from_titles' );
 add_filter( 'private_title_format',   'bk_remove_private_protected_from_titles' );
+
+remove_action( 'woocommerce_order_details_after_order_table', 'woocommerce_order_again_button' );
