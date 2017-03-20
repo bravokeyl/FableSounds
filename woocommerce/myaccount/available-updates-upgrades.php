@@ -34,8 +34,14 @@ if($activation_qe->have_posts()){?>
         <th>
           <?php _e("Thumbnail","bk");?>
         </th>
-        <th colspan="2">
+        <th>
           <?php _e("Product Name","bk");?>
+        </th>
+        <th>
+          <?php _e("Price","bk");?>
+        </th>
+        <th>
+          
         </th>
       </tr>
     </thead>
@@ -50,6 +56,7 @@ if($activation_qe->have_posts()){?>
     $cart_url = $woocommerce->cart->get_cart_url();
     $product = wc_get_product( $acproduct_id );
     $order_thumb = $product->get_image();
+    $price = $product->get_price();
     ?>
         <tr>
           <td class="product-thumb">
@@ -57,6 +64,9 @@ if($activation_qe->have_posts()){?>
           </td>
           <td>
             <?php echo get_the_title($acproduct_id);?>
+          </td>
+          <td>
+            <?php echo get_woocommerce_currency_symbol().$price; ?>
           </td>
           <td>
             <?php
