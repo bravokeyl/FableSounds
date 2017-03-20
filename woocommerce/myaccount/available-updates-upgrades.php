@@ -34,11 +34,8 @@ if($activation_qe->have_posts()){?>
         <th>
           <?php _e("Thumbnail","bk");?>
         </th>
-        <th>
+        <th colspan="2">
           <?php _e("Product Name","bk");?>
-        </th>
-        <th>
-          <?php _e("Buy","bk");?>
         </th>
       </tr>
     </thead>
@@ -67,7 +64,7 @@ if($activation_qe->have_posts()){?>
                 'add-to-cart' => $acproduct_id,
             ), $cart_url );
              ?>
-            <a href="<?php echo esc_url($c_url);?>">Buy now</a>
+            <a href="<?php echo esc_url($c_url);?>">Add to cart</a>
           </td>
         </tr>
     <?php
