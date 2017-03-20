@@ -87,10 +87,16 @@ if($activation_qe->have_posts()){?>
                 foreach ( $downloadable_files as $key => $file ) {
                   $link = $file['file'];
                   $name = $file['name'];
+                  $download_link = add_query_arg( array(
+      							'download_file' => $file->get_product_id(),
+      							'order'         => $file->get_order_key(),
+      							'email'         => urlencode( $file->get_user_email() ),
+      							'key'           => $file->get_download_id(),
+      						), trailingslashit( home_url() ) );
                   if(empty($name)){
                     $name = "Default File name";
                   }
-                  echo "<a href='".$link."' target='_blank' >".$name."</a>";
+                  echo "<a href='".esc_url($link)."' target='_blank' >".$name."</a>";
                   if($fc < $fcount){
                     echo "<span>&nbsp;|&nbsp;</span>";
                   }
