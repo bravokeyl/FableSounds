@@ -280,13 +280,14 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
 
   $serials_available = bk_assign_serial_number($sku);
   $is_product_upgrade = bk_product_upgrade($product_id);
+  $is_product_update = bk_product_update($product_id);
   $product_url = get_post_meta($product_id,'bk_product_url',true);
 
   if(empty($product_url)) {
     $product_url = esc_url(home_url('/my-account'));
   }
 
-  if($codes_available && (0 < count($codes_available)) ){
+  if( ($codes_available && (0 < count($codes_available) )) || $is_product_update ){
     if($serials_available && (0 < count($serials_available)) ){
       if($is_product_upgrade){
         $eligible = bk_current_user_eligible_to_upgrade($product_id);
