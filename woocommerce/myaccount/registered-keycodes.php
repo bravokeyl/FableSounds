@@ -19,7 +19,7 @@ $activation_args = array(
   'post_type'      => 'fs_serial_numbers',
   'post_status'    => 'publish',
   'posts_per_page' => '-1',
-  'meta_key'       => 'bk_sn_user_login',
+  'meta_key'       => 'bk_sn_date',
   'meta_query'     => array(
     array(
       'key'     => 'bk_sn_user_login',
@@ -27,6 +27,8 @@ $activation_args = array(
       'compare' => '='
     )
   ),
+  'orderby' => 'meta_value',
+  'order' => 'ASC'
 );
 $activation_qe = new WP_Query($activation_args);
 
