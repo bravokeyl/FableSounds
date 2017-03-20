@@ -21,7 +21,7 @@ function bk_assign_vouchers($order_id){
     }
     $asku = get_post_meta($product_id,'_activation_sku',true);
     $serial = bk_get_unused_activation_codes(1,$asku);
-    if(1 == count($serial)){
+    if(1 == count($serial) || bk_product_update($product_id)){
       $bk_pay_logger->add('fablesounds','Debug: Activation codes found: order -'.$order_id.' product SKU - '.$product_sku.' (Activation SKU:'.$asku.')');
       bk_assign_voucher_to_user($username,$serial[0],$product_id,$product_sku);
     } else {
