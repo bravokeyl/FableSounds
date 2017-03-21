@@ -101,6 +101,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
         }
 
         if( 1 == count($serials)){
+          $continuata_sku = get_post_meta($product_id,'_continuata_sku',true);
           if(!$no_codes_req && !('register' == $product_register)){
             $serial_id = $serials[0];
             $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail.' - activation code ID:'. $serial_id);
@@ -112,13 +113,12 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             update_post_meta( $serial_id, 'bk_ac_date', current_time('mysql') );
             update_post_meta( $serial_id, 'order_data', $order_data );
 
-            $continuata_sku = get_post_meta($product_id,'_continuata_sku',true);
+
             $serial = get_the_title($serial_id);
 
             $serial_data = array(
               "product_id" => $product_id,
               "product_sku" => $continuata_sku,
-              // "activation" => $serial
             );
 
             if(is_array($order_data['line_items'])){
@@ -127,6 +127,10 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
             }
 
           } else {
+            $serial_data = array(
+              "product_id" => $product_id,
+              "product_sku" => $continuata_sku,
+            );
             $bk_apiLogger->add('fablesounds','Debug: Continuata Webhook Fired: Order '.$order_data['order_number'].' : '.$product_sku.' - '.$cemail);
           }
 
