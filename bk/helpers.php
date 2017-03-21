@@ -316,7 +316,7 @@ function bk_check_add_to_cart($cart_item_key, $product_id, $quantity, $variation
     $headers[] = 'Content-Type: text/html; charset=UTF-8';
     $headers[] = 'From: Fable Sounds <wordpress@fablesounds.com>';
     wp_mail( $to, $subject, $body, $headers );
-    wc_add_notice( "This product is out of stock. We are notified. Please check back later.", 'error' );
+    wc_add_notice( "This product is temporarily out of stock. Please check back later.", 'error' );
     wp_safe_redirect(esc_url(home_url('/my-account')));
     exit;
   }
