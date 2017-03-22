@@ -284,7 +284,7 @@ function bk_save_product_meta($post_id) {
 	$asku     = get_post_meta( $post_id, '_activation_sku', true );
 	$new_asku = (string) wc_clean( $_POST['_activation_sku'] );
 	$eligble_products = (string) wc_clean( $_POST['bk_eligible_products'] );
-	
+
 	$is_upgrade = $is_update = $is_download = 'no';
 
 	if ( '' == $new_sku ) {
@@ -321,6 +321,14 @@ function bk_save_product_meta($post_id) {
 	}
 
 	$eligble_products_arr = isset( $_POST['bk_eligible_products'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['bk_eligible_products'] ) ) ) : array();
+
+	foreach ($eligble_products_arr as $key => $eid) {
+			$eligble_products_arr[$key] = get_post_meta($eid,'_sku',true);
+	}
+
+	if(empty($eligble_products_arr)){
+		$eligble_products_arr = array();
+	}
 
 	update_post_meta( $post_id, 'bk_eligible_products', $eligble_products_arr );
 	update_post_meta( $post_id, 'bk_product_upgrade', $is_upgrade );
