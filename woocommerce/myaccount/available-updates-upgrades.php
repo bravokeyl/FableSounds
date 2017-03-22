@@ -52,12 +52,15 @@ if($activation_qe->have_posts()){?>
     $activation_qe->the_post();
     $activation_acid = get_the_ID();
     $abcsku = get_post_meta( $activation_acid, 'bk_voucher_product_sku', true );
+    // wp_die(print_r($abcsku));
     $acproduct_id = wc_get_product_id_by_sku($abcsku);
+
     global $woocommerce;
     $cart_url = $woocommerce->cart->get_cart_url();
-    $product = wc_get_product( $acproduct_id );
-    $order_thumb = $product->get_image();
-    $price = $product->get_price();
+    if($acproduct_id) {
+      $product = wc_get_product( $acproduct_id );
+      $order_thumb = $product->get_image();
+      $price = $product->get_price();
     ?>
         <tr>
           <td class="product-thumb">
@@ -79,6 +82,7 @@ if($activation_qe->have_posts()){?>
           </td>
         </tr>
     <?php
+   }// product id not 0
     $i++;
   }?>
   </tbody>

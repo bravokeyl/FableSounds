@@ -320,13 +320,10 @@ function bk_save_product_meta($post_id) {
 		$product_url = $_POST['bk_product_url'];
 	}
 
-	$eligble_products_arr = isset( $_POST['bk_eligible_products'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['bk_eligible_products'] ) ) ) : array();
-
-	foreach ($eligble_products_arr as $key => $eid) {
-			$eligble_products_arr[$key] = get_post_meta($eid,'_sku',true);
-	}
-
-	if(empty($eligble_products_arr)){
+	if(isset( $_POST['bk_eligible_products'] )) {
+		$eligble_products_c = $_POST['bk_eligible_products'];
+		$eligble_products_arr = explode(',',$_POST['bk_eligible_products']);
+	} else {
 		$eligble_products_arr = array();
 	}
 
@@ -347,18 +344,12 @@ function bk_product_is_new() {
 	?>
 	<p class="form-field">
 		<label for="bk_eligible_products"><?php _e( 'Eligible Products', 'fablesounds' ); ?></label>
-		<input type="hidden" class="wc-product-search" style="width: 50%;" id="bk_eligible_products" name="bk_eligible_products" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'fablesounds' ); ?>" data-action="woocommerce_json_search_products" data-multiple="true" data-exclude="<?php echo intval( $post->ID ); ?>" data-selected="<?php
-			$product_ids = array_filter( array_map( 'absint', (array) get_post_meta( $post->ID, 'bk_eligible_products', true ) ) );
-			$json_ids    = array();
-
-			foreach ( $product_ids as $product_id ) {
-				$product = wc_get_product( $product_id );
-				if ( is_object( $product ) ) {
-					$json_ids[ $product_id ] = wp_kses_post( html_entity_decode( $product->get_formatted_name(), ENT_QUOTES, get_bloginfo( 'charset' ) ) );
-				}
-			}
-
-			echo esc_attr( json_encode( $json_ids ) );
-		?>" value="<?php echo implode( ',', array_keys( $json_ids ) ); ?>" /> <?php echo wc_help_tip( __( 'Comma separated list of eligble product SKU\'s once this product is bought.', 'fablesounds' ) ); ?>
+		<?php $eligble_products_arr = get_post_meta( $post->ID, 'bk_eligible_products', true );
+		$eligble_products_c = implode (", ", $eligble_products_arr);
+		?>
+		<input type="text" class="short" style="width: 50%;" id="bk_eligible_products"
+		name="bk_eligible_products"
+		value="<?php echo $eligble_products_c; ?>" /> <?php echo wc_help_tip( __( 'Comma separated list of eligble product SKU\'s once this product is bought.', 'fablesounds' ) ); ?>
 	</p>
-<?php }
+	<?php
+}
