@@ -5,30 +5,32 @@ function bk_halion_voucher_to_user($username,$ac_id,$product_id,$product_sku){
 
   $bk_wclogger = new WC_Logger();
   $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
-  if(is_array($sku_arr)){
+  if(is_array($sku_arr) && 0 < count($sku_arr)){
     foreach($sku_arr as $key => $pid){
-      $slug = strtolower($username).'-voucher-code-id-'.$ac_id.'-'.$pid;
+      $slug = strtolower($username).'-voucher-code-id-'.$ac_id.'-'.$pid.'-'.wp_rand(1000,99999);
     	$title = strtoupper($username)."-".$ac_id."-".$product_id."-".$product_sku."-for-".$pid;
       if( null == get_page_by_title( $title ) ) {
-        $bk_wclogger->add('fablesounds','Debug: Creating Halion Voucher '.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
-        $voucher_id = wp_insert_post(
-    			array(
-    				'comment_status'	=>	'closed',
-    				'ping_status'		=>	'closed',
-    				'post_author'		=>	$author_id,
-    				'post_name'		=>	$slug,
-    				'post_title'		=>	$title,
-    				'post_status'		=>	'publish',
-    				'post_type'		=>	'fs_vouchers'
-    			)
-    		);
+        if(!empty($pid)){
+          $bk_wclogger->add('fablesounds','Debug: Creating Halion Voucher '.$title.' and assigning it to user '.$username.' : Product '.$product_sku);
+          $voucher_id = wp_insert_post(
+      			array(
+      				'comment_status'	=>	'closed',
+      				'ping_status'		=>	'closed',
+      				'post_author'		=>	$author_id,
+      				'post_name'		=>	$slug,
+      				'post_title'		=>	$title,
+      				'post_status'		=>	'publish',
+      				'post_type'		=>	'fs_vouchers'
+      			)
+      		);
 
-        if($voucher_id){
-          update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr[$key] );
-          update_post_meta($voucher_id,'bk_voucher_product_bought', $product_id );
-          update_post_meta($voucher_id,'bk_voucher_status','nused');
-          update_post_meta($voucher_id,'bk_voucher_user_login', $username);
-          update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
+          if($voucher_id){
+            update_post_meta($voucher_id,'bk_voucher_product_sku', $sku_arr[$key] );
+            update_post_meta($voucher_id,'bk_voucher_product_bought', $product_id );
+            update_post_meta($voucher_id,'bk_voucher_status','nused');
+            update_post_meta($voucher_id,'bk_voucher_user_login', $username);
+            update_post_meta($voucher_id,'bk_voucher_date', current_time('mysql'));
+          }
         }
       } else {
         $bk_wclogger->add('fablesounds','Error: Cannot create Halion vocuher '.$title.' and user '.$username.' : Product '.$product_sku);
