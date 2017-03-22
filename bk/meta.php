@@ -284,6 +284,7 @@ function bk_save_product_meta($post_id) {
 	$asku     = get_post_meta( $post_id, '_activation_sku', true );
 	$new_asku = (string) wc_clean( $_POST['_activation_sku'] );
 	$eligble_products = (string) wc_clean( $_POST['bk_eligible_products'] );
+	
 	$is_upgrade = $is_update = $is_download = 'no';
 
 	if ( '' == $new_sku ) {
