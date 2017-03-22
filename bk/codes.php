@@ -157,7 +157,13 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
           if($is_upgrade){
             $bk_apiLogger->add('fablesounds','Debug: Product upgrade bought by user: '.$customer_username);
             $bk_apiLogger->add('fablesounds','Debug: Changing the voucher status for order:'.$bk_order_id.', product id: '.$product_sku);
-            $vstatus = bk_change_voucher_status($product_id,$customer_username);
+            $vstatus = bk_change_voucher_status($product_sku,$customer_username);
+          }
+
+          if($no_codes_req){
+            $bk_apiLogger->add('fablesounds','Debug: Product update bought by user: '.$customer_username);
+            $bk_apiLogger->add('fablesounds','Debug: Changing the voucher status for update voucher - order:'.$bk_order_id.', product id: '.$product_sku);
+            $vstatus = bk_change_voucher_status($product_sku,$customer_username);
           }
 
         } else {
