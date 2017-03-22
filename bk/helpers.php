@@ -174,6 +174,7 @@ function bk_assign_voucher_to_user($username,$ac_id,$product_id,$product_sku){
 
   $bk_wclogger = new WC_Logger();
   $sku_arr = get_post_meta($product_id,'bk_eligible_products', true);
+  $bk_wclogger->add('fablesounds','Debug: Before Creating Voucher- Eligible Products Count: '. count($sku_arr));
   if(is_array($sku_arr) && 0 < count($sku_arr)){
     foreach($sku_arr as $key => $pid){
       $slug = strtolower($username).'-voucher-code-id-'.$ac_id.'-'.$pid;
