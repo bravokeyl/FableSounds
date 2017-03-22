@@ -189,8 +189,12 @@ if($halion_qe->have_posts()){
       <td style="text-transform: uppercase;">
         <?php
         try {
-          $hc_date_obj = new DateTime();
-          $hc_date = $hc_date_obj->setTimestamp($k);
+          if(is_numeric($k)){
+            $hc_date_obj = new DateTime();
+            $hc_date = $hc_date_obj->setTimestamp($k);
+          } else {
+            $hc_date = new DateTime($k);
+          }
           $hc_date_formatted = $hc_date->format('Y-m-d H:i:sP');
         } catch (Exception $e) {
           $hc_date_formatted = '';
