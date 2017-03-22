@@ -41,7 +41,7 @@ if($activation_qe->have_posts()){?>
           <?php _e("Price","bk");?>
         </th>
         <th>
-          
+
         </th>
       </tr>
     </thead>
@@ -51,7 +51,8 @@ if($activation_qe->have_posts()){?>
   while ($activation_qe->have_posts()) {
     $activation_qe->the_post();
     $activation_acid = get_the_ID();
-    $acproduct_id = get_post_meta( $activation_acid, 'bk_voucher_product_sku', true );
+    $abcsku = get_post_meta( $activation_acid, 'bk_voucher_product_sku', true );
+    $acproduct_id = wc_get_product_id_by_sku($abcsku);
     global $woocommerce;
     $cart_url = $woocommerce->cart->get_cart_url();
     $product = wc_get_product( $acproduct_id );
