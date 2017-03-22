@@ -252,8 +252,9 @@ function bk_current_user_eligible_to_upgrade($product_id) {
   $customer_email = $current_user->email;
   $user_id = $current_user->ID;
   $user_login = $current_user->user_login;
+  $psku = get_post_meta($product_id,'_sku',true);
   if($user_id) {
-    $vouchers = bk_get_user_product_vouchers($user_login,$product_id);
+    $vouchers = bk_get_user_product_vouchers($user_login,$psku);
     if($vouchers > 0){
       return true;
     }
