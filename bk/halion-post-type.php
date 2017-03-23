@@ -112,13 +112,17 @@ function fs_render_halion_codes_columns( $column ) {
 			$sndate = get_post_meta( $post->ID, 'bk_halion_date', true );
 			if ( $sndate ) {
 				try {
-          $hc_date_obj = new DateTime();
-          $hc_date = $hc_date_obj->setTimestamp($sndate);
+          if(is_numeric($sndate)){
+            $hc_date_obj = new DateTime();
+            $hc_date = $hc_date_obj->setTimestamp($sndate);
+          } else {
+            $hc_date = new DateTime($sndate);
+          }
           $hc_date_formatted = $hc_date->format('Y-m-d H:i:sP');
         } catch (Exception $e) {
           $hc_date_formatted = '';
         }
-				echo esc_attr($hc_date_formatted);
+        echo esc_attr($hc_date_formatted);
 			} else {
 				echo '&ndash;';
 			}
