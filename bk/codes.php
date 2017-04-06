@@ -46,6 +46,9 @@ function bk_add_user_to_list($user_name,$icontact_list){
   $bk_wclogger = new WC_Logger();
   if($icontact_id || $icontact_ide) {
     $bk_wclogger->add('fablesounds','Debug: Adding user to List - '.$icontact_list);
+    if($icontact_ide) {
+      $icontact_id = $icontact_ide;
+    }
     add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
   } else {
     $icontact_res = add_user_to_icontact($email, $firstName, $lastName, $user_name);
