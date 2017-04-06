@@ -41,9 +41,10 @@ function bk_add_user_to_list($user_name,$icontact_list){
   $firstName = $user->first_name;
   $lastName = $user->last_name;
   $icontact_id = get_user_meta($user->ID,'bk_icontact_id',true);
+  $icontact_ide = get_contact_id($email);
   global $icontact_lists;
   $bk_wclogger = new WC_Logger();
-  if($icontact_id) {
+  if($icontact_id || $icontact_ide) {
     $bk_wclogger->add('fablesounds','Debug: Adding user to List - '.$icontact_list);
     add_user_to_list($icontact_id,$icontact_lists[$icontact_list]);
   } else {
@@ -154,13 +155,12 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
               bk_mail_insufficient_serial_codes($product_sku,$customer_username);
             }
           }// No serials for product registered via keys
+
           if($is_upgrade){
             $bk_apiLogger->add('fablesounds','Debug: Product upgrade bought by user: '.$customer_username);
             $bk_apiLogger->add('fablesounds','Debug: Changing the voucher status for order:'.$bk_order_id.', product id: '.$product_sku);
             $vstatus = bk_change_voucher_status($product_sku,$customer_username);
-          }
-
-          if($no_codes_req){
+          } else if($no_codes_req){
             $bk_apiLogger->add('fablesounds','Debug: Product update bought by user: '.$customer_username);
             $bk_apiLogger->add('fablesounds','Debug: Changing the voucher status for update voucher - order:'.$bk_order_id.', product id: '.$product_sku);
             $vstatus = bk_change_voucher_status($product_sku,$customer_username);
@@ -183,6 +183,7 @@ function bk_add_serial_to_line_item( $order_data, $order ) {
         }
         $serial_index++;
   		} // foreach
+      $bk_apiLogger->add('orderdata','Debug: Webhook Fired: Successful Order Data');
       return $order_data;
     } else {
       $bk_apiLogger->add('fablesounds','Debug: Webhook Fired: Order updates with status '.$order_data['status']);
