@@ -340,6 +340,19 @@ function get_contact_id($userId) {
 	return $contactId;
 }
 
+function get_contact_id_from_email($email) {
+	$acc = $GLOBALS['config']['accountId'];
+	$clf = $GLOBALS['config']['clientFolderId'];
+
+	$contactId = 0;
+	$response = callResource("/a/{$acc}/c/{$clf}/contacts?email={$email}", 'GET');
+	if ($response['code'] == STATUS_CODE_SUCCESS)
+	{
+		$contactId = $response['data']['contacts'][0]['contactId'];
+	}
+	return $contactId;
+}
+
 function get_account_id() {
 	if ($ic_accountId <= 0)
 	{

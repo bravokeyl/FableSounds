@@ -41,7 +41,7 @@ function bk_add_user_to_list($user_name,$icontact_list){
   $firstName = $user->first_name;
   $lastName = $user->last_name;
   $icontact_id = get_user_meta($user->ID,'bk_icontact_id',true);
-  $icontact_ide = get_contact_id($email);
+  $icontact_ide = get_contact_id_from_email($email);
   global $icontact_lists;
   $bk_wclogger = new WC_Logger();
   if($icontact_id || $icontact_ide) {
