@@ -18,44 +18,23 @@
 // HTTP headers for the request authentication.
 
 
-// Sandbox settings
-
-// $GLOBALS['config'] = array(
- // 'apiUrl'   => 'https://app.sandbox.icontact.com/icp',
- // 'username' => 'fablesounds-wc',
- // 'password' => 't1K1beta',
- // 'appId'    => 's19UXbn8Sfc4AmTCOzcikj3NKcTiOhn7',
- // 'accountId' => 415511,
- // 'clientFolderId' => 126939,
-// );
-
-// $GLOBALS['icontact_lists'] = array(
-	// 'BKFDR' => 268236,
-  // 'BKFUL' => 268236,
-  // 'BKFUG' => 268236,
-	// 'BLDR' => 268237,
-	// 'BGDR' => 268238,
-// );
-
-// Production settings
 
 $GLOBALS['config'] = array(
-	'apiUrl'   => 'https://app.icontact.com/icp',
-	'username' => 'fablesounds',
-	'password' => 't1K1regREG!',
-	'appId'    => 's7UiVGBHItH8vXLNVjMmqOOOSUDNVBud',
-	'accountId' => 674224,
-	'clientFolderId' => 20986,
+ 'apiUrl'   => 'https://app.sandbox.icontact.com/icp',
+ 'username' => 'fablesounds-wc',
+ 'password' => 't1K1beta',
+ 'appId'    => 's19UXbn8Sfc4AmTCOzcikj3NKcTiOhn7',
+ 'accountId' => 415511,
+ 'clientFolderId' => 126939,
 );
 
 $GLOBALS['icontact_lists'] = array(
-	'BKFDR' => 33489,
-    'BKFUL' => 33489,
-    'BKFUG' => 33489,
-	'BLDR'  => 51577,
-	'BGDR'  => 112508,
+	'BKFDR' => 268236,
+  'BKFUL' => 268236,
+  'BKFUG' => 268236,
+	'BLDR' => 268237,
+	'BGDR' => 268238,
 );
-
 
 function add_user_to_icontact($email, $firstName, $lastName, $userName) {
   $bk_wclogger = new WC_Logger();
